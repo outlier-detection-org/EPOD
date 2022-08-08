@@ -187,7 +187,7 @@ public class Clustering {
 		System.out.println("\nNearest neighbour clustering");
 		nearestNeighbourClustering(4, dataset);
 		
-		nearestNeighbourClustering(1000, LSH.readDataset("output_dataset.txt", Integer.MAX_VALUE));
+		nearestNeighbourClustering(1000, LSH.readDataset("output_dataset.txt", Integer.MAX_VALUE," "));
 	}
 
 }

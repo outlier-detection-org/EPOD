@@ -220,9 +220,9 @@ public class LSH {
 	 *            file defines more points).
 	 * @return a list of vectors, the data set.
 	 */
-	public static ArrayList<Vector> readDataset(String file,int maxSize) {
+	public static ArrayList<Vector> readDataset(String file,int maxSize, String seperator) {
 		ArrayList<Vector> ret = new ArrayList<Vector>();
-		List<String[]> data = FileUtils.readCSVFile(file, " ", -1);
+		List<String[]> data = FileUtils.readCSVFile(file, seperator, -1);
 		if(data.size() > maxSize){
 			data = data.subList(0, maxSize);
 		}

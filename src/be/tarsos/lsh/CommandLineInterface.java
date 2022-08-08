@@ -86,11 +86,11 @@ public class CommandLineInterface {
 			TestUtils.addNeighbours(dataset, numberOfNeighbours, radius);
 		}
 		if(datasetFile !=null){
-			dataset = LSH.readDataset(datasetFile,Integer.MAX_VALUE);
+			dataset = LSH.readDataset(datasetFile,Integer.MAX_VALUE," ");
 			dimensions = dataset.get(0).getDimensions();
 		}
 		if(queryFile != null){
-			queries = LSH.readDataset(queryFile,Integer.MAX_VALUE);
+			queries = LSH.readDataset(queryFile,Integer.MAX_VALUE," ");
 			dimensions = queries.get(0).getDimensions();
 		}
 		if(radius == 0 && hashFamilyType.equalsIgnoreCase("l1")){

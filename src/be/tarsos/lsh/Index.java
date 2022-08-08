@@ -35,7 +35,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,7 +44,7 @@ import be.tarsos.lsh.families.DistanceComparator;
 import be.tarsos.lsh.families.DistanceMeasure;
 import be.tarsos.lsh.families.HashFamily;
 import be.tarsos.lsh.util.FileUtils;
-import be.tarsos.lsh.util.Constants;
+import utils.Constants;
 
 /**
  * The index makes it easy to store vectors and lookup queries efficiently. For
