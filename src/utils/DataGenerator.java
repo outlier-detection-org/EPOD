@@ -1,6 +1,6 @@
 package utils;
 
-
+import dataStructure.Data;
 import main.EdgeDevice;
 
 import java.io.*;
@@ -18,24 +18,25 @@ public class DataGenerator {
 
     public static ArrayList<EdgeDevice> listeners = new ArrayList<>();
 
+    public static HashSet<Data> outlierList = new HashSet<>();
     public static void register(EdgeDevice edgeDevice){
         listeners.add(edgeDevice);
     }
 
-    public static List<Data> notifyDevices(ArrayList<Data> data) throws Throwable {
+    public static HashSet<Data> notifyDevices(ArrayList<Data> data,long currentTime) throws Throwable {
         int lengthOfData = (int) Math.ceil(data.size()*1.0/listeners.size());
-        List<Data> outlierList = new ArrayList<>();
         for (int i=0;i<listeners.size();i++){
             int left = Math.min(i*lengthOfData,data.size());
             int right = Math.min((i+1)*lengthOfData,data.size());
             List<Data> dataForDevice =data.subList(left,right);
-            outlierList.addAll(listeners.get(i).detectOutlier(dataForDevice));
+            listeners.get(i).setRawData(dataForDevice);
+            outlierList.addAll(listeners.get(i).detectOutlier(dataForDevice,currentTime));
         }
         return outlierList;
     }
 
     public static DataGenerator getInstance(String type) {
-
+        Constants.dataset = type;
         if (instance != null) {
             return instance;
         } else if ("ForestCover".equals(type)) {
@@ -181,7 +182,7 @@ public class DataGenerator {
      * @param filename
      * @return
      */
-    public ArrayList<Data> getTimeBasedIncomingData(Date currentTime, int lengthInSecond, String filename) {
+    public HashSet<Data> getTimeBasedIncomingData(Date currentTime, int lengthInSecond, String filename) throws Throwable {
         ArrayList<Data> results = new ArrayList<>();
         try {
             BufferedReader bfr = new BufferedReader(new FileReader(new File(filename)));
@@ -224,7 +225,8 @@ public class DataGenerator {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return results;
+        HashSet<Data> outlier = notifyDevices(results,currentTime.getTime());
+        return outlier;
 
     }
 
@@ -234,7 +236,7 @@ public class DataGenerator {
      * @param length
      * @return
      */
-    public ArrayList<Data> getIncomingData(int currentTime, int length) throws Throwable {
+    public HashSet<Data> getIncomingData(int currentTime, int length) throws Throwable {
         ArrayList<Data> results = new ArrayList<Data>();
         Data d = dataQueue.peek();
         while (d != null && d.arrivalTime > currentTime
@@ -244,8 +246,8 @@ public class DataGenerator {
             d = dataQueue.peek();
 
         }
-        notifyDevices(results);
-        return results;
+        HashSet<Data> outlier = notifyDevices(results,currentTime);
+        return outlier;
     }
 
     /**

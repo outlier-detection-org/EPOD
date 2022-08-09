@@ -2,7 +2,7 @@ package main;
 
 import RPC.Client;
 import RPC.Service;
-import utils.Data;
+import dataStructure.Data;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -4,9 +4,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import main.NETS;
+import Detector.NETS;
 import utils.StreamGenerator;
-import main.Tuple;
+import dataStructure.Tuple;
 import utils.MeasureMemoryThread;
 import utils.Utils;
 

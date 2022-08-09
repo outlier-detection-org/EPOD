@@ -5,11 +5,16 @@ import java.util.HashMap;
 public class Constants {
 
     public static double R = 1;
-    public static int k = 30;
+    public static int K = 30;
     public static int W = 1000;
     public static int numberWindow = -1;
+    public static int numberSlidePerWindow= 0;
     public static int slide = 500;
     public static int dimensions = 3;
+    public static int subDim = 0;
+    public static boolean subDimFlag = false;
+
+    public static String dataset = "";
     public static String prefix = "/home/xinyingzheng/Desktop/outlier_detection/";
 //    public static String prefix = "C:\\Users\\14198\\Desktop\\outlier_detection\\";
     public static String forestCoverFileName = prefix+"Datasets/fc.data";

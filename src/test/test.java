@@ -2,7 +2,7 @@ package test;
 
 import main.EdgeDeviceFactory;
 import utils.Constants;
-import utils.Data;
+import dataStructure.Data;
 import utils.DataGenerator;
 
 import java.util.ArrayList;
@@ -18,7 +18,6 @@ public class test {
         }
 
         int currentTime = 0;
-        ArrayList<Data> data = dataGenerator.getIncomingData(currentTime,50);
 
     }
 }

@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import main.Tuple;
+import dataStructure.Tuple;
 
 public class StreamGenerator {
 	private double[] maxValues;

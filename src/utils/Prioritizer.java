@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import utils.StreamGenerator;
-import main.Tuple;
+
+import dataStructure.Tuple;
 
 public class Prioritizer {
 	public static void main(String[] args) throws IOException {
