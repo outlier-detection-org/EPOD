@@ -8,7 +8,7 @@ import utils.DataGenerator;
 import java.util.ArrayList;
 
 public class test {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Throwable {
 
         DataGenerator dataGenerator = DataGenerator.getInstance("ForestCover");
         EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(Constants.radiusEuclideanDict.get(Constants.forestCoverFileName),

@@ -1,34 +1,36 @@
 package main;
 
+import RPC.Client;
+import RPC.Service;
 import be.tarsos.lsh.Index;
 import be.tarsos.lsh.Vector;
 import be.tarsos.lsh.families.HashFamily;
 import utils.Data;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.SynchronousQueue;
 
-public class EdgeDevice {
+@SuppressWarnings("unchecked")
+public class EdgeDevice implements Service, Client {
     public List<Data> rawData;
-    public SynchronousQueue<Data> allDataList;
+    public List<Data> allRawDataList = new ArrayList<>();
 
-    private int numberOfHashes;
+    private final int numberOfHashTables;
     public Index index;
     public int[] fingerprints;
     public HashSet[] aggFingerprints;
 
     public EdgeNode nearestNode;
 
+    public int port;
+
     public EdgeDevice(HashFamily hashFamily, int NumberOfHashes, int NumberOfHashTables){
-        this.numberOfHashes = NumberOfHashes;
+        this.port = new Random().nextInt(50000)+10000;
+        this.numberOfHashTables = NumberOfHashTables;
         this.index = new Index(hashFamily,NumberOfHashes,NumberOfHashTables);
         this.fingerprints = new int[NumberOfHashTables];
         this.aggFingerprints = new HashSet[NumberOfHashTables];
@@ -36,12 +38,9 @@ public class EdgeDevice {
             aggFingerprints[i] = new HashSet<Integer>();
         }
     }
-    public List<Data> detectOutlier(List<Data> data){
+    public List<Data> detectOutlier(List<Data> data) throws Throwable {
         rawData = data;
-        //TODO:generate signature for data and upload to edgeNode
         generateAggFingerprints(rawData);
-        //TODO:send to closest edge device
-        //TODO:waiting to receive necessary data from others
         sendAggFingerprints();
         //TODO:aggregate data and run outlier detection algorithm
         return rawData;
@@ -49,7 +48,7 @@ public class EdgeDevice {
 
     public void generateAggFingerprints(List<Data> data){
         for (Data datum : data) {
-            for (int j = 0; j < this.numberOfHashes; j++) {
+            for (int j = 0; j < this.numberOfHashTables; j++) {
                 // TODO:convert data to vector
                 Vector v = new Vector(datum.values, datum.arrivalTime);
                 int bucketId = index.getHashTable().get(j).getHashValue(v);
@@ -58,54 +57,22 @@ public class EdgeDevice {
         }
     }
 
-    public void sendAggFingerprints(){
-
-
+    public void sendAggFingerprints() throws Throwable {
+        SynchronousQueue<Data> result = (SynchronousQueue<Data>) invoke("localhost",this.nearestNode.port,EdgeNode.class.getMethod("upload", HashSet[].class),aggFingerprints);
+        while(!result.isEmpty()){
+            this.allRawDataList.add(result.poll());
+        }
     }
 
-    public void publish(int port) throws IOException {
-        ServerSocket server = new ServerSocket(port);
-        while (true) {
-            try {
-                final Socket socket = server.accept();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            try {
-                                ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
-                                ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-                                try {
-                                    String methodName = input.readUTF();
-                                    Class<?>[] parameterTypes = (Class<?>[]) input.readObject();
-                                    Object[] arguments = (Object[]) input.readObject();
-                                    try {
-                                        Method method = this.getClass().getMethod(methodName, parameterTypes);
-                                        Object result = method.invoke(this, arguments);
-                                        output.writeObject(result);
-                                    } catch (Throwable t) {
-                                        output.writeObject(t);
-                                    } finally {
-                                        output.close();
-                                    }
-                                } finally {
-                                    input.close();
-                                }
-                            } finally {
-                                socket.close();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    public List<Data> sendData(){
+        return rawData;
     }
 
     public void setNearestNode(EdgeNode nearestNode) {
         this.nearestNode = nearestNode;
+    }
+
+    public void start() throws IOException {
+        this.publish(port);
     }
 }

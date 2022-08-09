@@ -22,7 +22,7 @@ public class DataGenerator {
         listeners.add(edgeDevice);
     }
 
-    public static List<Data> notifyDevices(ArrayList<Data> data){
+    public static List<Data> notifyDevices(ArrayList<Data> data) throws Throwable {
         int lengthOfData = (int) Math.ceil(data.size()*1.0/listeners.size());
         List<Data> outlierList = new ArrayList<>();
         for (int i=0;i<listeners.size();i++){
@@ -234,7 +234,7 @@ public class DataGenerator {
      * @param length
      * @return
      */
-    public ArrayList<Data> getIncomingData(int currentTime, int length) {
+    public ArrayList<Data> getIncomingData(int currentTime, int length) throws Throwable {
         ArrayList<Data> results = new ArrayList<Data>();
         Data d = dataQueue.peek();
         while (d != null && d.arrivalTime > currentTime
