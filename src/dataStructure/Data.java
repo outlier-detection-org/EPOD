@@ -1,5 +1,6 @@
 package dataStructure;
 
+import java.util.Date;
 import java.util.Random;
 
 public class Data implements  Comparable<Data> {
@@ -9,7 +10,8 @@ public class Data implements  Comparable<Data> {
 	
 	//arrival time 
 	public int arrivalTime;
-	
+
+	public Date arrivalRealTime;
 	
 	public Data(double... values) {
 		this.values = values;

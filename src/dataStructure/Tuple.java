@@ -31,7 +31,7 @@ public class Tuple extends Data{
 			return nn;
 		}
 		
-		public void removeOutdatedNNUnsafeOut(int itr, int nS) {
+		public void removeOutdatedNNUnsafeOut(long itr, int nS) {
 			Iterator<Integer> it = unSafeOutNeighbors.keySet().iterator();
 			
 			while (it.hasNext()) {

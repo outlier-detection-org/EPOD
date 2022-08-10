@@ -123,11 +123,11 @@ public class NewNETS extends Detector {
 	}
 
 	@Override
-	public HashSet<Data> detectOutlier(List<Data> data, int currentTime){
+	public HashSet<Data> detectOutlier(List<Data> data, long currentTime){
 		if (data.isEmpty()) return null;
 		ArrayList<Tuple> newSlide = preprocessData(data);
-		calcNetChange(newSlide,currentTime/Constants.slide);
-		findOutlier("NETS",currentTime/Constants.slide);
+		calcNetChange(newSlide, (int) (currentTime/Constants.slide));
+		findOutlier("NETS", (int) (currentTime/Constants.slide));
 		return outliers;
 	}
 
