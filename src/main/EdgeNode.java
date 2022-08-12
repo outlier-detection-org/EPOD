@@ -1,10 +1,7 @@
 package main;
 
-import RPC.Client;
-import RPC.Service;
+import RPC.RPCFrame;
 import dataStructure.Data;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,14 +9,13 @@ import java.util.Random;
 import java.util.concurrent.SynchronousQueue;
 
 @SuppressWarnings("unchecked")
-public class EdgeNode implements Client, Service {
+public class EdgeNode extends RPCFrame implements Runnable {
 
     private List<Data> localData = new ArrayList<>();
     public SynchronousQueue<Data> allData = new SynchronousQueue<>();
     private final int numberOfHashTables;
     private HashSet[] localAggFingerprints;
     public EdgeDevice edgeDevice;
-    public int port;
 
     public EdgeNode(int numberOfHashTables){
         this.numberOfHashTables = numberOfHashTables;
@@ -36,7 +32,8 @@ public class EdgeNode implements Client, Service {
             new Thread(() -> {
                 List<Data> data = null;
                 try {
-                    data = (List<Data>) invoke("localhost", node.port, EdgeNode.class.getMethod("compareAndSend", HashSet[].class), aggFingerprints);
+                    Object[] parameters = new Object[]{aggFingerprints};
+                    data = (List<Data>) invoke("localhost", node.port, EdgeNode.class.getMethod("compareAndSend", HashSet[].class), parameters);
                     for (Data d : data) {
                         allData.put(d);
                     }
@@ -66,12 +63,8 @@ public class EdgeNode implements Client, Service {
 
     public List<Data> getData() throws Throwable {
         if(localData==null){
-            localData = (List<Data>) invoke("localhost",this.edgeDevice.port, EdgeDevice.class.getMethod("sendData"),null);
+            localData = (List<Data>) invoke("localhost",this.edgeDevice.port, EdgeDevice.class.getMethod("sendData"),new Object[]{});
         }
         return localData;
-    }
-
-    public void start() throws IOException {
-        this.publish(port);
     }
 }

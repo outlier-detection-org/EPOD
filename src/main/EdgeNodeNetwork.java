@@ -7,6 +7,8 @@ public class EdgeNodeNetwork {
     public static ArrayList<EdgeNode> edgeNodes = new ArrayList<>();
     public static int numberOfHashTables;
 
+    public static ArrayList<Thread> threads=new ArrayList<>();
+
     public static void setNumberOfHashTables(int number) {
         numberOfHashTables = number;
     }
@@ -29,8 +31,21 @@ public class EdgeNodeNetwork {
 
     public static void startNetwork() throws IOException {
         for (EdgeNode node: edgeNodes){
-            node.start();
-            node.edgeDevice.start();
+            node.active = true;
+            node.edgeDevice.active = true;
+            Thread t1 = new Thread(node);
+            Thread t2 = new Thread(node.edgeDevice);
+            threads.add(t1);
+            threads.add(t2);
+            t1.start();
+            t2.start();
+        }
+    }
+
+    public static void stopNetwork() throws IOException, InterruptedException {
+        for (EdgeNode node: edgeNodes) {
+            node.close();
+            node.edgeDevice.close();
         }
     }
 

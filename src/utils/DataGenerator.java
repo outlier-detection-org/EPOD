@@ -28,7 +28,14 @@ public class DataGenerator {
             int right = Math.min((i+1)*lengthOfData,data.size());
             List<Data> dataForDevice =data.subList(left,right);
             listeners.get(i).setRawData(dataForDevice);
-            outlierList.addAll(listeners.get(i).detectOutlier(dataForDevice,currentTime));
+            int finalI = i;
+            new Thread(() -> {
+                try {
+                    outlierList.addAll(listeners.get(finalI).detectOutlier(dataForDevice,currentTime));
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
         }
         return outlierList;
     }
@@ -54,7 +61,8 @@ public class DataGenerator {
                 return instance;
             }
             if (withTime){
-                String newPath = GenerateTimestamp.generate(Constants.slide*10,Constants.slide,Constants.emFileName);
+                String newPath = GenerateTimestamp.generate(Constants.slide*10,Constants.slide,name);
+                Constants.dataset = newPath;
                 instance = new DataGenerator(true);
                 instance.getData(newPath);
                 return instance;
@@ -243,7 +251,7 @@ public class DataGenerator {
         return outlier;
     }
 
-    public ArrayList<Data> getTimeBasedIncomingData(Date currentTime, int lengthInSecond) throws Throwable {
+    public HashSet<Data> getTimeBasedIncomingData(Date currentTime, int lengthInSecond) throws Throwable {
         ArrayList<Data> results = new ArrayList<>();
         Date endTime = new Date();
         endTime.setTime(currentTime.getTime() + lengthInSecond * 1000L);
@@ -254,8 +262,8 @@ public class DataGenerator {
             dataQueue.poll();
             d=dataQueue.peek();
         }
-        HashSet<Data> outlier = null;
-        return results;
+        HashSet<Data> outlier = notifyDevices(results,currentTime.getTime());
+        return outlier;
     }
 
 

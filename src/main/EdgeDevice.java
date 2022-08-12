@@ -2,14 +2,11 @@ package main;
 
 import Detector.Detector;
 import Detector.NewNETS;
-import RPC.Client;
-import RPC.Service;
+import RPC.RPCFrame;
 import be.tarsos.lsh.Index;
 import be.tarsos.lsh.Vector;
 import be.tarsos.lsh.families.HashFamily;
 import dataStructure.Data;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +14,7 @@ import java.util.Random;
 import java.util.concurrent.SynchronousQueue;
 
 @SuppressWarnings("unchecked")
-public class EdgeDevice implements Service, Client {
+public class EdgeDevice extends RPCFrame implements Runnable {
     public List<Data> rawData;
     public List<Data> allRawDataList = new ArrayList<>();
 
@@ -29,8 +26,6 @@ public class EdgeDevice implements Service, Client {
     public EdgeNode nearestNode;
 
     public Detector detector;
-
-    public int port;
 
     public EdgeDevice(HashFamily hashFamily, int NumberOfHashes, int NumberOfHashTables){
         this.port = new Random().nextInt(50000)+10000;
@@ -64,7 +59,8 @@ public class EdgeDevice implements Service, Client {
     }
 
     public void sendAggFingerprints() throws Throwable {
-        SynchronousQueue<Data> result = (SynchronousQueue<Data>) invoke("localhost",this.nearestNode.port,EdgeNode.class.getMethod("upload", HashSet[].class),aggFingerprints);
+        Object[] parameters = new Object[]{aggFingerprints};
+        SynchronousQueue<Data> result = (SynchronousQueue<Data>) invoke("localhost",this.nearestNode.port,EdgeNode.class.getMethod("upload", HashSet[].class),parameters);
         while(!result.isEmpty()){
             this.allRawDataList.add(result.poll());
         }
@@ -80,9 +76,5 @@ public class EdgeDevice implements Service, Client {
 
     public void setRawData(List<Data> rawData) {
         this.rawData = rawData;
-    }
-
-    public void start() throws IOException {
-        this.publish(port);
     }
 }

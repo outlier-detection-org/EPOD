@@ -1,30 +1,32 @@
 package test;
 
 import main.EdgeDeviceFactory;
+import main.EdgeNodeNetwork;
 import utils.Constants;
-import dataStructure.Data;
 import utils.DataGenerator;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+
 
 public class test {
     public static void main(String[] args) throws Throwable {
+        int numberOfHashes = 8;
+        int numberOfHashTables = 4;
+        int dimensions = 55;
+        int nS = 1;
+        Constants.slide = 500;
+        EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(Constants.radiusEuclideanDict.get(Constants.forestCoverFileName),
+                dimensions,numberOfHashes,numberOfHashTables);
+        EdgeNodeNetwork.setNumberOfHashTables(numberOfHashTables);
+        EdgeNodeNetwork.createNetwork(3,edgeDeviceFactory);
+        EdgeNodeNetwork.startNetwork();
 
-//        DataGenerator dataGenerator = DataGenerator.getInstance("ForestCover");
-//        EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(Constants.radiusEuclideanDict.get(Constants.forestCoverFileName),
-//                55,8,4);
-//        for (int i=0;i<5;i++){
-//            edgeDeviceFactory.createEdgeDevice();
-//        }
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        System.out.println(formatter.format(calendar.getTime()));
-        calendar.add(Calendar.SECOND,10);
-        System.out.println(formatter.format(calendar.getTime()));
-        int currentTime = 0;
-
+        System.out.println("started!");
+        DataGenerator dataGenerator = DataGenerator.getInstance("ForestCover",true); //put data into data queue
+        Date date = dataGenerator.getFirstTimeStamp(Constants.dataset);
+        for (int i=nS;i>=0;i--){
+            dataGenerator.getTimeBasedIncomingData(date,5000);
+        }
+//        EdgeNodeNetwork.stopNetwork();
     }
 }
