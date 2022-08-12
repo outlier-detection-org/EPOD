@@ -25,12 +25,16 @@ public class EdgeNode extends RPCFrame implements Runnable {
             localAggFingerprints[i] = new HashSet<Integer>();
         }
     }
-    public SynchronousQueue<Data> upload(HashSet[] aggFingerprints) throws Throwable {
+    public SynchronousQueue<Data> upload(HashSet[] aggFingerprints) {
+        System.out.println(Thread.currentThread().getName()+": "+this+" node upload");
         this.localAggFingerprints = aggFingerprints;
         this.allData.clear();
         for (EdgeNode node: EdgeNodeNetwork.edgeNodes) {
+            if (node==this)
+                continue;
             new Thread(() -> {
-                List<Data> data = null;
+                System.out.println(Thread.currentThread().getName()+": "+this+" new thread for invoke compareAndSend to "+node);
+                List<Data> data;
                 try {
                     Object[] parameters = new Object[]{aggFingerprints};
                     data = (List<Data>) invoke("localhost", node.port, EdgeNode.class.getMethod("compareAndSend", HashSet[].class), parameters);
@@ -47,9 +51,13 @@ public class EdgeNode extends RPCFrame implements Runnable {
 
     public List<Data> compareAndSend(HashSet[] aggFingerprints) throws Throwable {
         HashSet<Integer> intersection = new HashSet<>();
+        System.out.println(Thread.currentThread().getName()+" "+this+": compareAndSend :)");
         for (int i=0;i<numberOfHashTables;i++){
             intersection.addAll(localAggFingerprints[i]);
             intersection.retainAll(aggFingerprints[i]);
+            System.out.println(Thread.currentThread().getName()+" 1 "+aggFingerprints[i]);
+            System.out.println(Thread.currentThread().getName()+" 2 "+localAggFingerprints[i]);
+            System.out.println(Thread.currentThread().getName()+" "+this+" intersection size: "+intersection.size());
             if (!intersection.isEmpty()){
                 return getData();
             }

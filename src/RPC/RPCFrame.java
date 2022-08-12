@@ -12,6 +12,7 @@ public class RPCFrame implements Runnable {
 
     public boolean active = false;
     public void publish(int port) throws IOException  {
+        System.out.println(Thread.currentThread().getName()+" "+this+": publish");
         this.server = new ServerSocket(port);
         while (true) {
             try {
@@ -26,6 +27,7 @@ public class RPCFrame implements Runnable {
                                 Object[] arguments = (Object[]) input.readObject();
                                 try {
                                     Method method = this.getClass().getMethod(methodName, parameterTypes);
+                                    System.out.println(Thread.currentThread().getName()+": "+this+" new thread: "+methodName);
                                     Object result =method.invoke(this, arguments);
                                     output.writeObject(result);
                                 } catch (Throwable t) {

@@ -1,5 +1,8 @@
 package utils;
 
+import be.tarsos.lsh.families.DistanceComparator;
+import be.tarsos.lsh.families.DistanceMeasure;
+import be.tarsos.lsh.families.EuclideanDistance;
 import dataStructure.Data;
 import main.EdgeDevice;
 
@@ -21,21 +24,29 @@ public class DataGenerator {
         listeners.add(edgeDevice);
     }
 
-    public static HashSet<Data> notifyDevices(ArrayList<Data> data,long currentTime) throws Throwable {
+    public static HashSet<Data> notifyDevices(ArrayList<Data> data,long currentTime) throws InterruptedException {
         int lengthOfData = (int) Math.ceil(data.size()*1.0/listeners.size());
+        ArrayList<Thread> threads = new ArrayList<>();
         for (int i=0;i<listeners.size();i++){
-            int left = Math.min(i*lengthOfData,data.size());
-            int right = Math.min((i+1)*lengthOfData,data.size());
-            List<Data> dataForDevice =data.subList(left,right);
-            listeners.get(i).setRawData(dataForDevice);
             int finalI = i;
-            new Thread(() -> {
+            Thread t = new Thread(() -> {
                 try {
-                    outlierList.addAll(listeners.get(finalI).detectOutlier(dataForDevice,currentTime));
+                    System.out.println(Thread.currentThread().getName()+": notify listener "+finalI);
+                    int left = Math.min(finalI*lengthOfData,data.size());
+                    int right = Math.min((finalI+1)*lengthOfData,data.size());
+                    List<Data> dataForDevice =data.subList(left,right);
+                    listeners.get(finalI).setRawData(dataForDevice);
+                    outlierList.addAll(listeners.get(finalI).detectOutlier(currentTime));
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
                 }
-            }).start();
+            });
+            threads.add(t);
+            t.start();
+        }
+
+        for (Thread t:threads){
+            t.join();
         }
         return outlierList;
     }
@@ -363,6 +374,28 @@ class DataComparator implements Comparator<Data> {
             return 0;
         }
 
+    }
+    public HashSet<Data> linearSearch(ArrayList<Data> data){
+        HashSet<Data> outlier = new HashSet<>();
+        DistanceMeasure measure = new EuclideanDistance();
+        ArrayList<Data> neighbor = new ArrayList<>();
+        for (Data data1:data){
+            DistanceComparator dc = new DistanceComparator(data1,measure);
+            PriorityQueue<Data> priorityQueue = new PriorityQueue<>(data.size(),dc);
+            priorityQueue.addAll(data);
+            Data d= priorityQueue.peek();
+            double distance = measure.distance(d,data1);
+            while(distance<=Constants.R){
+                neighbor.add(d);
+                priorityQueue.poll();
+                d= priorityQueue.peek();
+                distance = measure.distance(d,data1);
+            }
+            if (neighbor.size()<Constants.K){
+                outlier.add(data1);
+            }
+        }
+        return outlier;
     }
 
 }

@@ -24,7 +24,7 @@ public class test {
         System.out.println("started!");
         DataGenerator dataGenerator = DataGenerator.getInstance("ForestCover",true); //put data into data queue
         Date date = dataGenerator.getFirstTimeStamp(Constants.dataset);
-        for (int i=nS;i>=0;i--){
+        for (int i=nS;i>0;i--){
             dataGenerator.getTimeBasedIncomingData(date,5000);
         }
 //        EdgeNodeNetwork.stopNetwork();

@@ -38,11 +38,10 @@ public class EdgeDevice extends RPCFrame implements Runnable {
             aggFingerprints[i] = new HashSet<Integer>();
         }
     }
-    public List<Data> detectOutlier(List<Data> data,long currentTime) throws Throwable {
-        rawData = data;
+    public List<Data> detectOutlier(long currentTime) throws Throwable {
+        System.out.println(Thread.currentThread().getName()+" "+this+": receive data and detect outlier: "+this.rawData.size());
         generateAggFingerprints(rawData);
         sendAggFingerprints();
-        ///TODO:aggregate data and run outlier detection algorithm
         detector.detectOutlier(allRawDataList,currentTime);
         return rawData;
     }
@@ -50,15 +49,16 @@ public class EdgeDevice extends RPCFrame implements Runnable {
     public void generateAggFingerprints(List<Data> data){
         for (Data datum : data) {
             for (int j = 0; j < this.numberOfHashTables; j++) {
-                /// TODO:convert data to vector
                 Vector v = new Vector(datum.values, datum.arrivalTime);
                 int bucketId = index.getHashTable().get(j).getHashValue(v);
                 aggFingerprints[j].add(bucketId);
             }
         }
+        System.out.println(Thread.currentThread().getName()+": "+this+"generateAggFingerprints "+ aggFingerprints.length);
     }
 
     public void sendAggFingerprints() throws Throwable {
+        System.out.println(Thread.currentThread().getName()+": "+this+" sendAggFingerprints, invoke upload");
         Object[] parameters = new Object[]{aggFingerprints};
         SynchronousQueue<Data> result = (SynchronousQueue<Data>) invoke("localhost",this.nearestNode.port,EdgeNode.class.getMethod("upload", HashSet[].class),parameters);
         while(!result.isEmpty()){

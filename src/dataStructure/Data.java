@@ -1,9 +1,11 @@
 package dataStructure;
 
+import be.tarsos.lsh.Vector;
+
 import java.util.Date;
 import java.util.Random;
 
-public class Data implements  Comparable<Data> {
+public class Data extends Vector implements  Comparable<Data> {
 	
 	public double[] values;
 	public final int hashCode;
