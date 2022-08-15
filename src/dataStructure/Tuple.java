@@ -1,9 +1,11 @@
 package dataStructure;
+import be.tarsos.lsh.Vector;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Tuple extends Data{
+public class Tuple extends Vector {
 		public int id;
 		public int slideID;
 		public double[] value;

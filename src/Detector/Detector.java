@@ -1,11 +1,12 @@
 package Detector;
 
-import dataStructure.Data;
+import be.tarsos.lsh.Vector;
+
 import java.util.HashSet;
 import java.util.List;
 
 public class Detector {
-    public HashSet<Data> detectOutlier(List<Data> data, long currentTime){
+    public HashSet<Vector> detectOutlier(List<Vector> data, long currentTime){
         return null;
     }
 }

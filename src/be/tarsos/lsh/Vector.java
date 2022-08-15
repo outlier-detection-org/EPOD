@@ -25,15 +25,16 @@ package be.tarsos.lsh;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
 
 /**
- * An Vector contains a vector of 'dimension' values. It serves as the main data
+ * A Vector contains a vector of 'dimension' values. It serves as the main data
  * structure that is stored and retrieved. It also has an identifier (key).
  * 
  * @author Joren Six
  */
-public class Vector  implements Serializable {
+public class Vector  implements Serializable,Comparable<Vector> {
 	
 	private static final long serialVersionUID = 5169504339456492327L;
 
@@ -43,9 +44,11 @@ public class Vector  implements Serializable {
 	 */
 	public double[] values;
 	public int arrivalTime;
-	public Vector(){
-            
-        }
+	public Date arrivalRealTime;
+
+	public Vector(double... values){
+            this.values = values;
+	}
       
 	/**
 	 * An optional key, identifier for the vector.
@@ -70,7 +73,7 @@ public class Vector  implements Serializable {
 		this(other.getKey(),Arrays.copyOf(other.values, other.values.length));
 	}
         
-        public Vector(double[] v, int arrivalTime ){
+        public Vector(double[] v, int arrivalTime){
             this.values = v;
             this.arrivalTime = arrivalTime;
 //            this.hashCode = d.hashCode;
@@ -152,6 +155,31 @@ public class Vector  implements Serializable {
 
 	public String getKey() {
 		return key;
+	}
+
+	@Override
+	public int compareTo(Vector that) {
+		int dimensions = Math.min(this.getDimensions(), that.getDimensions());
+		for(int i = 0; i < dimensions; i++) {
+			double v1 = this.values[i];
+			double v2 = that.values[i];
+			if(v1 > v2) {
+				return +1;
+			}
+			if(v1 < v2) {
+				return -1;
+			}
+		}
+
+		if(this.getDimensions() > dimensions) {
+			return +1;
+		}
+
+		if(that.getDimensions() > dimensions) {
+			return -1;
+		}
+
+		return 0;
 	}
 	
 	public String toString(){

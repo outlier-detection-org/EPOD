@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 public class Constants {
 
-    public static double R = 1;
-    public static int K = 30;
+    public static double R = 525;
+    public static int K = 50;
     public static int W = 1000;
     public static int numberWindow = -1;
     public static int numberSlidePerWindow= 0;

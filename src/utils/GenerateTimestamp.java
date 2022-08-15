@@ -1,7 +1,5 @@
 package utils;
 
-import dataStructure.Data;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -18,20 +16,19 @@ public class GenerateTimestamp {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
         Random random =new Random();
-        int count = random.nextInt(range)+1;
+//        int count = random.nextInt(range)+1;
+        int count = range;
         int unit = s/count;
         int index = 0;
-        int num = 0;
         while((line = bfr.readLine())!=null){
             calendar.add(Calendar.SECOND,unit);
             bfw.write(formatter.format(calendar.getTime())+",");
             bfw.write(line);
             bfw.write("\n");
             index++;
-            num++;
-            if (num==2000) break;
             if (index==count){
-                count = random.nextInt(range)+1;
+//                count = random.nextInt(range)+1;
+                count = range;
                 unit = s/count;
                 index = 0;
             }

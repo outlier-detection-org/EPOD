@@ -1,9 +1,9 @@
 package utils;
 
+import be.tarsos.lsh.Vector;
 import be.tarsos.lsh.families.DistanceComparator;
 import be.tarsos.lsh.families.DistanceMeasure;
 import be.tarsos.lsh.families.EuclideanDistance;
-import dataStructure.Data;
 import main.EdgeDevice;
 
 import java.io.*;
@@ -13,18 +13,18 @@ import java.util.*;
 
 public class DataGenerator {
 
-    PriorityQueue<Data> dataQueue;
+    PriorityQueue<Vector> dataQueue;
 
     public static DataGenerator instance;
 
     public static ArrayList<EdgeDevice> listeners = new ArrayList<>();
 
-    public static HashSet<Data> outlierList = new HashSet<>();
+    public static HashSet<Vector> outlierList = new HashSet<>();
     public static void register(EdgeDevice edgeDevice){
         listeners.add(edgeDevice);
     }
 
-    public static HashSet<Data> notifyDevices(ArrayList<Data> data,long currentTime) throws InterruptedException {
+    public static HashSet<Vector> notifyDevices(ArrayList<Vector> data,long currentTime) throws InterruptedException {
         int lengthOfData = (int) Math.ceil(data.size()*1.0/listeners.size());
         ArrayList<Thread> threads = new ArrayList<>();
         for (int i=0;i<listeners.size();i++){
@@ -34,7 +34,7 @@ public class DataGenerator {
                     System.out.println(Thread.currentThread().getName()+": notify listener "+finalI);
                     int left = Math.min(finalI*lengthOfData,data.size());
                     int right = Math.min((finalI+1)*lengthOfData,data.size());
-                    List<Data> dataForDevice =data.subList(left,right);
+                    List<Vector> dataForDevice =data.subList(left,right);
                     listeners.get(finalI).setRawData(dataForDevice);
                     outlierList.addAll(listeners.get(finalI).detectOutlier(currentTime));
                 } catch (Throwable e) {
@@ -88,46 +88,6 @@ public class DataGenerator {
         return !dataQueue.isEmpty();
     }
 
-//    /**
-//     *  return a list of data which is in the period [currentTime,currentTime+length]
-//     * @param currentTime
-//     * @param length
-//     * @param filename
-//     * @return
-//     */
-//    public ArrayList<Data> getIncomingData(int currentTime, int length, String filename) {
-//
-//        ArrayList<Data> results = new ArrayList<>();
-//        try {
-//            BufferedReader bfr = new BufferedReader(new FileReader(new File(filename)));
-//
-//            String line = "";
-//            int time = 0;
-//            try {
-//                while ((line = bfr.readLine()) != null) {
-//                    time++;
-//                    if (time > currentTime && time <= currentTime + length) {
-//                        String[] atts = line.split(",");
-//                        double[] d = new double[atts.length];
-//                        for (int i = 0; i < d.length; i++) {
-//                            d[i] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
-//                        }
-//                        Data data = new Data(d);
-//                        data.arrivalTime = time;
-//                        results.add(data);
-//                    }
-//                }
-//                bfr.close();
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        return results;
-//    }
 
     public Date getFirstTimeStamp(String filename) throws FileNotFoundException, IOException, ParseException {
         BufferedReader bfr = new BufferedReader(new FileReader(new File(filename)));
@@ -139,118 +99,15 @@ public class DataGenerator {
         return formatter.parse(atts[0].trim());
     }
 
-//    /**
-//     * return a list of data which is in the period [currentTime,currentTime+length] but each has a likely probability
-//     * to return
-//     * @param currentTime
-//     * @param length
-//     * @param filename
-//     * @param likely
-//     * @return
-//     */
-//    public ArrayList<Data> getRandomIncomingData(int currentTime, int length, String filename, double likely) {
-//        Random r = new Random();
-//        ArrayList<Data> results = new ArrayList<>();
-//        try {
-//            BufferedReader bfr = new BufferedReader(new FileReader(new File(filename)));
-//
-//            String line = "";
-//            int time = 0;
-//            try {
-//                while ((line = bfr.readLine()) != null) {
-//                    time++;
-//                    if (time > currentTime && time <= currentTime + length) {
-//                        String[] atts = line.split(",");
-//                        double[] d = new double[atts.length];
-//                        for (int i = 0; i < d.length; i++) {
-//
-//                            d[i] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
-//                        }
-//                        Data data = new Data(d);
-//                        data.arrivalTime = time;
-//
-//                        if (likely > r.nextDouble()) {
-//                            results.add(data);
-//                        }
-//                    }
-//                }
-//                bfr.close();
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        return results;
-//
-//    }
-//
-//    /**
-//     * return time based Incoming data, each data line begins with a timestamp like: [2022/8/6 data]
-//     * @param currentTime
-//     * @param lengthInSecond
-//     * @param filename
-//     * @return
-//     */
-//    public HashSet<Data> getTimeBasedIncomingData(Date currentTime, int lengthInSecond, String filename) throws Throwable {
-//        ArrayList<Data> results = new ArrayList<>();
-//        try {
-//            BufferedReader bfr = new BufferedReader(new FileReader(new File(filename)));
-//
-//            String line = "";
-//            int time = 0;
-//            Date endTime = new Date();
-//            endTime.setTime(currentTime.getTime() + lengthInSecond * 1000L);
-//            try {
-//                while ((line = bfr.readLine()) != null) {
-//                    String[] atts = line.split(",");
-//                    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-//
-//                    try {
-//                        Date data_time = formatter.parse(atts[0].trim());
-//                        if (data_time.after(currentTime) && data_time.before(endTime)) {
-//
-//                            double[] d = new double[atts.length - 1];
-//                            for (int i = 1; i < d.length; i++) {
-//
-//                                d[i - 1] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
-//                            }
-//                            Data data = new Data(d);
-//                            data.arrivalTime = time;
-//
-//                            results.add(data);
-//
-//                        }
-//                    } catch (ParseException ex) {
-//                        Logger.getLogger(DataGenerator.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//
-//                }
-//                bfr.close();
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        HashSet<Data> outlier = notifyDevices(results,currentTime.getTime());
-//        return outlier;
-//
-//    }
-
     /**
      * get incoming data in the period [currentTime,currentTime+length]
      * @param currentTime
      * @param length
      * @return
      */
-    public HashSet<Data> getIncomingData(int currentTime, int length) throws Throwable {
-        ArrayList<Data> results = new ArrayList<Data>();
-        Data d = dataQueue.peek();
+    public HashSet<Vector> getIncomingData(int currentTime, int length) throws Throwable {
+        ArrayList<Vector> results = new ArrayList<Vector>();
+        Vector d = dataQueue.peek();
         while (d != null && d.arrivalTime > currentTime
                 && d.arrivalTime <= currentTime + length) {
             results.add(d);
@@ -258,23 +115,23 @@ public class DataGenerator {
             d = dataQueue.peek();
 
         }
-        HashSet<Data> outlier = notifyDevices(results,currentTime);
+        HashSet<Vector> outlier = notifyDevices(results,currentTime);
         return outlier;
     }
 
-    public HashSet<Data> getTimeBasedIncomingData(Date currentTime, int lengthInSecond) throws Throwable {
-        ArrayList<Data> results = new ArrayList<>();
+    public ArrayList<Vector> getTimeBasedIncomingData(Date currentTime, int lengthInSecond) throws Throwable {
+        ArrayList<Vector> results = new ArrayList<>();
         Date endTime = new Date();
         endTime.setTime(currentTime.getTime() + lengthInSecond * 1000L);
-        Data d = dataQueue.peek();
+        Vector d = dataQueue.peek();
         while (d!=null&&d.arrivalRealTime.compareTo(currentTime)>=0
                 &&d.arrivalRealTime.compareTo(endTime)<0){
             results.add(d);
             dataQueue.poll();
             d=dataQueue.peek();
         }
-        HashSet<Data> outlier = notifyDevices(results,currentTime.getTime());
-        return outlier;
+//        HashSet<Data> outlier = notifyDevices(results,currentTime.getTime());
+        return results;
     }
 
 
@@ -288,7 +145,7 @@ public class DataGenerator {
         Random r = new Random();
         for (int i = 1; i <= length; i++) {
             double d = r.nextInt(range);
-            Data data = new Data(d);
+            Vector data = new Vector(d);
             data.arrivalTime = i;
             dataQueue.add(data);
             dataQueue.add(data);
@@ -322,7 +179,7 @@ public class DataGenerator {
                         for (int i = 0; i < d.length; i++) {
                             d[i] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
                         }
-                        Data data = new Data(d);
+                        Vector data = new Vector(d);
                         data.arrivalTime = time;
                         dataQueue.add(data);
                         time++;
@@ -332,7 +189,7 @@ public class DataGenerator {
                         for (int i = 1; i < d.length-1; i++) {
                             d[i] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
                         }
-                        Data data = new Data(d);
+                        Vector data = new Vector(d);
                         data.arrivalRealTime = formatter.parse(atts[0]);
                         dataQueue.add(data);
                     }
@@ -353,37 +210,50 @@ public class DataGenerator {
 
     public DataGenerator(boolean hasTime) {
         if (hasTime) {
-            Comparator<Data> comparator = new DataComparatorWithTimestamp();
+            Comparator<Vector> comparator = new DataComparatorWithTimestamp();
             dataQueue = new PriorityQueue<>(comparator);
         } else {
-            Comparator<Data> comparator = new DataComparator();
-            dataQueue = new PriorityQueue<Data>(comparator);
+            Comparator<Vector> comparator = new DataComparator();
+            dataQueue = new PriorityQueue<Vector>(comparator);
         }
     }
-}
 
-class DataComparator implements Comparator<Data> {
-
-    @Override
-    public int compare(Data x, Data y) {
-        if (x.arrivalTime < y.arrivalTime) {
-            return -1;
-        } else if (x.arrivalTime > y.arrivalTime) {
-            return 1;
-        } else {
-            return 0;
-        }
-
-    }
-    public HashSet<Data> linearSearch(ArrayList<Data> data){
-        HashSet<Data> outlier = new HashSet<>();
+    public HashMap<Integer,HashSet<Vector>> linearSearchReturnBuckets(ArrayList<Vector> data,Vector tmp) {
+        HashMap<Integer, HashSet<Vector>> buckets = new HashMap<>();
+        HashSet<Vector> outlier = new HashSet<>();
         DistanceMeasure measure = new EuclideanDistance();
-        ArrayList<Data> neighbor = new ArrayList<>();
-        for (Data data1:data){
+
+        Vector data1 = tmp;
+        ArrayList<Vector> neighbor = new ArrayList<>();
+        HashSet<Vector> hashSet = new HashSet<>();
+//            hashSet.add(data1);
+        DistanceComparator dc = new DistanceComparator(data1, measure);
+        PriorityQueue<Vector> priorityQueue = new PriorityQueue<>(data.size(), dc);
+        priorityQueue.addAll(data);
+        Vector d = priorityQueue.peek();
+        double distance = measure.distance(d, data1);
+        while (distance <= Constants.R) {
+            neighbor.add(d);
+            hashSet.add(d);
+            priorityQueue.poll();
+            d = priorityQueue.peek();
+            distance = measure.distance(d, data1);
+        }
+        buckets.put(1, hashSet);
+        if (neighbor.size() < Constants.K) {
+            outlier.add(data1);
+        }
+        return buckets;
+    }
+    public HashSet<Vector> linearSearch(ArrayList<Vector> data){
+        HashSet<Vector> outlier = new HashSet<>();
+        DistanceMeasure measure = new EuclideanDistance();
+        ArrayList<Vector> neighbor = new ArrayList<>();
+        for (Vector data1:data){
             DistanceComparator dc = new DistanceComparator(data1,measure);
-            PriorityQueue<Data> priorityQueue = new PriorityQueue<>(data.size(),dc);
+            PriorityQueue<Vector> priorityQueue = new PriorityQueue<>(data.size(),dc);
             priorityQueue.addAll(data);
-            Data d= priorityQueue.peek();
+            Vector d= priorityQueue.peek();
             double distance = measure.distance(d,data1);
             while(distance<=Constants.R){
                 neighbor.add(d);
@@ -397,13 +267,27 @@ class DataComparator implements Comparator<Data> {
         }
         return outlier;
     }
-
 }
 
-class DataComparatorWithTimestamp implements Comparator<Data> {
+class DataComparator implements Comparator<Vector> {
 
     @Override
-    public int compare(Data x, Data y) {
+    public int compare(Vector x, Vector y) {
+        if (x.arrivalTime < y.arrivalTime) {
+            return -1;
+        } else if (x.arrivalTime > y.arrivalTime) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+}
+
+class DataComparatorWithTimestamp implements Comparator<Vector> {
+
+    @Override
+    public int compare(Vector x, Vector y) {
         return x.arrivalRealTime.compareTo(y.arrivalRealTime);
     }
 

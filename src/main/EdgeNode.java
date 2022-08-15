@@ -1,7 +1,7 @@
 package main;
 
 import RPC.RPCFrame;
-import dataStructure.Data;
+import be.tarsos.lsh.Vector;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.concurrent.SynchronousQueue;
 @SuppressWarnings("unchecked")
 public class EdgeNode extends RPCFrame implements Runnable {
 
-    private List<Data> localData = new ArrayList<>();
-    public SynchronousQueue<Data> allData = new SynchronousQueue<>();
+    private List<Vector> localData = new ArrayList<>();
+    public SynchronousQueue<Vector> allData = new SynchronousQueue<>();
     private final int numberOfHashTables;
     private HashSet[] localAggFingerprints;
     public EdgeDevice edgeDevice;
@@ -25,7 +25,7 @@ public class EdgeNode extends RPCFrame implements Runnable {
             localAggFingerprints[i] = new HashSet<Integer>();
         }
     }
-    public SynchronousQueue<Data> upload(HashSet[] aggFingerprints) {
+    public SynchronousQueue<Vector> upload(HashSet[] aggFingerprints) {
         System.out.println(Thread.currentThread().getName()+": "+this+" node upload");
         this.localAggFingerprints = aggFingerprints;
         this.allData.clear();
@@ -34,11 +34,11 @@ public class EdgeNode extends RPCFrame implements Runnable {
                 continue;
             new Thread(() -> {
                 System.out.println(Thread.currentThread().getName()+": "+this+" new thread for invoke compareAndSend to "+node);
-                List<Data> data;
+                List<Vector> data;
                 try {
                     Object[] parameters = new Object[]{aggFingerprints};
-                    data = (List<Data>) invoke("localhost", node.port, EdgeNode.class.getMethod("compareAndSend", HashSet[].class), parameters);
-                    for (Data d : data) {
+                    data = (List<Vector>) invoke("localhost", node.port, EdgeNode.class.getMethod("compareAndSend", HashSet[].class), parameters);
+                    for (Vector d : data) {
                         allData.put(d);
                     }
                 } catch (Throwable e) {
@@ -49,7 +49,7 @@ public class EdgeNode extends RPCFrame implements Runnable {
         return this.allData;
     }
 
-    public List<Data> compareAndSend(HashSet[] aggFingerprints) throws Throwable {
+    public List<Vector> compareAndSend(HashSet[] aggFingerprints) throws Throwable {
         HashSet<Integer> intersection = new HashSet<>();
         System.out.println(Thread.currentThread().getName()+" "+this+": compareAndSend :)");
         for (int i=0;i<numberOfHashTables;i++){
@@ -69,9 +69,9 @@ public class EdgeNode extends RPCFrame implements Runnable {
         this.edgeDevice = edgeDevice;
     }
 
-    public List<Data> getData() throws Throwable {
+    public List<Vector> getData() throws Throwable {
         if(localData==null){
-            localData = (List<Data>) invoke("localhost",this.edgeDevice.port, EdgeDevice.class.getMethod("sendData"),new Object[]{});
+            localData = (List<Vector>) invoke("localhost",this.edgeDevice.port, EdgeDevice.class.getMethod("sendData"),new Object[]{});
         }
         return localData;
     }

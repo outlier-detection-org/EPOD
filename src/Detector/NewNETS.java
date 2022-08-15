@@ -1,10 +1,9 @@
 package Detector;
 
-import Detector.Detector;
+import be.tarsos.lsh.Vector;
 import dataStructure.Cell;
 import dataStructure.Tuple;
 import utils.Constants;
-import dataStructure.Data;
 
 import java.util.*;
 
@@ -33,7 +32,7 @@ public class NewNETS extends Detector {
 	public HashMap<Integer,ArrayList<Short>> idxDecoder;
 	public HashMap<ArrayList<Short>,Integer> idxEncoder;
 	public HashMap<Integer,Integer> slideDelta;
-	public HashSet<Data> outliers;
+	public HashSet<Vector> outliers;
 	public HashMap<Integer,Integer> fullDimCellWindowCnt;
 	public LinkedList<HashMap<Integer,Cell>> slides;
 	public HashMap<Integer,Integer> fullDimCellSlideInCnt;
@@ -68,7 +67,7 @@ public class NewNETS extends Detector {
 		this.fullDimCellSlidesCnt = new LinkedList<HashMap<Integer,Integer>>();
 		this.fullDimCellSlideOutCnt = new HashMap<Integer,Integer>();
 				
-		this.outliers = new HashSet<Data>();
+		this.outliers = new HashSet<Vector>();
 						
 		/* Cell size calculation for all dim*/
 		double minDimSize = Integer.MAX_VALUE;
@@ -123,7 +122,7 @@ public class NewNETS extends Detector {
 	}
 
 	@Override
-	public HashSet<Data> detectOutlier(List<Data> data, long currentTime){
+	public HashSet<Vector> detectOutlier(List<Vector> data, long currentTime){
 		if (data.isEmpty()) return null;
 		ArrayList<Tuple> newSlide = preprocessData(data);
 		calcNetChange(newSlide, (int) (currentTime/Constants.slide));
@@ -131,11 +130,11 @@ public class NewNETS extends Detector {
 		return outliers;
 	}
 
-	public ArrayList<Tuple> preprocessData(List<Data> data){
+	public ArrayList<Tuple> preprocessData(List<Vector> data){
 		ArrayList<Tuple> newSlide = new ArrayList<Tuple>();
 		double[] value = new double[data.get(0).values.length];
 		int j=0;
-		for (Data datum : data) {
+		for (Vector datum : data) {
 			for (int i : priorityList) {
 				value[j] = datum.values[i];
 				j++;
@@ -356,7 +355,7 @@ public class NewNETS extends Detector {
 
 	public void findOutlier(String type, int itr) {
 		// Remove expired or outdated outliers
-		Iterator<Data> it = outliers.iterator();
+		Iterator<Vector> it = outliers.iterator();
 		while (it.hasNext()) {
 			Tuple outlier = (Tuple) it.next();
 			if(slideOut.containsKey(idxEncoder.get(outlier.subDimCellIdx)) && slideOut.get(idxEncoder.get(outlier.subDimCellIdx)).tuples.contains(outlier)) {  
