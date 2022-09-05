@@ -133,10 +133,10 @@ public class NewNETS extends Detector {
 	public ArrayList<Tuple> preprocessData(List<Vector> data){
 		ArrayList<Tuple> newSlide = new ArrayList<Tuple>();
 		double[] value = new double[data.get(0).values.length];
-		int j=0;
 		for (Vector datum : data) {
+			int j=0;
 			for (int i : priorityList) {
-				value[j] = datum.values[i];
+				value[j] = datum.values[priorityList.get(i)];
 				j++;
 			}
 			Tuple tuple = new Tuple(datum.arrivalTime,datum.arrivalTime/Constants.slide,value);

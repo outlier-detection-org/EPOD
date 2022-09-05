@@ -14,17 +14,17 @@ public class Constants {
     public static int subDim = 0;
     public static boolean subDimFlag = false;
 
-    public static String dataset = "";
-    public static String prefix = "/home/xinyingzheng/Desktop/outlier_detection";
-//    public static String prefix = "C:\\Users\\14198\\Desktop\\outlier_detection\\";
-    public static String forestCoverFileName = prefix+"/Datasets/fc.data";
-    public static String taoFileName = prefix+"/Datasets/tao.txt";
-    public static String emFileName = prefix+"/Datasets/ethylene.txt";
-    public static String stockFileName = prefix+"/Datasets/stock.txt";
-    public static String gaussFileName = prefix+"/Datasets/gaussian.txt";
-    public static String hpcFileName = prefix+"/Datasets/household2.txt";
+    public static String dataset = "TAO";
+//    public static String prefix = "/home/xinyingzheng/Desktop/outlier_detection";
+    public static String prefix = "C:\\Users\\14198\\Desktop\\outlier_detection\\";
+    public static String forestCoverFileName = prefix+"\\Datasets\\fc.data";
+    public static String taoFileName = prefix+"\\Datasets\\tao.txt";
+    public static String emFileName = prefix+"\\Datasets\\ethylene.txt";
+    public static String stockFileName = prefix+"\\Datasets\\stock.txt";
+    public static String gaussFileName = prefix+"\\Datasets\\gaussian.txt";
+    public static String hpcFileName = prefix+"\\Datasets\\household2.txt";
 
-    public static String outputFile= prefix+"/Algorithm/output/outputDefault.txt";
+    public static String outputFile= prefix+"\\Algorithm\\output\\outputDefault.txt";
 
     public static HashMap<String, Integer> radiusEuclideanDict = new HashMap<>();
 

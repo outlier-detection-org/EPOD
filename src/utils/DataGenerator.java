@@ -13,7 +13,7 @@ import java.util.*;
 
 public class DataGenerator {
 
-    PriorityQueue<Vector> dataQueue;
+    public static PriorityQueue<Vector> dataQueue;
 
     public static DataGenerator instance;
 
@@ -25,6 +25,7 @@ public class DataGenerator {
     }
 
     public static HashSet<Vector> notifyDevices(ArrayList<Vector> data,long currentTime) throws InterruptedException {
+        System.out.println("all data size:"+data.size());
         int lengthOfData = (int) Math.ceil(data.size()*1.0/listeners.size());
         ArrayList<Thread> threads = new ArrayList<>();
         for (int i=0;i<listeners.size();i++){
@@ -34,7 +35,7 @@ public class DataGenerator {
                     System.out.println(Thread.currentThread().getName()+": notify listener "+finalI);
                     int left = Math.min(finalI*lengthOfData,data.size());
                     int right = Math.min((finalI+1)*lengthOfData,data.size());
-                    List<Vector> dataForDevice =data.subList(left,right);
+                    ArrayList<Vector> dataForDevice = new ArrayList<>(data.subList(left,right));
                     listeners.get(finalI).setRawData(dataForDevice);
                     outlierList.addAll(listeners.get(finalI).detectOutlier(currentTime));
                 } catch (Throwable e) {
@@ -105,7 +106,7 @@ public class DataGenerator {
      * @param length
      * @return
      */
-    public HashSet<Vector> getIncomingData(int currentTime, int length) throws Throwable {
+    public static HashSet<Vector> getIncomingData(int currentTime, int length) throws Throwable {
         ArrayList<Vector> results = new ArrayList<Vector>();
         Vector d = dataQueue.peek();
         while (d != null && d.arrivalTime > currentTime

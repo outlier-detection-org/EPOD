@@ -14,20 +14,24 @@ public class RPCFrame implements Runnable {
     public void publish(int port) throws IOException  {
         System.out.println(Thread.currentThread().getName()+" "+this+": publish");
         this.server = new ServerSocket(port);
-        while (true) {
+        while (active) {
             try {
                 final Socket socket = server.accept();
+                if (!active){
+                    break;
+                }
                 new Thread(() -> {
                     try {
                         try {
                             try (ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
                                 ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
                                 String methodName = input.readUTF();
+                                System.out.println("current method name: "+methodName);
+                                System.out.println("current class: "+ this.getClass());
                                 Class<?>[] parameterTypes = (Class<?>[]) input.readObject();
                                 Object[] arguments = (Object[]) input.readObject();
                                 try {
                                     Method method = this.getClass().getMethod(methodName, parameterTypes);
-                                    System.out.println(Thread.currentThread().getName()+": "+this+" new thread: "+methodName);
                                     Object result =method.invoke(this, arguments);
                                     output.writeObject(result);
                                 } catch (Throwable t) {
@@ -47,6 +51,7 @@ public class RPCFrame implements Runnable {
                 e.printStackTrace();
             }
         }
+        this.server.close();
     }
 
     public Object invoke(String host, int port, Method method, Object[] arguments) throws Throwable {
@@ -77,10 +82,10 @@ public class RPCFrame implements Runnable {
 
     public void close() throws IOException, InterruptedException {
         this.active = false;
-        Thread.sleep(1000);
-        if (this.server!=null){
-            this.server.close();
-        }
+        Socket socket = new Socket("localhost", this.port);
+        socket.close();
+        Thread.sleep(1);
+        System.out.println(this.server.isClosed());
     }
 
 }
