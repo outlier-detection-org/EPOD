@@ -2,6 +2,8 @@ package test;
 
 import be.tarsos.lsh.Vector;
 import be.tarsos.lsh.families.EuclideanDistance;
+import be.tarsos.lsh.families.EuclidianHashFamily;
+import be.tarsos.lsh.families.HashFamily;
 import be.tarsos.lsh.util.TestUtils;
 import main.EdgeDevice;
 import main.EdgeDeviceFactory;
@@ -55,12 +57,13 @@ public class testFingerprint extends JFrame {
         ArrayList<Vector> neighbor = (ArrayList<Vector>) data.clone();
         TestUtils.addNeighbours(neighbor, 50, 3);
         ArrayList<Vector> nonNeighbor = (ArrayList<Vector>) data.clone();
-        TestUtils.addNeighbours(nonNeighbor, 50, 20);
+        TestUtils.addNeighbours(nonNeighbor, 50, 35);
         EuclideanDistance euclideanDistance = new EuclideanDistance();
         double avg = 0;
         for (Vector v:neighbor){
             avg+=euclideanDistance.distance(data.get(0),v);
         }
+        Constants.R = avg/neighbor.size();
         System.out.println("The avg distance of neighbor is "+ avg / neighbor.size());
         avg = 0;
         for (Vector v:nonNeighbor){
@@ -71,12 +74,21 @@ public class testFingerprint extends JFrame {
             for (int y=x;y>0;y-=1){
                 double p1=x/10.0;
                 double p2=y/10.0;
+//                double p1=0.8;
+//                double p2=0.8;
                 double k = Math.log(n)/Math.log(1/p2);
                 double L = Math.pow(n,Math.log(1/p1)/Math.log(1/p2));
+                System.out.println(n+" "+p1+" "+p2+" ");
                 int numberOfHashes = (int) k;
                 int numberOfHashTables = (int) L;
-                EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(Constants.radiusEuclideanDict.get(Constants.forestCoverFileName),
-                        dimensions, numberOfHashes, numberOfHashTables);
+//                System.out.println("kl is "+k+","+L);
+                EuclidianHashFamily hashFamily;
+                if ((int) (1 * Constants.R) == 0) {
+                    hashFamily = new EuclidianHashFamily(4, dimensions);
+                } else {
+                    hashFamily = new EuclidianHashFamily((int) (10*Constants.R), dimensions);
+                }
+                EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(hashFamily, numberOfHashes, numberOfHashTables);
                 double TP=0;
                 double FP=0;
                 double FN=0;
@@ -87,14 +99,15 @@ public class testFingerprint extends JFrame {
                 double f1_score=0;
                 kl[x][y]= String.format("(%d,%2d)",numberOfHashes,numberOfHashTables);
                 StringBuilder stringBuilder = new StringBuilder();
-                testKL(edgeDeviceFactory,neighbor,data.get(0));
+                testKL(edgeDeviceFactory,neighbor,data);
                 TP = numberOfTrue*1.0;
                 FN = numberOfFalse*1.0;
 //                stringBuilder.append(String.format("(%2d,%2d,",numberOfTrue,numberOfFalse));
-                testKL(edgeDeviceFactory,nonNeighbor,data.get(0));
+                testKL(edgeDeviceFactory,nonNeighbor,data);
                 FP = numberOfTrue*1.0;
                 TN = numberOfFalse*1.0;
 //                stringBuilder.append(String.format("%2d,%2d)",numberOfTrue,numberOfFalse));
+//                System.out.println(stringBuilder.toString());
                 precious = TP/(TP+FP);
                 recall = TP/(TP+FN);
                 accuracy = (TP+TN)/(TP+TN+FP+FN);
@@ -105,18 +118,19 @@ public class testFingerprint extends JFrame {
         }
     }
 
-    public void testKL(EdgeDeviceFactory edgeDeviceFactory,ArrayList<Vector> dataset,Vector data){
+    public void testKL(EdgeDeviceFactory edgeDeviceFactory,ArrayList<Vector> dataset,ArrayList<Vector> data){
         EdgeDevice device = edgeDeviceFactory.createEdgeDevice();
+        device.generateAggFingerprints(data);
         HashSet[] fingerprint0 = device.aggFingerprints;
-
+        device.clearFingerprints();
         numberOfTrue=0;
         numberOfFalse=0;
 
-        HashSet<Integer> intersection = new HashSet<>();
         for (Vector v : dataset) {
-            if (v==data){
+            if (v==data.get(0)){
                 continue;
             }
+            HashSet<Integer> intersection = new HashSet<>();
             boolean flag = false;
             ArrayList<Vector> arrayList = new ArrayList<>();
             arrayList.add(v);

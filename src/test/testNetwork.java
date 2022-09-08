@@ -3,6 +3,7 @@ import be.tarsos.lsh.Vector;
 import be.tarsos.lsh.families.DistanceComparator;
 import be.tarsos.lsh.families.DistanceMeasure;
 import be.tarsos.lsh.families.EuclideanDistance;
+import be.tarsos.lsh.families.EuclidianHashFamily;
 import be.tarsos.lsh.util.TestUtils;
 import main.EdgeDevice;
 import main.EdgeDeviceFactory;
@@ -13,26 +14,54 @@ import utils.DataGenerator;
 import java.io.IOException;
 import java.util.*;
 
-
 public class testNetwork {
     public static void main(String[] args) throws Throwable {
-        int numberOfHashes = 4;
-        int numberOfHashTables = 40;
+        int size = 4;
         int dimensions = 20;
-        Constants.slide = 500;
-        EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(Constants.radiusEuclideanDict.get(Constants.forestCoverFileName),
-                dimensions, numberOfHashes, numberOfHashTables);
-        EdgeNodeNetwork.setNumberOfHashTables(numberOfHashTables);
-        EdgeNodeNetwork.createNetwork(3, edgeDeviceFactory);
-        EdgeNodeNetwork.startNetwork();
 
+        ArrayList<ArrayList<Vector>> buckets = new ArrayList<>();
+        for (int i=0;i<size;i++){
+            buckets.add(generateBucket(dimensions,100,3));
+        }
+        int n=buckets.stream().mapToInt(ArrayList::size).sum();
+
+        double p1=0.9;
+        double p2=0.1;
+        double k = Math.log(n)/Math.log(1/p2);
+        double L = Math.pow(n,Math.log(1/p1)/Math.log(1/p2));
+        int numberOfHashes = (int) k;
+        int numberOfHashTables = (int) L;
+        EuclideanDistance euclideanDistance = new EuclideanDistance();
+
+        double avg=0.0;
+        for (Vector v:buckets.get(0)){
+            avg+=euclideanDistance.distance(buckets.get(0).get(0),v);
+        }
+        Constants.R = avg/buckets.get(0).size();
+        System.out.println("The avg distance of neighbor is "+ Constants.R);
+
+        EuclidianHashFamily hashFamily;
+        if ((int) (1 * Constants.R) == 0) {
+            hashFamily = new EuclidianHashFamily(4, dimensions);
+        } else {
+            hashFamily = new EuclidianHashFamily((int) (10*Constants.R), dimensions);
+        }
+        EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(hashFamily, numberOfHashes, numberOfHashTables);
+        EdgeNodeNetwork.setNumberOfHashTables(numberOfHashTables);
+        EdgeNodeNetwork.createNetwork(size, edgeDeviceFactory);
+        EdgeNodeNetwork.startNetwork();
         System.out.println("started!");
-        DataGenerator.getInstance("TAO", false);
-        int currentTime = 0;
-        Constants.W = 10000;
-        Constants.slide = 500;
-        DataGenerator.getIncomingData(0, Constants.slide);
+
+//        ArrayList<Vector> outlier = DataGenerator.fullTransfer(buckets.get(0));
+        ArrayList<Vector> outlier = DataGenerator.nonTransfer(buckets);
+
         EdgeNodeNetwork.stopNetwork();
+    }
+
+    public static ArrayList<Vector> generateBucket(int dimensions,int size,double radius){
+        ArrayList<Vector> data = TestUtils.generate(dimensions,1,100);
+        TestUtils.addNeighbours(data,size-1,radius);
+        return data;
     }
 }
 

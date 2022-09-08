@@ -32,7 +32,7 @@ public class DataGenerator {
             int finalI = i;
             Thread t = new Thread(() -> {
                 try {
-                    System.out.println(Thread.currentThread().getName()+": notify listener "+finalI);
+//                    System.out.println(Thread.currentThread().getName()+": notify listener "+finalI);
                     int left = Math.min(finalI*lengthOfData,data.size());
                     int right = Math.min((finalI+1)*lengthOfData,data.size());
                     ArrayList<Vector> dataForDevice = new ArrayList<>(data.subList(left,right));
@@ -54,7 +54,6 @@ public class DataGenerator {
 
     public static DataGenerator getInstance(String type, boolean withTime) throws IOException {
         String name = "";
-        boolean random = false;
         if (instance != null) {
             return instance;
         } else {
@@ -65,12 +64,7 @@ public class DataGenerator {
                 case "STOCK":name = Constants.stockFileName;break;
                 case "Gauss":name = Constants.gaussFileName;break;
                 case "HPC":name = Constants.hpcFileName;break;
-                default: random = true;break;
-            }
-            if (random){
-                instance = new DataGenerator(false);
-                instance.getRandomInput(1000, 10);
-                return instance;
+                default: break;
             }
             if (withTime){
                 String newPath = GenerateTimestamp.generate(Constants.slide*10,Constants.slide,name);
@@ -133,26 +127,6 @@ public class DataGenerator {
         }
 //        HashSet<Data> outlier = notifyDevices(results,currentTime.getTime());
         return results;
-    }
-
-
-    /**
-     * generate random data of the size length in the range [0,range]
-     * @param length
-     * @param range
-     */
-    public void getRandomInput(int length, int range) {
-
-        Random r = new Random();
-        for (int i = 1; i <= length; i++) {
-            double d = r.nextInt(range);
-            Vector data = new Vector(d);
-            data.arrivalTime = i;
-            dataQueue.add(data);
-            dataQueue.add(data);
-
-        }
-
     }
 
     /**
@@ -267,6 +241,34 @@ public class DataGenerator {
             }
         }
         return outlier;
+    }
+
+    public static ArrayList<Vector> fullTransfer(ArrayList<Vector> bucket) throws InterruptedException {
+        notifyDevices(bucket,0);
+        return null;
+    }
+
+    public static ArrayList<Vector> nonTransfer(ArrayList<ArrayList<Vector>> bucket) throws Throwable {
+        assert (bucket.size()==listeners.size());
+        ArrayList<Thread> threads = new ArrayList<>();
+        for (int i=0;i<listeners.size();i++){
+            int finalI = i;
+            Thread t = new Thread(() -> {
+                try {
+                    listeners.get(finalI).setRawData(bucket.get(finalI));
+                    outlierList.addAll(listeners.get(finalI).detectOutlier(0));
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            threads.add(t);
+            t.start();
+        }
+
+        for (Thread t:threads){
+            t.join();
+        }
+        return null;
     }
 }
 

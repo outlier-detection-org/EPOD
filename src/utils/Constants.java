@@ -26,10 +26,11 @@ public class Constants {
 
     public static String outputFile= prefix+"\\Algorithm\\output\\outputDefault.txt";
 
-    public static HashMap<String, Integer> radiusEuclideanDict = new HashMap<>();
-
-    static {
-        radiusEuclideanDict.put(forestCoverFileName,30);
-    }
+//    public static HashMap<String, Double> radiusEuclideanDict = new HashMap<>();
+//
+//    static {
+//        radiusEuclideanDict.put(forestCoverFileName,30.0);
+//        radiusEuclideanDict.put(taoFileName,0.014709762408123913);
+//    }
 }
 

@@ -24,7 +24,7 @@ public class EdgeNode extends RPCFrame implements Runnable {
         }
     }
     public List<Vector> upload(HashSet[] aggFingerprints) throws InterruptedException {
-        System.out.println(Thread.currentThread().getName()+": "+this+" node upload");
+//        System.out.println(Thread.currentThread().getName()+": "+this+" node upload");
         ArrayList<Thread> threads = new ArrayList<>();
         this.localAggFingerprints = aggFingerprints;
         this.allData.clear();
@@ -32,11 +32,12 @@ public class EdgeNode extends RPCFrame implements Runnable {
             if (node==this)
                 continue;
             Thread t = new Thread(() -> {
-                System.out.println(Thread.currentThread().getName()+": "+this+" new thread for invoke compareAndSend to "+node);
+//                System.out.println(Thread.currentThread().getName()+": "+this+" new thread for invoke compareAndSend to "+node);
                 List<Vector> data;
                 try {
-                    Object[] parameters = new Object[]{aggFingerprints,false};
+                    Object[] parameters = new Object[]{aggFingerprints,true};
                     data = (List<Vector>) invoke("localhost", node.port, EdgeNode.class.getMethod("compareAndSend", HashSet[].class,boolean.class), parameters);
+                    System.out.println("result size is :"+data.size());
                     allData.addAll(data);
                 } catch (Throwable e) {
                     throw new RuntimeException(e);
@@ -55,7 +56,7 @@ public class EdgeNode extends RPCFrame implements Runnable {
     public List<Vector> compareAndSend(HashSet[] aggFingerprints,boolean allData) throws Throwable {
         if (allData) {
             HashSet<Integer> intersection = new HashSet<>();
-            System.out.println(Thread.currentThread().getName() + " " + this + ": compareAndSend :)");
+//            System.out.println(Thread.currentThread().getName() + " " + this + ": compareAndSend :)");
             for (int i = 0; i < numberOfHashTables; i++) {
                 intersection.addAll(localAggFingerprints[i]);
                 intersection.retainAll(aggFingerprints[i]);

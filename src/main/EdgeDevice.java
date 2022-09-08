@@ -26,11 +26,11 @@ public class EdgeDevice extends RPCFrame implements Runnable {
 
     public Detector detector;
 
-    public EdgeDevice(HashFamily hashFamily, int NumberOfHashes, int NumberOfHashTables){
+    public EdgeDevice(Index index, int NumberOfHashes, int NumberOfHashTables){
         this.port = new Random().nextInt(50000)+10000;
         this.detector = new NewNETS(0);
         this.numberOfHashTables = NumberOfHashTables;
-        this.index = new Index(hashFamily,NumberOfHashes,NumberOfHashTables);
+        this.index = index;
         this.fingerprints = new int[NumberOfHashTables];
         this.aggFingerprints = new HashSet[NumberOfHashTables];
         for (int i = 0; i < NumberOfHashTables; i++) {
@@ -44,9 +44,8 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         }
     }
     public List<Vector> detectOutlier(long currentTime) throws Throwable {
-        System.out.println(Thread.currentThread().getName()+" "+this+": receive data and detect outlier: "+this.rawData.size());
+//        System.out.println(Thread.currentThread().getName()+" "+this+": receive data and detect outlier: "+this.rawData.size());
         generateAggFingerprints(rawData);
-        System.out.println("zxy: "+this.allRawDataList.size());
         sendAggFingerprints();
         System.out.println("zxy: "+this.allRawDataList.size());
 //        detector.detectOutlier(allRawDataList,currentTime);
@@ -54,17 +53,22 @@ public class EdgeDevice extends RPCFrame implements Runnable {
     }
 
     public void generateAggFingerprints(List<Vector> data){
+//        System.out.println("raw data size: "+data.size());
         for (Vector datum : data) {
             for (int j = 0; j < this.numberOfHashTables; j++) {
                 int bucketId = index.getHashTable().get(j).getHashValue(datum);
+//                System.out.println(Thread.currentThread().getName()+": "+bucketId);
                 aggFingerprints[j].add(bucketId);
             }
         }
-        System.out.println(Thread.currentThread().getName()+": "+this+"generateAggFingerprints "+ aggFingerprints.length);
+//        for (int j = 0; j < this.numberOfHashTables; j++) {
+//            System.out.println(Thread.currentThread().getName()+"agg size: "+j+" "+aggFingerprints[j].size());
+//        }
+//        System.out.println(Thread.currentThread().getName()+": "+this+"generateAggFingerprints "+ aggFingerprints.length);
     }
 
     public void sendAggFingerprints() throws Throwable {
-        System.out.println(Thread.currentThread().getName()+": "+this+" sendAggFingerprints, invoke upload");
+//        System.out.println(Thread.currentThread().getName()+": "+this+" sendAggFingerprints, invoke upload");
         Object[] parameters = new Object[]{aggFingerprints};
         List<Vector> result = (List<Vector>) invoke("localhost",this.nearestNode.port,EdgeNode.class.getMethod("upload", HashSet[].class),parameters);
         if(!result.isEmpty()){
