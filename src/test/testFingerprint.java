@@ -121,7 +121,7 @@ public class testFingerprint extends JFrame {
     public void testKL(EdgeDeviceFactory edgeDeviceFactory,ArrayList<Vector> dataset,ArrayList<Vector> data){
         EdgeDevice device = edgeDeviceFactory.createEdgeDevice();
         device.generateAggFingerprints(data);
-        HashSet[] fingerprint0 = device.aggFingerprints;
+        HashSet<Integer> fingerprint0 = device.aggFingerprints;
         device.clearFingerprints();
         numberOfTrue=0;
         numberOfFalse=0;
@@ -135,14 +135,11 @@ public class testFingerprint extends JFrame {
             ArrayList<Vector> arrayList = new ArrayList<>();
             arrayList.add(v);
             device.generateAggFingerprints(arrayList);
-            HashSet[] fingerprint = device.aggFingerprints;
-            for (int i = 0; i < edgeDeviceFactory.NumberOfHashTables; i++) {
-                intersection.addAll(fingerprint0[i]);
-                intersection.retainAll(fingerprint[i]);
-                if (!intersection.isEmpty()) {
-                    flag = true;
-                    break;
-                }
+            HashSet<Integer> fingerprint = device.aggFingerprints;
+            intersection.addAll(fingerprint0);
+            intersection.retainAll(fingerprint);
+            if (!intersection.isEmpty()) {
+                flag = true;
             }
             if (flag) {
                 numberOfTrue++;
