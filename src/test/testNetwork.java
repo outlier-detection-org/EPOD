@@ -16,21 +16,22 @@ import java.util.*;
 
 public class testNetwork {
     public static void main(String[] args) throws Throwable {
-        int size = 4;
+        int size = 6;
         int dimensions = 20;
 
         ArrayList<ArrayList<Vector>> buckets = new ArrayList<>();
         for (int i=0;i<size;i++){
-            buckets.add(generateBucket(dimensions,100,3));
+            buckets.add(generateBucket(dimensions,25,3));
         }
         int n=buckets.stream().mapToInt(ArrayList::size).sum();
 
-        double p1=0.9;
-        double p2=0.1;
+        double p1=0.8;
+        double p2=0.4;
         double k = Math.log(n)/Math.log(1/p2);
         double L = Math.pow(n,Math.log(1/p1)/Math.log(1/p2));
         int numberOfHashes = (int) k;
         int numberOfHashTables = (int) L;
+        System.out.println("k is "+numberOfHashes+" L is "+numberOfHashTables);
         EuclideanDistance euclideanDistance = new EuclideanDistance();
 
         double avg=0.0;
@@ -48,13 +49,12 @@ public class testNetwork {
         }
         EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(hashFamily, numberOfHashes, numberOfHashTables);
         EdgeNodeNetwork.setNumberOfHashTables(numberOfHashTables);
-        EdgeNodeNetwork.createNetwork(size, edgeDeviceFactory);
+        EdgeNodeNetwork.createNetwork(3,2, edgeDeviceFactory);
         EdgeNodeNetwork.startNetwork();
         System.out.println("started!");
 
 //        ArrayList<Vector> outlier = DataGenerator.fullTransfer(buckets.get(0));
         ArrayList<Vector> outlier = DataGenerator.nonTransfer(buckets);
-
         EdgeNodeNetwork.stopNetwork();
     }
 

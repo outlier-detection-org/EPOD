@@ -2,11 +2,14 @@ package main;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class EdgeNodeNetwork {
     public static ArrayList<EdgeNode> edgeNodes = new ArrayList<>();
+    public static HashMap<Integer,EdgeDevice> edgeDeviceHashMap = new HashMap<>();
     public static int numberOfHashTables;
-
+    public static int nn;
+    public static int dn;
     public static ArrayList<Thread> threads=new ArrayList<>();
 
     public static void setNumberOfHashTables(int number) {
@@ -20,32 +23,42 @@ public class EdgeNodeNetwork {
         return edgeNode;
     }
 
-    public static void createNetwork(int n , EdgeDeviceFactory edgeDeviceFactory){
-        for (int i=0;i<n;i++){
+    public static void createNetwork(int nn , int dn, EdgeDeviceFactory edgeDeviceFactory){
+        for (int i=0;i<nn;i++){
             EdgeNode node = createEdgeNode();
-            EdgeDevice device = edgeDeviceFactory.createEdgeDevice();
-            node.setEdgeDevice(device);
-            device.setNearestNode(node);
+            ArrayList<Integer> devices = new ArrayList<>();
+            for (int j=0;j<dn;j++){
+                EdgeDevice device = edgeDeviceFactory.createEdgeDevice();
+                edgeDeviceHashMap.put(device.hashCode(),device);
+                device.setNearestNode(node);
+                devices.add(device.hashCode());
+            }
+            node.setEdgeDevice(devices);
         }
     }
 
     public static void startNetwork() throws IOException {
-        for (EdgeNode node: edgeNodes){
+        for (EdgeNode node : edgeNodes) {
             node.active = true;
-            node.edgeDevice.active = true;
             Thread t1 = new Thread(node);
-            Thread t2 = new Thread(node.edgeDevice);
             threads.add(t1);
-            threads.add(t2);
             t1.start();
+        }
+        for (EdgeDevice device : edgeDeviceHashMap.values()) {
+            device.active = true;
+            Thread t2 = new Thread(device);
+            threads.add(t2);
             t2.start();
         }
     }
 
+
     public static void stopNetwork() throws IOException, InterruptedException {
-        for (EdgeNode node: edgeNodes) {
+        for (EdgeNode node : edgeNodes) {
             node.close();
-            node.edgeDevice.close();
+        }
+        for (EdgeDevice device : edgeDeviceHashMap.values()) {
+            device.close();
         }
     }
 
