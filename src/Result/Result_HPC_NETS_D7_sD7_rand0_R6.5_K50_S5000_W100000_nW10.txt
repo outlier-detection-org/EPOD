@@ -1,0 +1,18 @@
+At window 0, # outliers: 741
+At window 1, # outliers: 720
+At window 2, # outliers: 715
+At window 3, # outliers: 719
+At window 4, # outliers: 694
+At window 5, # outliers: 711
+At window 6, # outliers: 736
+At window 7, # outliers: 760
+At window 8, # outliers: 790
+At window 9, # outliers: 738
+# Dataset: HPC
+Method: NETS
+Dim: 7
+subDim: 7
+R/K/W/S: 6.5/50/100000/5000
+# of windows: 10
+Avg CPU time(s) 	 Peak memory(MB)
+0.20778000000000002	43.4

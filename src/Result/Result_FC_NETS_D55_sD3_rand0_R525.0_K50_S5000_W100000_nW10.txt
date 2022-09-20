@@ -1,0 +1,18 @@
+At window 0, # outliers: 461
+At window 1, # outliers: 441
+At window 2, # outliers: 487
+At window 3, # outliers: 20
+At window 4, # outliers: 0
+At window 5, # outliers: 0
+At window 6, # outliers: 0
+At window 7, # outliers: 0
+At window 8, # outliers: 0
+At window 9, # outliers: 0
+# Dataset: FC
+Method: NETS
+Dim: 55
+subDim: 3
+R/K/W/S: 525.0/50/100000/5000
+# of windows: 10
+Avg CPU time(s) 	 Peak memory(MB)
+0.16558999999999996	172.0

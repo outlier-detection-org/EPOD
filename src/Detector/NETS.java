@@ -273,7 +273,7 @@ public class NETS {
 		return candidateCellIndices;
 	}
 
-	public void findOutlier(String type, int itr) {
+	public HashSet<Tuple> findOutlier(String type, int itr) {
 		// Remove expired or outdated outliers
 		Iterator<Tuple> it = outliers.iterator();
 		while (it.hasNext()) {
@@ -288,6 +288,9 @@ public class NETS {
 			this.findOutlierNaive();
 		else if(type == "NETS")
 			this.findOutlierNETS(itr);
+
+		//print outliers
+		return outliers;
 	}
 
 	public void findOutlierNaive() {

@@ -9,7 +9,7 @@ import dataStructure.Tuple;
 
 public class Prioritizer {
 	public static void main(String[] args) throws IOException {
-		String dataset = "EM";
+		String dataset = "GAS";
 		StreamGenerator streamGen = new StreamGenerator(dataset, 0);
 		int dim = streamGen.getMaxValues().length;
 		Integer[] defaultList = new Integer[dim];
