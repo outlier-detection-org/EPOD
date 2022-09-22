@@ -9,13 +9,13 @@ At window 7, # outliers: 109
 At window 8, # outliers: 71
 At window 9, # outliers: 73
 # Dataset: GAS
-Method: NETS
+Method: NAIVE
 Dim: 10
 subDim: 10
 R/K/W/S: 2.75/50/100000/5000
 # of windows: 10
 Avg CPU time(s) 	 Peak memory(MB)
-0.1734	45.0
+11.05464	46.5
 At window 0, # outliers: 347
 At window 1, # outliers: 345
 At window 2, # outliers: 345
@@ -27,10 +27,28 @@ At window 7, # outliers: 109
 At window 8, # outliers: 71
 At window 9, # outliers: 73
 # Dataset: GAS
-Method: NETS
+Method: NAIVE
 Dim: 10
 subDim: 10
 R/K/W/S: 2.75/50/100000/5000
 # of windows: 10
 Avg CPU time(s) 	 Peak memory(MB)
-0.1609	45.1
+10.312450000000002	46.5
+At window 0, # outliers: 347
+At window 1, # outliers: 345
+At window 2, # outliers: 345
+At window 3, # outliers: 347
+At window 4, # outliers: 307
+At window 5, # outliers: 318
+At window 6, # outliers: 307
+At window 7, # outliers: 109
+At window 8, # outliers: 71
+At window 9, # outliers: 73
+# Dataset: GAS
+Method: NAIVE
+Dim: 10
+subDim: 10
+R/K/W/S: 2.75/50/100000/5000
+# of windows: 10
+Avg CPU time(s) 	 Peak memory(MB)
+10.10933	46.5

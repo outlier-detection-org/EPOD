@@ -1,0 +1,18 @@
+At window 0, # outliers: 391
+At window 1, # outliers: 383
+At window 2, # outliers: 359
+At window 3, # outliers: 339
+At window 4, # outliers: 330
+At window 5, # outliers: 345
+At window 6, # outliers: 332
+At window 7, # outliers: 332
+At window 8, # outliers: 320
+At window 9, # outliers: 331
+# Dataset: STK
+Method: NAIVE
+Dim: 1
+subDim: 1
+R/K/W/S: 0.45/50/100000/5000
+# of windows: 10
+Avg CPU time(s) 	 Peak memory(MB)
+6.190579999999999	39.5

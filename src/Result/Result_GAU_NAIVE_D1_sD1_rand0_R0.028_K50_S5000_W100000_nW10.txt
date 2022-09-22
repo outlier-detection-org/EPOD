@@ -1,0 +1,18 @@
+At window 0, # outliers: 804
+At window 1, # outliers: 788
+At window 2, # outliers: 807
+At window 3, # outliers: 791
+At window 4, # outliers: 804
+At window 5, # outliers: 749
+At window 6, # outliers: 743
+At window 7, # outliers: 763
+At window 8, # outliers: 778
+At window 9, # outliers: 792
+# Dataset: GAU
+Method: NAIVE
+Dim: 1
+subDim: 1
+R/K/W/S: 0.028/50/100000/5000
+# of windows: 10
+Avg CPU time(s) 	 Peak memory(MB)
+37.60934	42.5

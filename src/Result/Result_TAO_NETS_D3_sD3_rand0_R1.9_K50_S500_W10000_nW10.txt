@@ -1,0 +1,18 @@
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 163
+At window 5, # outliers: 162
+At window 6, # outliers: 180
+At window 7, # outliers: 154
+At window 8, # outliers: 141
+At window 9, # outliers: 146
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 10
+Avg CPU time(s) 	 Peak memory(MB)
+0.00624	5.3

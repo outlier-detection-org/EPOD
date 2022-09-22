@@ -14,11 +14,12 @@ import utils.Utils;
 
 public class testBase {
 	public static String dataset ="GAS";
-	public static String method = "NETS";
-	public static double R = 2.75; // distance threshold, default=6.5(HPC), 115(EM), 1.9(TAO), 0.45(STK), 0.028(GAU), 525(FC), 2.75(GAS)
+	public static String method = "NAIVE";
+	public static double R = 2.75;
+	// distance threshold, default=6.5(HPC), 115(EM), 1.9(TAO), 0.45(STK), 0.028(GAU), 525(FC), 2.75(GAS)
 	public static int K = 50; // neighborhood threshold, default = 50
-	public static int dim = 10; // dimension, default = 7(HPC), 16(EM), 55(FC), 3(TAO)
-	public static int subDim = 10; // sub-dimension selected by
+	public static int dim = 10; // dimension, default = 7(HPC), 16(EM), 55(FC), 3(TAO), 10(GAS)
+	public static int subDim = 10; // sub-dimension selected by 3(FC)
 	public static int randSubDim = 0; //0: false, 1:true
 	public static int S = 5000; // sliding size, default = 500(FC, TAO), 5000(Otherwise)
 	public static int W = 100000; // sliding size, default = 10000(FC, TAO), 100000(Otherwise)
@@ -35,17 +36,15 @@ public class testBase {
 		
 	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws IOException {
-		loadArgs(args);
+//		loadArgs(args);
 		StreamGenerator streamGen = new StreamGenerator(dataset, randSubDim);
 		ArrayList<Tuple> newSlideTuples;
 		NETS detector = new NETS(dim, subDim, R, K, S, W, nW, streamGen.getMaxValues(), streamGen.getMinValues());
-		
-		if(args.length > 0){
-			String fileName = "src\\Result\\Result_"+dataset+"_"+method+"_D"+dim+"_sD"+subDim+"_rand"+randSubDim+"_R"+R+"_K"+K+"_S"+S+"_W"+W+"_nW"+nW+".txt";
-			fw = new BufferedWriter(new FileWriter(new File(fileName),true));
-			outlierFw = new BufferedWriter(new FileWriter(new File("src\\Result\\Result_"+dataset+"_outliers.txt")));
-			printType = "File";
-		}
+
+		String fileName = "src\\Result\\Result_"+dataset+"_"+method+"_D"+dim+"_sD"+subDim+"_rand"+randSubDim+"_R"+R+"_K"+K+"_S"+S+"_W"+W+"_nW"+nW+".txt";
+		fw = new BufferedWriter(new FileWriter(new File(fileName),true));
+		outlierFw = new BufferedWriter(new FileWriter(new File("src\\Result\\Result_"+method+"_"+dataset+"_outliers.txt")));
+		printType = "File";
 		/* Simulate sliding windows */
         mesureThread.start();
         int itr = 0;

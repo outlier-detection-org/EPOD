@@ -33,8 +33,8 @@ public class testDataset {
 //        DistanceMeasure measure = new EuclideanDistance();
 //        System.out.println(measure.distance(buckets.get(0).get(0),buckets.get(0).get(1)));
 //        System.out.println(measure.distance(buckets.get(0).get(0),buckets.get(1).get(0)));
-        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("src/Result/Bucketing.txt"));
-        ArrayList<ArrayList<Vector>> buckets = (ArrayList<ArrayList<Vector>>) objectInputStream.readObject();
+//        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("src/Result/Bucketing.txt"));
+//        ArrayList<ArrayList<Vector>> buckets = (ArrayList<ArrayList<Vector>>) objectInputStream.readObject();
         int a=1;
     }
     public static ArrayList<ArrayList<Vector>> bucketing(String type) throws IOException {
