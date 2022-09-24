@@ -62,12 +62,15 @@ public class DataGenerator {
                 case "TAO":name = Constants.taoFileName;break;
                 case "EM":name = Constants.emFileName;break;
                 case "STOCK":name = Constants.stockFileName;break;
-                case "Gauss":name = Constants.gaussFileName;break;
+                case "GAU":name = Constants.gaussFileName;break;
                 case "HPC":name = Constants.hpcFileName;break;
+                case "GAS":name = Constants.gasFileName;break;
                 default: break;
             }
             if (withTime){
-                String newPath = GenerateTimestamp.generate(Constants.slide*10,Constants.slide,name);
+                String[] strings = name.split("\\\\");
+                String newPath = name.substring(0, name.lastIndexOf('\\')) + "\\Timestamp_data\\Time_" +
+                        strings[strings.length - 1];
                 Constants.dataset = newPath;
                 instance = new DataGenerator(true);
                 instance.getData(newPath);
@@ -161,8 +164,8 @@ public class DataGenerator {
                     }
                     else {
                         double[] d = new double[atts.length-1];
-                        for (int i = 1; i < d.length-1; i++) {
-                            d[i] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
+                        for (int i = 1; i < atts.length; i++) {
+                            d[i-1] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
                         }
                         Vector data = new Vector(d);
                         data.arrivalRealTime = formatter.parse(atts[0]);
