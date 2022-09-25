@@ -8,15 +8,8 @@ import utils.Constants;
 import java.util.*;
 
 public class NewNETS extends Detector {
-//	public double R;
-//	public int K;
-//	public int dim;
-//	public int subDim;
-//	public boolean Constants.subDimFlag;
-//	public int S;
-//	public int W;
-//	public int nS;
-//	public int nW;
+	public int subDim;
+	public boolean subDimFlag;
 	public double neighCellIdxDist;
 	public double neighCellFullDimIdxDist;
 	public double[] maxValues;
@@ -44,8 +37,28 @@ public class NewNETS extends Detector {
 
 	public NewNETS(int random) {
 //		this.dim = dim;
-//		this.subDim = subDim;
-//		this.Constants.subDimFlag = dim != subDim;
+		switch (Constants.dataset) {
+			case "ForestCover":
+			case "TAO":
+				subDim = 3;
+				break;
+			case "EM":
+				subDim = 4;
+				break;
+			case "STOCK":
+			case "GAU":
+				subDim = 1;
+				break;
+			case "HPC":
+				subDim = 7;
+				break;
+			case "GAS":
+				subDim = 10;
+				break;
+			default:
+				break;
+		}
+		this.subDimFlag = Constants.dim != subDim;
 //		this.R = R;
 //		this.K = K;
 //		this.S = S;
@@ -53,8 +66,8 @@ public class NewNETS extends Detector {
 //		this.nW = nW;
 //		this.nS = W/S;
 		this.random = random;
-		this.neighCellIdxDist = Math.sqrt(Constants.subDim)*2;
-		this.neighCellFullDimIdxDist = Math.sqrt(Constants.dimensions)*2;
+		this.neighCellIdxDist = Math.sqrt(subDim)*2;
+		this.neighCellFullDimIdxDist = Math.sqrt(Constants.dim)*2;
 //		this.maxValues = maxValues;
 //		this.minValues = minValues;
 		determineMinMax();
@@ -71,48 +84,48 @@ public class NewNETS extends Detector {
 						
 		/* Cell size calculation for all dim*/
 		double minDimSize = Integer.MAX_VALUE;
-		double[] dimSize = new double[Constants.dimensions];
-		for(int i=0;i<Constants.dimensions;i++) {
+		double[] dimSize = new double[Constants.dim];
+		for(int i=0;i<Constants.dim;i++) {
 			dimSize[i] = maxValues[i] - minValues[i]; 
 			if(dimSize[i] <minDimSize) minDimSize = dimSize[i];
 		}
 		
 		double dimWeightsSum = 0;
-		int[] dimWeights = new int[Constants.dimensions];
-		for(int i=0;i<Constants.dimensions;i++) {
+		int[] dimWeights = new int[Constants.dim];
+		for(int i=0;i<Constants.dim;i++) {
 			//dimWeights[i] = dimSize[i]/minDimSize; //relative-weight
 			dimWeights[i] = 1; //equal-weight
 			dimWeightsSum+=dimWeights[i];
 		}
 		
-		dimLength = new double[Constants.dimensions];
-		double[] gapCount = new double[Constants.dimensions];
-		for(int i = 0;i<Constants.dimensions;i++) {
+		dimLength = new double[Constants.dim];
+		double[] gapCount = new double[Constants.dim];
+		for(int i = 0;i<Constants.dim;i++) {
 			dimLength[i] = Math.sqrt(Constants.R*Constants.R*dimWeights[i]/dimWeightsSum);
 			gapCount[i] = Math.ceil(dimSize[i]/dimLength[i]);
 			dimSize[i] = gapCount[i]*dimLength[i];
 		}
 		
 		/* Cell size calculation for sub dim*/
-		if (Constants.subDimFlag) {
+		if (subDimFlag) {
 			double minSubDimSize = Integer.MAX_VALUE;
-			double[] subDimSize = new double[Constants.subDim];
-			for(int i=0;i<Constants.subDim;i++) {
+			double[] subDimSize = new double[subDim];
+			for(int i=0;i<subDim;i++) {
 				subDimSize[i] = maxValues[i] - minValues[i]; 
 				if(subDimSize[i] <minSubDimSize) minSubDimSize = subDimSize[i];
 			}
 			
 			double subDimWeightsSum = 0;
-			int[] subDimWeights = new int[Constants.subDim];
-			for(int i=0;i<Constants.subDim;i++) {
+			int[] subDimWeights = new int[subDim];
+			for(int i=0;i<subDim;i++) {
 				//subDimWeights[i] = subDimSize[i]/minSubDimSize; //relative-weight
 				subDimWeights[i] = 1; //equal-weight
 				subDimWeightsSum+=subDimWeights[i];
 			}
 			
-			subDimLength = new double[Constants.subDim];
-			double[] subDimgapCount = new double[Constants.subDim];
-			for(int i = 0;i<Constants.subDim;i++) {
+			subDimLength = new double[subDim];
+			double[] subDimgapCount = new double[subDim];
+			for(int i = 0;i<subDim;i++) {
 				subDimLength[i] = Math.sqrt(Constants.R*Constants.R*subDimWeights[i]/subDimWeightsSum);
 				subDimgapCount[i] = Math.ceil(subDimSize[i]/subDimLength[i]);
 				subDimSize[i] = subDimgapCount[i]*subDimLength[i];
@@ -125,8 +138,8 @@ public class NewNETS extends Detector {
 	public HashSet<Vector> detectOutlier(List<Vector> data, long currentTime){
 		if (data.isEmpty()) return null;
 		ArrayList<Tuple> newSlide = preprocessData(data);
-		calcNetChange(newSlide, (int) (currentTime/Constants.slide));
-		findOutlier("NETS", (int) (currentTime/Constants.slide));
+		calcNetChange(newSlide, (int) (currentTime/Constants.S));
+		findOutlier("NETS", (int) (currentTime/Constants.S));
 		return outliers;
 	}
 
@@ -139,7 +152,7 @@ public class NewNETS extends Detector {
 				value[j] = datum.values[priorityList.get(i)];
 				j++;
 			}
-			Tuple tuple = new Tuple(datum.arrivalTime,datum.arrivalTime/Constants.slide,value);
+			Tuple tuple = new Tuple(datum.arrivalTime,datum.arrivalTime/Constants.S,value);
 			newSlide.add(tuple);
 		}
 		return newSlide;
@@ -208,12 +221,12 @@ public class NewNETS extends Detector {
 		for(Tuple t:slideTuples) {
 			ArrayList<Short> fullDimCellIdx = new ArrayList<Short>();
 			ArrayList<Short> subDimCellIdx = new ArrayList<Short>();
-			for (int j = 0; j<Constants.dimensions; j++) { 
+			for (int j = 0; j<Constants.dim; j++) { 
 				short dimIdx = (short) ((t.value[j]-minValues[j])/dimLength[j]);
 				fullDimCellIdx.add(dimIdx);
 			}
-			if (Constants.subDimFlag) {
-				for (int j = 0; j<Constants.subDim; j++) {
+			if (subDimFlag) {
+				for (int j = 0; j<subDim; j++) {
 					short dimIdx = (short) ((t.value[j]-minValues[j])/subDimLength[j]);
 					subDimCellIdx.add(dimIdx);
 				}
@@ -235,15 +248,15 @@ public class NewNETS extends Detector {
 				idxDecoder.put(id, subDimCellIdx);
 			}
 			if(!slideIn.containsKey(idxEncoder.get(subDimCellIdx))) {
-				double[] cellCenter = new double[Constants.subDim];
-				if (Constants.subDimFlag) {
-					for (int j = 0; j<Constants.subDim; j++) cellCenter[j] = minValues[j] + subDimCellIdx.get(j)*subDimLength[j]+subDimLength[j]/2;
+				double[] cellCenter = new double[subDim];
+				if (subDimFlag) {
+					for (int j = 0; j<subDim; j++) cellCenter[j] = minValues[j] + subDimCellIdx.get(j)*subDimLength[j]+subDimLength[j]/2;
 				}else {
-					for (int j = 0; j<Constants.dimensions; j++) cellCenter[j] = minValues[j] + fullDimCellIdx.get(j)*dimLength[j]+dimLength[j]/2;
+					for (int j = 0; j<Constants.dim; j++) cellCenter[j] = minValues[j] + fullDimCellIdx.get(j)*dimLength[j]+dimLength[j]/2;
 				}
-				slideIn.put(idxEncoder.get(subDimCellIdx), new Cell(subDimCellIdx, cellCenter, Constants.subDimFlag));
+				slideIn.put(idxEncoder.get(subDimCellIdx), new Cell(subDimCellIdx, cellCenter, subDimFlag));
 			}
-			slideIn.get(idxEncoder.get(subDimCellIdx)).addTuple(t, Constants.subDimFlag);
+			slideIn.get(idxEncoder.get(subDimCellIdx)).addTuple(t, subDimFlag);
 			
 			if(!fullDimCellSlideInCnt.containsKey(idxEncoder.get(fullDimCellIdx))) {
 				fullDimCellSlideInCnt.put(idxEncoder.get(fullDimCellIdx), 0);
@@ -259,7 +272,7 @@ public class NewNETS extends Detector {
 		this.indexingSlide(slideTuples);
 		
 		/* Slide out */
-		if(itr>Constants.numberSlidePerWindow-1) {
+		if(itr>Constants.nS-1) {
 			slideOut = slides.poll();
 			fullDimCellSlideOutCnt = fullDimCellSlidesCnt.poll();
 		}
@@ -308,7 +321,7 @@ public class NewNETS extends Detector {
 		influencedCells = new HashSet<Integer>();
 		for (Integer cellIdxWin:windowCnt.keySet()) {
 			//verify if inlier cell
-			if (!Constants.subDimFlag && windowCnt.get(cellIdxWin) > Constants.K) {
+			if (!subDimFlag && windowCnt.get(cellIdxWin) > Constants.K) {
 				continue;
 			}
 			for (Integer cellIdxSld:slideDelta.keySet()) {
@@ -328,7 +341,7 @@ public class NewNETS extends Detector {
 		HashMap<Double, HashSet<Integer>> candidateCellIndicesMap = new HashMap<Double, HashSet<Integer>>();
 		for (Integer cellIdxWin:windowCnt.keySet()) {
 			double dist = neighboringSetDist(idxDecoder.get(cellIdxInf), idxDecoder.get(cellIdxWin));
-			if(!Constants.subDimFlag) {
+			if(!subDimFlag) {
 				if (!cellIdxInf.equals(cellIdxWin) && dist < neighCellIdxDist) {
 					if(!candidateCellIndicesMap.containsKey(dist)) candidateCellIndicesMap.put(dist, new HashSet<Integer>());
 					candidateCellIndicesMap.get(dist).add(cellIdxWin);
@@ -405,7 +418,7 @@ public class NewNETS extends Detector {
 			//find neighbor cells
 			candidateCellsTupleCnt = 0;
 			ArrayList<Integer> candCellIndices = getSortedCandidateCellIndices(infCellIdx);		
-			if(!Constants.subDimFlag) candidateCellsTupleCnt += windowCnt.get(infCellIdx);
+			if(!subDimFlag) candidateCellsTupleCnt += windowCnt.get(infCellIdx);
 			//verify if outlier cell 
 			if(candidateCellsTupleCnt < Constants.K+1) {
 				for(HashMap<Integer, Cell> slide: slides) {
@@ -424,7 +437,7 @@ public class NewNETS extends Detector {
 						continue;
 					}
 					t.nnIn = fullDimCellWindowCnt.get(idxEncoder.get(t.fullDimCellIdx))-1;
-					t.removeOutdatedNNUnsafeOut(itr, Constants.numberSlidePerWindow);
+					t.removeOutdatedNNUnsafeOut(itr, Constants.nS);
 					if(t.getNN()<Constants.K) {
 						candOutlierTuples.add(t);
 					}else if(outliers.contains(t)){
@@ -456,7 +469,7 @@ public class NewNETS extends Detector {
 							continue CellLoop;
 						
 						HashSet<Tuple> otherTuples = new HashSet<Tuple>();
-						if(Constants.subDimFlag) {
+						if(subDimFlag) {
 							//reduce search space using sub-dims
 							for(Cell allIdxCell: currentSlide.get(otherCellIdx).childCells.values()) {
 								if(!allIdxCell.cellIdx.equals(tCand.fullDimCellIdx) 
@@ -499,7 +512,7 @@ public class NewNETS extends Detector {
 	
 	public double distTuple(Tuple t1, Tuple t2) {
 		double ss = 0;
-		for(int i = 0; i<Constants.dimensions; i++) {
+		for(int i = 0; i<Constants.dim; i++) {
 			ss += Math.pow((t1.value[i] - t2.value[i]),2);
 		}
 		 return Math.sqrt(ss);
@@ -508,7 +521,7 @@ public class NewNETS extends Detector {
 	public boolean neighboringTuple(Tuple t1, Tuple t2, double threshold) {
 		double ss = 0;
 		threshold *= threshold;
-		for(int i = 0; i<Constants.dimensions; i++) {
+		for(int i = 0; i<Constants.dim; i++) {
 			ss += Math.pow((t1.value[i] - t2.value[i]),2);
 			if(ss>threshold) return false;
 		}
@@ -528,7 +541,7 @@ public class NewNETS extends Detector {
 	
 	public double neighboringSetDist(ArrayList<Short> c1, ArrayList<Short> c2) {
 		double ss = 0;
-		double cellIdxDist = (c1.size() == Constants.dimensions? neighCellFullDimIdxDist : neighCellIdxDist);
+		double cellIdxDist = (c1.size() == Constants.dim? neighCellFullDimIdxDist : neighCellIdxDist);
 		double threshold = cellIdxDist*cellIdxDist;
 		for(int k = 0; k<c1.size(); k++) {
 			ss += Math.pow((c1.get(k) - c2.get(k)),2);
@@ -539,7 +552,7 @@ public class NewNETS extends Detector {
 	
 	public boolean neighboringSet(ArrayList<Short> c1, ArrayList<Short> c2) {
 		double ss = 0;
-		double cellIdxDist = (c1.size() == Constants.dimensions? neighCellFullDimIdxDist : neighCellIdxDist);
+		double cellIdxDist = (c1.size() == Constants.dim? neighCellFullDimIdxDist : neighCellIdxDist);
 		double threshold =cellIdxDist*cellIdxDist;
 		for(int k = 0; k<c1.size(); k++) {
 			ss += Math.pow((c1.get(k) - c2.get(k)),2);

@@ -45,6 +45,7 @@ public class Vector  implements Serializable,Comparable<Vector> {
 	public double[] values;
 	public int arrivalTime;
 	public Date arrivalRealTime;
+	public int deviceId;
 
 	public Vector(double... values){
             this.values = values;

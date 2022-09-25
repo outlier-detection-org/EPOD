@@ -4,8 +4,7 @@ import be.tarsos.lsh.Vector;
 import be.tarsos.lsh.families.DistanceComparator;
 import be.tarsos.lsh.families.DistanceMeasure;
 import be.tarsos.lsh.families.EuclideanDistance;
-import main.EdgeDevice;
-
+import be.tarsos.lsh.util.TestUtils;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,73 +12,57 @@ import java.util.*;
 
 public class DataGenerator {
 
-    public static PriorityQueue<Vector> dataQueue;
+    public PriorityQueue<Vector> dataQueue;
 
-    public static DataGenerator instance;
-
-    public static ArrayList<EdgeDevice> listeners = new ArrayList<>();
-
-    public static HashSet<Vector> outlierList = new HashSet<>();
-    public static void register(EdgeDevice edgeDevice){
-        listeners.add(edgeDevice);
-    }
-
-    public static HashSet<Vector> notifyDevices(ArrayList<Vector> data,long currentTime) throws InterruptedException {
-        System.out.println("all data size:"+data.size());
-        int lengthOfData = (int) Math.ceil(data.size()*1.0/listeners.size());
-        ArrayList<Thread> threads = new ArrayList<>();
-        for (int i=0;i<listeners.size();i++){
-            int finalI = i;
-            Thread t = new Thread(() -> {
-                try {
-//                    System.out.println(Thread.currentThread().getName()+": notify listener "+finalI);
-                    int left = Math.min(finalI*lengthOfData,data.size());
-                    int right = Math.min((finalI+1)*lengthOfData,data.size());
-                    ArrayList<Vector> dataForDevice = new ArrayList<>(data.subList(left,right));
-                    listeners.get(finalI).setRawData(dataForDevice);
-                    outlierList.addAll(listeners.get(finalI).detectOutlier(currentTime));
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            threads.add(t);
-            t.start();
+    public static DataGenerator getInstance(String type, int deviceId) throws Throwable {
+        switch (type) {
+            case "ForestCover":
+                Constants.datasetPath = Constants.forestCoverFileName;
+                break;
+            case "TAO":
+                Constants.datasetPath = Constants.taoFileName;
+                break;
+            case "EM":
+                Constants.datasetPath = Constants.emFileName;
+                break;
+            case "STOCK":
+                Constants.datasetPath = Constants.stockFileName;
+                break;
+            case "GAU":
+                Constants.datasetPath = Constants.gaussFileName;
+                break;
+            case "HPC":
+                Constants.datasetPath = Constants.hpcFileName;
+                break;
+            case "GAS":
+                Constants.datasetPath = Constants.gasFileName;
+                break;
+            default:
+                break;
         }
-
-        for (Thread t:threads){
-            t.join();
-        }
-        return outlierList;
-    }
-
-    public static DataGenerator getInstance(String type, boolean withTime) throws IOException {
-        String name = "";
-        if (instance != null) {
+        if (Constants.withTime && !Constants.withDeviceId) {
+            String[] strings = Constants.datasetPath.split("\\\\");
+            String newPath = Constants.datasetPath.substring(0, Constants.datasetPath.lastIndexOf('\\')) + "\\Timestamp_data\\Time_" +
+                    strings[strings.length - 1];
+            DataGenerator instance = new DataGenerator(true);
+            instance.getData(newPath);
+            Constants.datasetPathWithTime = newPath;
             return instance;
-        } else {
-            switch (type){
-                case "ForestCover":name = Constants.forestCoverFileName;break;
-                case "TAO":name = Constants.taoFileName;break;
-                case "EM":name = Constants.emFileName;break;
-                case "STOCK":name = Constants.stockFileName;break;
-                case "GAU":name = Constants.gaussFileName;break;
-                case "HPC":name = Constants.hpcFileName;break;
-                case "GAS":name = Constants.gasFileName;break;
-                default: break;
-            }
-            if (withTime){
-                String[] strings = name.split("\\\\");
-                String newPath = name.substring(0, name.lastIndexOf('\\')) + "\\Timestamp_data\\Time_" +
-                        strings[strings.length - 1];
-                Constants.dataset = newPath;
-                instance = new DataGenerator(true);
-                instance.getData(newPath);
-                return instance;
-            }
-            instance = new DataGenerator(false);
-            instance.getData(name);
+        } else if (Constants.withTime) {
+            String[] strings = Constants.datasetPath.split("\\\\");
+            String newPath = Constants.datasetPath.substring(0, Constants.datasetPath.lastIndexOf('\\')) + "\\Timestamp_data\\Time_" +
+                    strings[strings.length - 1];
+            Constants.datasetPathWithTime = newPath;
+            newPath = GenerateDeviceId.generateDeviceId(Constants.dn * Constants.nn, Constants.datasetPath)+
+                    "\\" + deviceId + ".txt";
+            DataGenerator instance = new DataGenerator(true);
+            instance.getData(newPath);
             return instance;
         }
+        //TODO: withTime = false that is count based window.
+        DataGenerator instance = new DataGenerator(false);
+        instance.getData(Constants.datasetPath);
+        return instance;
     }
 
     public boolean hasNext() {
@@ -103,7 +86,7 @@ public class DataGenerator {
      * @param length
      * @return
      */
-    public static HashSet<Vector> getIncomingData(int currentTime, int length) throws Throwable {
+    public ArrayList<Vector> getIncomingData(int currentTime, int length) throws Throwable {
         ArrayList<Vector> results = new ArrayList<Vector>();
         Vector d = dataQueue.peek();
         while (d != null && d.arrivalTime > currentTime
@@ -113,11 +96,10 @@ public class DataGenerator {
             d = dataQueue.peek();
 
         }
-        HashSet<Vector> outlier = notifyDevices(results,currentTime);
-        return outlier;
+        return results;
     }
 
-    public ArrayList<Vector> getTimeBasedIncomingData(Date currentTime, int lengthInSecond) throws Throwable {
+    public ArrayList<Vector> getTimeBasedIncomingData(Date currentTime, int lengthInSecond, int deviceId) throws Throwable {
         ArrayList<Vector> results = new ArrayList<>();
         Date endTime = new Date();
         endTime.setTime(currentTime.getTime() + lengthInSecond * 1000L);
@@ -128,7 +110,6 @@ public class DataGenerator {
             dataQueue.poll();
             d=dataQueue.peek();
         }
-//        HashSet<Data> outlier = notifyDevices(results,currentTime.getTime());
         return results;
     }
 
@@ -137,18 +118,15 @@ public class DataGenerator {
      * @param filename
      */
     public void getData(String filename) {
-        boolean hasTimestamp = false;
+        boolean hasTimestamp = Constants.withTime;
+        boolean hasDeviceId = Constants.withDeviceId;
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         try {
             BufferedReader bfr = new BufferedReader(new FileReader(new File(filename)));
 
             try {
                 String line = bfr.readLine();
-                try{
-                    Double.parseDouble(line.split(",")[0]);
-                }catch (NumberFormatException e){
-                    hasTimestamp = true;
-                }
+
                 int time = 1;
                 while (line != null) {
                     String[] atts = line.split(",");
@@ -163,13 +141,25 @@ public class DataGenerator {
                         time++;
                     }
                     else {
-                        double[] d = new double[atts.length-1];
-                        for (int i = 1; i < atts.length; i++) {
-                            d[i-1] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
+                        if (!hasDeviceId){
+                            double[] d = new double[atts.length-1];
+                            for (int i = 1; i < atts.length; i++) {
+                                d[i-1] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
+                            }
+                            Vector data = new Vector(d);
+                            data.deviceId=0;
+                            data.arrivalRealTime = formatter.parse(atts[0]);
+                            dataQueue.add(data);
+                        } else {
+                            double[] d = new double[atts.length-2];
+                            for (int i = 2; i < atts.length; i++) {
+                                d[i-2] = Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000;
+                            }
+                            Vector data = new Vector(d);
+                            data.deviceId = Integer.parseInt(atts[1]);
+                            data.arrivalRealTime = formatter.parse(atts[0]);
+                            dataQueue.add(data);
                         }
-                        Vector data = new Vector(d);
-                        data.arrivalRealTime = formatter.parse(atts[0]);
-                        dataQueue.add(data);
                     }
                     line = bfr.readLine();
                 }
@@ -196,7 +186,7 @@ public class DataGenerator {
         }
     }
 
-    public HashMap<Integer,HashSet<Vector>> linearSearchReturnBuckets(ArrayList<Vector> data,Vector tmp) {
+    public static HashMap<Integer,HashSet<Vector>> linearSearchReturnBuckets(ArrayList<Vector> data,Vector tmp) {
         HashMap<Integer, HashSet<Vector>> buckets = new HashMap<>();
         HashSet<Vector> outlier = new HashSet<>();
         DistanceMeasure measure = new EuclideanDistance();
@@ -223,7 +213,14 @@ public class DataGenerator {
         }
         return buckets;
     }
-    public HashSet<Vector> linearSearch(ArrayList<Vector> data){
+
+    public static ArrayList<Vector> generateBucket(int dimensions,int size,double radius){
+        ArrayList<Vector> data = TestUtils.generate(dimensions,1,100);
+        TestUtils.addNeighbours(data,size-1,radius);
+        return data;
+    }
+
+    public static HashSet<Vector> linearSearch(ArrayList<Vector> data){
         HashSet<Vector> outlier = new HashSet<>();
         DistanceMeasure measure = new EuclideanDistance();
         ArrayList<Vector> neighbor = new ArrayList<>();
@@ -246,32 +243,33 @@ public class DataGenerator {
         return outlier;
     }
 
-    public static ArrayList<Vector> fullTransfer(ArrayList<Vector> bucket) throws InterruptedException {
-        notifyDevices(bucket,0);
-        return null;
-    }
-
-    public static ArrayList<Vector> nonTransfer(ArrayList<ArrayList<Vector>> bucket) throws Throwable {
-        assert (bucket.size()==listeners.size());
-        ArrayList<Thread> threads = new ArrayList<>();
-        for (int i=0;i<listeners.size();i++){
-            int finalI = i;
-            Thread t = new Thread(() -> {
-                try {
-                    listeners.get(finalI).setRawData(bucket.get(finalI));
-                    outlierList.addAll(listeners.get(finalI).detectOutlier(0));
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            threads.add(t);
-            t.start();
+    public static ArrayList<ArrayList<Vector>> bucketing(String type) throws Throwable {
+        DataGenerator dataGenerator = DataGenerator.getInstance(type, 0);
+        ArrayList<Vector> dataset = new ArrayList<>(dataGenerator.dataQueue);
+        double r = 1.9;
+        int[] flag = new int[dataset.size()];
+        ArrayList<ArrayList<Vector>> buckets = new ArrayList<>();
+        DistanceMeasure measure = new EuclideanDistance();
+        for (int i = 0; i < dataset.size(); i++) {
+            if (flag[i] == 1) continue;
+            else flag[i] = 1;
+            Vector v = dataset.get(i);
+            ArrayList<Vector> bucket = new ArrayList<>();
+            bucket.add(v);
+            DistanceComparator dc = new DistanceComparator(v, measure);
+            PriorityQueue<Vector> pq = new PriorityQueue<Vector>(dc);
+            pq.addAll(dataset);
+            Vector neighbor = pq.peek();
+            while (measure.distance(v, neighbor) <= r) {
+                if (flag[dataset.indexOf(neighbor)]!=1){
+                    flag[dataset.indexOf(neighbor)] = 1;
+                    bucket.add(pq.poll());
+                }else pq.poll();
+                neighbor = pq.peek();
+            }
+            buckets.add(bucket);
         }
-
-        for (Thread t:threads){
-            t.join();
-        }
-        return null;
+        return buckets;
     }
 }
 

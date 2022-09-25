@@ -3,15 +3,16 @@ package test;
 import be.tarsos.lsh.Vector;
 import be.tarsos.lsh.families.EuclideanDistance;
 import be.tarsos.lsh.families.EuclidianHashFamily;
-import be.tarsos.lsh.families.HashFamily;
 import be.tarsos.lsh.util.TestUtils;
 import main.EdgeDevice;
 import main.EdgeDeviceFactory;
 import utils.Constants;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("unchecked")
 public class testFingerprint extends JFrame {
@@ -23,7 +24,7 @@ public class testFingerprint extends JFrame {
      String[][] kl = new String[10][10];
      String[][] tf = new String[10][10];
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Throwable {
         testFingerprint testFingerprint = new testFingerprint();
         testFingerprint.test();
         testFingerprint.createTable();
@@ -52,7 +53,7 @@ public class testFingerprint extends JFrame {
         this.setVisible(true);
     }
 
-    public void test(){
+    public void test() throws Throwable {
         ArrayList<Vector> data = TestUtils.generate(dimensions, 1, 100);
         ArrayList<Vector> neighbor = (ArrayList<Vector>) data.clone();
         TestUtils.addNeighbours(neighbor, 50, 3);
@@ -82,13 +83,7 @@ public class testFingerprint extends JFrame {
                 int numberOfHashes = (int) k;
                 int numberOfHashTables = (int) L;
 //                System.out.println("kl is "+k+","+L);
-                EuclidianHashFamily hashFamily;
-                if ((int) (1 * Constants.R) == 0) {
-                    hashFamily = new EuclidianHashFamily(4, dimensions);
-                } else {
-                    hashFamily = new EuclidianHashFamily((int) (10*Constants.R), dimensions);
-                }
-                EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(hashFamily, numberOfHashes, numberOfHashTables);
+                EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(numberOfHashes, numberOfHashTables);
                 double TP=0;
                 double FP=0;
                 double FN=0;
@@ -118,8 +113,8 @@ public class testFingerprint extends JFrame {
         }
     }
 
-    public void testKL(EdgeDeviceFactory edgeDeviceFactory,ArrayList<Vector> dataset,ArrayList<Vector> data){
-        EdgeDevice device = edgeDeviceFactory.createEdgeDevice();
+    public void testKL(EdgeDeviceFactory edgeDeviceFactory,ArrayList<Vector> dataset,ArrayList<Vector> data) throws Throwable {
+        EdgeDevice device = edgeDeviceFactory.createEdgeDevice(0);
         device.generateAggFingerprints(data);
         Set<Integer> fingerprint0 = device.aggFingerprints.keySet();
         device.clearFingerprints();

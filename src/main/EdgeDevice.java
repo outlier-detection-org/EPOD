@@ -5,46 +5,48 @@ import Detector.NewNETS;
 import RPC.RPCFrame;
 import be.tarsos.lsh.Index;
 import be.tarsos.lsh.Vector;
-import be.tarsos.lsh.families.HashFamily;
+import utils.Constants;
+import utils.DataGenerator;
+
 import java.util.*;
-import java.util.concurrent.SynchronousQueue;
 
 @SuppressWarnings("unchecked")
 public class EdgeDevice extends RPCFrame implements Runnable {
+    public int deviceId;
     public ArrayList<Vector> rawData;
-
     private final int numberOfHashTables;
     public Index index;
     public HashMap<Integer,ArrayList<Vector>> aggFingerprints;
     public HashMap<Integer,List<Vector>> allRawDataList;
     public HashMap<Integer,ArrayList<Integer>> dependentDevice;
-
+    public DataGenerator dataGenerator;
     public EdgeNode nearestNode;
     public Detector detector;
 
-    public EdgeDevice(Index index, int NumberOfHashes, int NumberOfHashTables){
+    public EdgeDevice(Index index, int NumberOfHashTables,int deviceId) throws Throwable {
         this.port = new Random().nextInt(50000)+10000;
+        this.deviceId = deviceId;
         this.detector = new NewNETS(0);
         this.numberOfHashTables = NumberOfHashTables;
         this.index = index;
         this.dependentDevice = new HashMap<>();
         this.aggFingerprints = new HashMap<>();
         this.allRawDataList =new HashMap<>();
+        this.dataGenerator = DataGenerator.getInstance(Constants.dataset,deviceId);
     }
+
     public void clearFingerprints(){
         this.aggFingerprints = new HashMap<>();
     }
-    public Set<Vector> detectOutlier(long currentTime) throws Throwable {
-//        System.out.println(Thread.currentThread().getName()+" "+this+": receive data and detect outlier: "+this.rawData.size());
-        generateAggFingerprints(rawData);
-        sendAggFingerprints();
-//        System.out.println("end");
 
-//        HashSet<Vector> outliers = new HashSet<>();
-//        for (ArrayList<Vector> x:this.allRawDataList.values()){
-//            outliers.addAll(detector.detectOutlier(x,currentTime));
-//        }
-//        return outliers;
+    public Set<Vector> detectOutlier(long itr) throws Throwable {
+//        System.out.println(Thread.currentThread().getName()+" "+this+": receive data and detect outlier: "+this.rawData.size());
+        Date currentRealTime = dataGenerator.getFirstTimeStamp(Constants.datasetPathWithTime);
+        currentRealTime.setTime(currentRealTime.getTime() + (long) Constants.S * 10 * 1000 * itr);
+        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S*10,deviceId);
+        System.out.println(Thread.currentThread().getName()+" "+deviceId+": "+rawData.size());
+//        generateAggFingerprints(rawData);
+//        sendAggFingerprints();
         return new HashSet<>();
     }
 
