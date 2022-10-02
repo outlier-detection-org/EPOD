@@ -1,7 +1,9 @@
 package RPC;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -64,6 +66,8 @@ public class RPCFrame implements Runnable {
                         throw (Throwable) result;
                     }
                     return result;
+                }catch (EOFException ignored){
+                    return null;
                 }
             }
         }

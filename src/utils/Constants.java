@@ -3,8 +3,8 @@ package utils;
 public class Constants {
     public static boolean withTime = true;
     public static boolean withDeviceId = true;
-    public static int nn = 3;
-    public static int dn = 4;
+    public static int nn = 2;
+    public static int dn = 3;
 
     public static double R = 1.9;
     // distance threshold, default=6.5(HPC), 115(EM), 1.9(TAO), 0.45(STK), 0.028(GAU), 525(FC), 2.75(GAS)

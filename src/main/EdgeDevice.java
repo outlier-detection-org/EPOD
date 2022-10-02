@@ -5,6 +5,7 @@ import Detector.NewNETS;
 import RPC.RPCFrame;
 import be.tarsos.lsh.Index;
 import be.tarsos.lsh.Vector;
+import test.testNetwork;
 import utils.Constants;
 import utils.DataGenerator;
 
@@ -13,15 +14,16 @@ import java.util.*;
 @SuppressWarnings("unchecked")
 public class EdgeDevice extends RPCFrame implements Runnable {
     public int deviceId;
-    public ArrayList<Vector> rawData;
     private final int numberOfHashTables;
     public Index index;
-    public HashMap<Integer,ArrayList<Vector>> aggFingerprints;
-    public HashMap<Integer,List<Vector>> allRawDataList;
-    public HashMap<Integer,ArrayList<Integer>> dependentDevice;
+    public Map<Integer,List<Vector>> aggFingerprints;
+    public Map<Integer,List<Vector>> allRawDataList;
+    public Map<Integer,ArrayList<Integer>> dependentDevice;
     public DataGenerator dataGenerator;
     public EdgeNode nearestNode;
     public Detector detector;
+    public long itr;
+    public HashSet<Vector> outlier;
 
     public EdgeDevice(Index index, int NumberOfHashTables,int deviceId) throws Throwable {
         this.port = new Random().nextInt(50000)+10000;
@@ -29,72 +31,91 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         this.detector = new NewNETS(0);
         this.numberOfHashTables = NumberOfHashTables;
         this.index = index;
-        this.dependentDevice = new HashMap<>();
-        this.aggFingerprints = new HashMap<>();
-        this.allRawDataList =new HashMap<>();
+        this.dependentDevice = Collections.synchronizedMap(new HashMap<>());
+        this.aggFingerprints = Collections.synchronizedMap(new HashMap<>());
+        this.allRawDataList = Collections.synchronizedMap(new HashMap<>());
         this.dataGenerator = DataGenerator.getInstance(Constants.dataset,deviceId);
     }
 
     public void clearFingerprints(){
-        this.aggFingerprints = new HashMap<>();
+        this.aggFingerprints = Collections.synchronizedMap(new HashMap<>());
+        this.allRawDataList = Collections.synchronizedMap(new HashMap<>());
     }
 
     public Set<Vector> detectOutlier(long itr) throws Throwable {
-//        System.out.println(Thread.currentThread().getName()+" "+this+": receive data and detect outlier: "+this.rawData.size());
+        this.itr = itr;
         Date currentRealTime = dataGenerator.getFirstTimeStamp(Constants.datasetPathWithTime);
         currentRealTime.setTime(currentRealTime.getTime() + (long) Constants.S * 10 * 1000 * itr);
-        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S*10,deviceId);
-        System.out.println(Thread.currentThread().getName()+" "+deviceId+": "+rawData.size());
-//        generateAggFingerprints(rawData);
-//        sendAggFingerprints();
-        return new HashSet<>();
+        generateAggFingerprints(
+                dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S*10,deviceId));
+        sendAggFingerprints();
+        return outlier;
     }
 
     public void generateAggFingerprints(List<Vector> data) {
-//        System.out.println("raw data size: "+data.size());
-//        System.out.println(Thread.currentThread().getName()+": "+this+" generateAggFingerprints");
+        clearFingerprints();
         for (Vector datum : data) {
             for (int j = 0; j < this.numberOfHashTables; j++) {
                 int bucketId = index.getHashTable().get(j).getHashValue(datum);
-//                System.out.println(Thread.currentThread().getName()+": "+bucketId);
                 if (!aggFingerprints.containsKey(bucketId)) {
-                    aggFingerprints.put(bucketId, new ArrayList<Vector>());
+                    aggFingerprints.put(bucketId, Collections.synchronizedList(new ArrayList<Vector>()));
                     allRawDataList.put(bucketId, Collections.synchronizedList(new ArrayList<Vector>()));
                 }
                 aggFingerprints.get(bucketId).add(datum);
                 allRawDataList.get(bucketId).add(datum);
             }
         }
-        HashSet<Vector> tmp = new HashSet<>();
-        for (List x: this.allRawDataList.values()){
-            tmp.addAll(x);
-        }
-        System.out.println(Thread.currentThread().getName()+" Original data size: "+tmp.size());
+//        StringBuilder sb =  new StringBuilder();
+//        sb.append(this.hashCode()).append(" ");
+//        aggFingerprints.keySet().forEach(x->
+//                sb.append(x).append(" ").append(aggFingerprints.get(x).size()).append(","));
+//        System.out.println(sb.toString());
+        /***
+         * used for test
+         */
+//        HashMap<Integer,Integer> xx = new HashMap<>();
+//        aggFingerprints.keySet().forEach(a->{
+//            xx.put(a,aggFingerprints.get(a).size());
+//            synchronized (testNetwork.all){
+//            testNetwork.all.put(a,
+//                    testNetwork.all.getOrDefault(a, 0)+aggFingerprints.get(a).size());}
+//        } );
+//        synchronized (testNetwork.buckets) {
+//            testNetwork.buckets.add(xx);
+//            testNetwork.index.put(this,testNetwork.buckets.size()-1);
+//        }
+//
+//        HashSet<Vector> tmp = new HashSet<>();
+//        for (List x: this.allRawDataList.values()){
+//            tmp.addAll(x);
+//        }
+//        synchronized (testNetwork.total){
+//            testNetwork.total += tmp.size();
+//        }
+//        System.out.println(Thread.currentThread().getName()+" "+this+" Original data size: "+tmp.size());
     }
 
     public void sendAggFingerprints() throws Throwable {
-//        System.out.println(Thread.currentThread().getName()+": "+this+" sendAggFingerprints");
         Object[] parameters = new Object[]{new ArrayList<>(aggFingerprints.keySet()),this.hashCode()};
         invoke("localhost",this.nearestNode.port,
                 EdgeNode.class.getMethod("upload", ArrayList.class, Integer.class),parameters);
     }
 
     public void getData() throws InterruptedException {
-//        System.out.println(Thread.currentThread().getName()+": "+this+" getData");
         ArrayList<Thread> threads = new ArrayList<>();
-//        System.out.println(this+" dependent device size "+dependentDevice.keySet().size());
         for (Integer edgeDeviceCode :dependentDevice.keySet()){
             Thread t =new Thread(()->{
                 Object[] parameters = new Object[]{dependentDevice.get(edgeDeviceCode)};
                 try {
-                    HashMap<Integer,ArrayList<Vector>> data = (HashMap<Integer, ArrayList<Vector>>) invoke("localhost",
+                    HashMap<Integer,List<Vector>> data = (HashMap<Integer, List<Vector>>)
+                            invoke("localhost",
                             EdgeNodeNetwork.edgeDeviceHashMap.get(edgeDeviceCode).port,
                             EdgeDevice.class.getMethod("sendData", ArrayList.class),parameters);
-                    for (Integer x:data.keySet()){
-                        this.allRawDataList.get(x).addAll(data.get(x));
-//                        System.out.println(Thread.currentThread().getName()+" "+this+" get data from "
-//                                +EdgeNodeNetwork.edgeDeviceHashMap.get(edgeDeviceCode)+" total size is "+
-//                                this.allRawDataList.values().stream().mapToInt(List::size).sum());
+                    for (Integer x:data.keySet()) {
+                        try {
+                            this.allRawDataList.get(x).addAll(data.get(x));
+                        } catch (NullPointerException ignored) {
+                        }
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -110,21 +131,18 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         for (List x: this.allRawDataList.values()){
             tmp.addAll(x);
         }
-        System.out.println(Thread.currentThread().getName()+" Final data size: "+tmp.size());
+//        System.out.println(this+" Final data size: "+tmp.size());
     }
 
-    public HashMap<Integer,ArrayList<Vector>> sendData(ArrayList<Integer> bucketIds){
-        HashMap<Integer,ArrayList<Vector>> data = new HashMap<>();
+    public HashMap<Integer,List<Vector>> sendData(ArrayList<Integer> bucketIds){
+        HashMap<Integer,List<Vector>> data = new HashMap<>();
         for (Integer x:bucketIds){
-            data.put(x, (ArrayList<Vector>) aggFingerprints.get(x));
+            data.put(x, aggFingerprints.get(x));
         }
-//        System.out.println(Thread.currentThread().getName()+": "+this+" sendData, size is "+
-//                data.values().stream().mapToInt(ArrayList::size).sum());
         return data;
     }
 
     public void setDependentDevice(HashMap<Integer, ArrayList<Integer>> dependentDevice) throws InterruptedException {
-//        System.out.println(Thread.currentThread().getName()+": "+this+" setDependentDevice");
         this.dependentDevice = dependentDevice;
         getData();
     }
@@ -133,7 +151,4 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         this.nearestNode = nearestNode;
     }
 
-    public void setRawData(ArrayList<Vector> rawData) {
-        this.rawData = rawData;
-    }
 }

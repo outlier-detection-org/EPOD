@@ -5,45 +5,42 @@ import be.tarsos.lsh.Vector;
 
 import java.util.*;
 import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("unchecked")
 public class EdgeNode extends RPCFrame implements Runnable {
 
-    public HashMap<Integer,List<Integer>> localAggFingerprints;
-    public HashMap<Integer,List<Integer>> reverseFingerprints;
-    public HashMap<Integer,List<Integer>> result;
+    public Map<Integer,List<Integer>> localAggFingerprints;
+    public Map<Integer,List<Integer>> reverseFingerprints;
+    public Map<Integer,List<Integer>> result;
     public ArrayList<Integer> edgeDevice;
-    public int count;
+    public AtomicInteger count;
 
 
     public EdgeNode(int numberOfHashTables){
         this.port = new Random().nextInt(50000)+10000;
-        this.localAggFingerprints = new HashMap<>();
-        this.reverseFingerprints = new HashMap<>();
-        this.result = new HashMap<>();
-        this.count=0;
+        this.localAggFingerprints = Collections.synchronizedMap(new HashMap<>());
+        this.reverseFingerprints = Collections.synchronizedMap(new HashMap<>());
+        this.result = Collections.synchronizedMap(new HashMap<>());
+        this.count= new AtomicInteger(0);
     }
 
     public void upload(ArrayList<Integer> aggFingerprints,Integer edgeDeviceHashCode) throws Throwable {
-//        System.out.println(Thread.currentThread().getName()+": "+this+" upload");
-        if (count==this.edgeDevice.size()){
-            count=0;
-        }
-
+        count.compareAndSet(edgeDevice.size(),0);
         ArrayList<Thread> threads = new ArrayList<>();
+
         this.reverseFingerprints.put(edgeDeviceHashCode,aggFingerprints);
         for (Integer id:aggFingerprints){
             if (!this.localAggFingerprints.containsKey(id)){
               this.localAggFingerprints.put(id,Collections.synchronizedList(new ArrayList<Integer>()));
               this.result.put(id,Collections.synchronizedList(new ArrayList<Integer>()));
             }
+            Thread.sleep(1);
             this.localAggFingerprints.get(id).add(edgeDeviceHashCode);
             this.result.get(id).add(edgeDeviceHashCode);
         }
-        this.count++;
-
-        if (count==this.edgeDevice.size()){
-//            System.out.println(count);
+        count.incrementAndGet();
+        if (count.get()==edgeDevice.size()){
             //说明device已经完成上传数据，进入node互相交互阶段
             for (EdgeNode node: EdgeNodeNetwork.edgeNodes) {
                 if (node==this)
@@ -52,16 +49,17 @@ public class EdgeNode extends RPCFrame implements Runnable {
 //                System.out.println(Thread.currentThread().getName()+": "+this+" new thread for invoke compareAndSend to "+node);
                     try {
                         Object[] parameters = new Object[]{this.localAggFingerprints};
-                            Map<Integer,ArrayList<Integer>> tmp = (Map<Integer, ArrayList<Integer>>)
+                        Map<Integer, ArrayList<Integer>> tmp = (Map<Integer, ArrayList<Integer>>)
                                 invoke("localhost", node.port, EdgeNode.class.getMethod
-                                ("compareAndSend", Map.class), parameters);
-                        for (Integer x:tmp.keySet()){
+                                        ("compareAndSend", Map.class), parameters);
+                        for (Integer x : tmp.keySet()) {
                             if (!result.containsKey(x)) {
                                 result.put(x, Collections.synchronizedList(new ArrayList<Integer>()));
                             }
                             result.get(x).addAll(tmp.get(x));
                         }
                     } catch (Throwable e) {
+                        e.printStackTrace();
                         throw new RuntimeException(e);
                     }
                 });
@@ -77,8 +75,7 @@ public class EdgeNode extends RPCFrame implements Runnable {
     }
 
     public HashMap<Integer,List<Integer>> compareAndSend(Map<Integer,ArrayList<Integer>> aggFingerprints) throws Throwable {
-//        System.out.println(Thread.currentThread().getName()+": "+this+" compareAndSend");
-        while (this.count != this.edgeDevice.size()); //等待这个node的所有device数据上传完成
+        while (this.count.get() != this.edgeDevice.size()); //等待这个node的所有device数据上传完成
         HashMap<Integer, List<Integer>> result = new HashMap<>();
         HashSet<Integer> intersection = new HashSet<>(localAggFingerprints.keySet());
         intersection.retainAll(aggFingerprints.keySet());
@@ -98,7 +95,7 @@ public class EdgeNode extends RPCFrame implements Runnable {
             Thread t = new Thread(() -> {
                 HashMap<Integer, ArrayList<Integer>> dependent = new HashMap<>();
                 for (Integer x : this.reverseFingerprints.get(edgeDeviceCode)) {
-                    if (result.get(x)==null) continue;
+                    if (!result.containsKey(x)) continue;
                     for (Integer y : result.get(x)) {
                         if (y==edgeDeviceCode.hashCode())continue;
 //                        if (Objects.equals(edgeDeviceCode, y))continue;

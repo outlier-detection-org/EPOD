@@ -1,9 +1,13 @@
 package main;
 
+import be.tarsos.lsh.Vector;
+import test.testNetwork;
 import utils.Constants;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class EdgeNodeNetwork {
     public static ArrayList<EdgeNode> edgeNodes = new ArrayList<>();
@@ -51,7 +55,8 @@ public class EdgeNodeNetwork {
         }
 
         int itr=0;
-        while (itr < Constants.nS+Constants.nW-1){
+        while (itr < Constants.nS+Constants.nW-1) {
+            System.out.println("This is the "+itr + " turn.");
             ArrayList<Thread> arrayList = new ArrayList<>();
             for (EdgeDevice device : edgeDeviceHashMap.values()) {
                 int finalItr = itr;
@@ -59,7 +64,7 @@ public class EdgeNodeNetwork {
                     @Override
                     public void run() {
                         try {
-                            device.detectOutlier(finalItr);
+                            Set<Vector> outlier = device.detectOutlier(finalItr);
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }
@@ -68,11 +73,27 @@ public class EdgeNodeNetwork {
                 t.start();
                 arrayList.add(t);
             }
-            for (Thread t:arrayList){
+            for (Thread t : arrayList) {
                 t.join();
             }
-            itr ++;
+            itr++;
+
+//            System.out.println("total" + testNetwork.total);
+//            for (EdgeDevice e : testNetwork.index.keySet()) {
+//                AtomicInteger total1 = new AtomicInteger();
+//                int index = testNetwork.index.get(e);
+//                HashMap<Integer, Integer> hashMap = testNetwork.buckets.get(index);
+//                hashMap.keySet().forEach(x -> {
+//                    total1.addAndGet(testNetwork.all.get(x));
+//                });
+//                System.out.println(e + " " + total1);
+//            }
+//            testNetwork.total =0;
+//            testNetwork.index = new HashMap<>();
+//            testNetwork.buckets= new ArrayList<>();
+//            testNetwork.all = new HashMap<>();
         }
+
         stopNetwork();
     }
 
@@ -83,6 +104,7 @@ public class EdgeNodeNetwork {
         for (EdgeDevice device : edgeDeviceHashMap.values()) {
             device.close();
         }
+        System.out.println("Ended!");
     }
 
 }
