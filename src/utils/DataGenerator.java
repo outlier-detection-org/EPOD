@@ -127,7 +127,7 @@ public class DataGenerator {
             try {
                 String line = bfr.readLine();
 
-                int time = 1;
+                int time = 0;
                 while (line != null) {
                     String[] atts = line.split(",");
                     if (!hasTimestamp){
@@ -149,6 +149,8 @@ public class DataGenerator {
                             Vector data = new Vector(d);
                             data.deviceId=0;
                             data.arrivalRealTime = formatter.parse(atts[0]);
+                            data.arrivalTime = time;
+                            time ++;
                             dataQueue.add(data);
                         } else {
                             double[] d = new double[atts.length-2];
@@ -158,6 +160,8 @@ public class DataGenerator {
                             Vector data = new Vector(d);
                             data.deviceId = Integer.parseInt(atts[1]);
                             data.arrivalRealTime = formatter.parse(atts[0]);
+                            data.arrivalTime = time;
+                            time++;
                             dataQueue.add(data);
                         }
                     }

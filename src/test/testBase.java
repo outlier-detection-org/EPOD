@@ -6,22 +6,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import Detector.NETS;
+import utils.Constants;
 import utils.StreamGenerator;
 import dataStructure.Tuple;
 import utils.MeasureMemoryThread;
 import utils.Utils;
 
 public class testBase {
-	public static String dataset ="GAS";
-	public static String method = "NAIVE";
-	public static double R = 2.75;
+	public static String dataset ="TAO";
+	public static String method = "NETS";
+	public static double R = 1.9;
 	// distance threshold, default=6.5(HPC), 115(EM), 1.9(TAO), 0.45(STK), 0.028(GAU), 525(FC), 2.75(GAS)
 	public static int K = 50; // neighborhood threshold, default = 50
-	public static int dim = 10; // dimension, default = 7(HPC), 16(EM), 55(FC), 3(TAO), 10(GAS)
-	public static int subDim = 10; // sub-dimension selected by 3(FC)
+	public static int dim = 3; // dimension, default = 7(HPC), 16(EM), 55(FC), 3(TAO), 10(GAS)
+	public static int subDim = 3; // sub-dimension selected by 3(FC)
 	public static int randSubDim = 0; //0: false, 1:true
-	public static int S = 5000; // sliding size, default = 500(FC, TAO), 5000(Otherwise)
-	public static int W = 100000; // sliding size, default = 10000(FC, TAO), 100000(Otherwise)
+	public static int S = 500; // sliding size, default = 500(FC, TAO), 5000(Otherwise)
+	public static int W = 10000; // sliding size, default = 10000(FC, TAO), 100000(Otherwise)
 	public static int nS = W/S;
 	public static int nW = 10;
 	public static BufferedWriter fw;
@@ -34,15 +35,15 @@ public class testBase {
 	public static MeasureMemoryThread mesureThread = new MeasureMemoryThread();
 		
 	@SuppressWarnings("deprecation")
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Throwable {
 //		loadArgs(args);
-		StreamGenerator streamGen = new StreamGenerator(dataset, randSubDim);
+		StreamGenerator streamGen = new StreamGenerator(dataset, randSubDim, Constants.withTime);
 		ArrayList<Tuple> newSlideTuples;
 		NETS detector = new NETS(dim, subDim, R, K, S, W, nW, streamGen.getMaxValues(), streamGen.getMinValues());
 
 		String fileName = "src\\Result\\Result_"+dataset+"_"+method+"_D"+dim+"_sD"+subDim+"_rand"+randSubDim+"_R"+R+"_K"+K+"_S"+S+"_W"+W+"_nW"+nW+".txt";
 		fw = new BufferedWriter(new FileWriter(new File(fileName),true));
-		outlierFw = new BufferedWriter(new FileWriter(new File("src\\Result\\Result_"+method+"_"+dataset+"_outliers.txt")));
+		outlierFw = new BufferedWriter(new FileWriter(new File("src\\Result\\Result_"+method+"_"+Constants.withTime+"_"+dataset+"_outliers.txt")));
 		printType = "File";
 		/* Simulate sliding windows */
         mesureThread.start();
@@ -51,7 +52,9 @@ public class testBase {
 			newSlideTuples = streamGen.getNewSlideTuples(itr, S);
 			if (newSlideTuples.isEmpty()) break;
 			long startTime = Utils.getCPUTime();
-			detector.calcNetChange(newSlideTuples, itr);	/* Calculate net effect*/
+			detector.calcNetChange(newSlideTuples, itr);
+			System.out.println(itr);/* Calculate net effect*/
+			System.out.println(newSlideTuples.size());
 			HashSet<Tuple> outliers = detector.findOutlier(method, itr);		/* Find outliers */
 			long endTime = Utils.getCPUTime();
 			
@@ -62,7 +65,12 @@ public class testBase {
 				peakMemory = (mesureThread.maxMemory/100000)/10d;
 				outlierFw.write("Window " +(itr-nS+1)+"\n");
 				for (Tuple t: outliers){
-					outlierFw.write(t.id+"\n");
+					StringBuilder sb = new StringBuilder();
+//					sb.append(String.format("%d ",t.id));
+					for (Double d: t.value) {
+						sb.append(String.format("%.2f ",d));
+					}
+					outlierFw.write(sb+"\n");
 				}
 			}
 			itr++;

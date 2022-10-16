@@ -1,26 +1,19 @@
 package utils;
 
-import jdk.swing.interop.SwingInterOpUtils;
-
 import java.io.*;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 
-import javax.print.attribute.HashAttributeSet;
-
 public class CompareResult {
-    public static int nW=10;
-    public static int W=100000;
-    public static String dataset = "STK";
+    public static int nW=Constants.nW;
+    public static int W=Constants.W;
+    public static String dataset = "TAO";
     public static BufferedWriter outlierFw;
 
     public static void main(String[] args) throws IOException{
         outlierFw = new BufferedWriter(new FileWriter(new File(
                 "src\\Result\\"+"compare_result_"+dataset+".txt")));
-        double[] result = compare(
-                "src/Result/Result_NETS_"+dataset+"_outliers.txt",
-                "src/Result/Result_NAIVE_"+dataset+"_outliers.txt");
+        double[] result = compare("src/Result/Result_NETS_true_"+dataset+"_outliers.txt");
         outlierFw.write("Dataset is "+dataset+"\n");
         outlierFw.write("Precision: "+result[0]/nW+"\n");
         outlierFw.write("Recall: "+result[1]/nW+"\n");
@@ -28,41 +21,57 @@ public class CompareResult {
         outlierFw.close();
     }
     
-    public static double[] compare(String filename1, String filename2) throws IOException{
-        
-        BufferedReader approx = new BufferedReader(new FileReader(new File(filename1)));
+    public static double[] compare(String filename1) throws IOException{
+        int number = 6;
+        BufferedReader[] approx = new BufferedReader[number];
+        String[] fileNames = new String[]{
+                "src/Result/Result_TAO_NETS_true_2_3_0_outliers.txt",
+                "src/Result/Result_TAO_NETS_true_2_3_1_outliers.txt",
+                "src/Result/Result_TAO_NETS_true_2_3_2_outliers.txt",
+                "src/Result/Result_TAO_NETS_true_2_3_3_outliers.txt",
+                "src/Result/Result_TAO_NETS_true_2_3_4_outliers.txt",
+                "src/Result/Result_TAO_NETS_true_2_3_5_outliers.txt"
+        };
+        for (int i=0;i<number;i++){
+            approx[i] = new BufferedReader(new FileReader(new File(fileNames[i])));
+            approx[i].readLine();
+        };
 
-        BufferedReader exact = new BufferedReader(new FileReader(new File(filename2)));
-
-        approx.readLine();
+        BufferedReader exact = new BufferedReader(new FileReader(new File(filename1)));
         exact.readLine();
+
         double[] precisions = new double[nW];
         double[] recalls = new double[nW];
         double[] f1s = new double[nW];
 
-        for (int j=0;j<nW;j++) {
+        for (int j=0;j<Constants.nW;j++) {
             outlierFw.write("Window "+j+"\n");
-            HashSet<Integer> approxValues = new HashSet<Integer>();
-            HashSet<Integer> exactValues = new HashSet<Integer>();
+            HashSet<String> approxValues = new HashSet<String>();
+            HashSet<String> exactValues = new HashSet<String>();
 
             String line = "";
-            while ((line = approx.readLine()) != null && !line.startsWith("Window")) {
-                approxValues.add(Integer.valueOf(line.trim()));
+            for (int i =0;i<number;i++) {
+                while ((line = approx[i].readLine()) != null && !line.startsWith("Window")) {
+                    approxValues.add(line.trim());
+                }
             }
             line = "";
             while ((line = exact.readLine()) != null&& !line.startsWith("Window")) {
-                exactValues.add(Integer.valueOf(line.trim()));
+                exactValues.add(line.trim());
             }
 
             double precision = 0;
             double recall = 0;
             double F1 = 0;
 
-            for (Integer i : approxValues) {
+            for (String i : approxValues) {
                 if (exactValues.contains(i))
                     precision++;
+                else {
+                    System.out.println(i);
+                }
             }
-            for (Integer i : exactValues) {
+            for (String i : exactValues) {
                 if (approxValues.contains(i))
                     recall++;
             }

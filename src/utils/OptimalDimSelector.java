@@ -6,7 +6,7 @@ import Detector.NETS;
 import dataStructure.Tuple;
 
 public class OptimalDimSelector {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Throwable {
 		String dataset ="EM";
 		double R = 115; // distance threshold, default=6.5(HPC), 115(EM), 1.9(TAO), 0.45(STOCK), 0.028(GAUSS), 525(FC), 2.75(GAS)
 		int K = 50; // neighborhood threshold, default = 50
@@ -24,7 +24,7 @@ public class OptimalDimSelector {
 		
 		dimLoop:
 		for(int subDim = 1; subDim <= dim; subDim++) {
-			StreamGenerator sg = new StreamGenerator(dataset,0);
+			StreamGenerator sg = new StreamGenerator(dataset,0,false);
 			NETS detector = new NETS(dim, subDim, R, K, S, W, nW, sg.getMaxValues(), sg.getMinValues());
 			
 			for(int i = 0; i< nS+nW+j ; i++) {

@@ -5,10 +5,8 @@ import Detector.NewNETS;
 import RPC.RPCFrame;
 import be.tarsos.lsh.Index;
 import be.tarsos.lsh.Vector;
-import test.testNetwork;
 import utils.Constants;
 import utils.DataGenerator;
-
 import java.util.*;
 
 @SuppressWarnings("unchecked")
@@ -70,9 +68,9 @@ public class EdgeDevice extends RPCFrame implements Runnable {
 //        aggFingerprints.keySet().forEach(x->
 //                sb.append(x).append(" ").append(aggFingerprints.get(x).size()).append(","));
 //        System.out.println(sb.toString());
-        /***
-         * used for test
-         */
+//        /***
+//         * used for test
+//         */
 //        HashMap<Integer,Integer> xx = new HashMap<>();
 //        aggFingerprints.keySet().forEach(a->{
 //            xx.put(a,aggFingerprints.get(a).size());
@@ -128,10 +126,11 @@ public class EdgeDevice extends RPCFrame implements Runnable {
             t.join();
         }
         HashSet<Vector> tmp = new HashSet<>();
-        for (List x: this.allRawDataList.values()){
+        for (List<Vector> x: this.allRawDataList.values()) {
             tmp.addAll(x);
         }
-//        System.out.println(this+" Final data size: "+tmp.size());
+        outlier = detector.detectOutlier(new ArrayList<>(tmp),itr);
+        System.out.println(this+" Final data size: "+tmp.size());
     }
 
     public HashMap<Integer,List<Vector>> sendData(ArrayList<Integer> bucketIds){

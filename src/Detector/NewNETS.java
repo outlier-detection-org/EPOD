@@ -4,7 +4,6 @@ import be.tarsos.lsh.Vector;
 import dataStructure.Cell;
 import dataStructure.Tuple;
 import utils.Constants;
-
 import java.util.*;
 
 public class NewNETS extends Detector {
@@ -145,14 +144,14 @@ public class NewNETS extends Detector {
 
 	public ArrayList<Tuple> preprocessData(List<Vector> data){
 		ArrayList<Tuple> newSlide = new ArrayList<Tuple>();
-		double[] value = new double[data.get(0).values.length];
 		for (Vector datum : data) {
+			double[] value = new double[data.get(0).values.length];
 			int j=0;
 			for (int i : priorityList) {
-				value[j] = datum.values[priorityList.get(i)];
+				value[j] = datum.values[i];
 				j++;
 			}
-			Tuple tuple = new Tuple(datum.arrivalTime,datum.arrivalTime/Constants.S,value);
+			Tuple tuple = new Tuple(datum.arrivalTime,datum.arrivalTime /Constants.S,value);
 			newSlide.add(tuple);
 		}
 		return newSlide;

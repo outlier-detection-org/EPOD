@@ -1,0 +1,314 @@
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 163
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.009359999999999999	5.2
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 163
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00624	5.0
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: -18
+Avg CPU time(s) 	 Peak memory(MB)
+-0.0	0.0
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00624	63.4
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00624	63.0
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00312	63.1
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00312	63.4
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00312	63.3
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00312	63.3
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00312	63.5
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00312	63.4
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00312	63.3
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00312	63.6
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00624	61.3
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.009359999999999999	63.2
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00312	63.3
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.0	62.1
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.00624	63.3
+At window 0, # outliers: 169
+At window 1, # outliers: 161
+At window 2, # outliers: 162
+At window 3, # outliers: 158
+At window 4, # outliers: 159
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 5
+Avg CPU time(s) 	 Peak memory(MB)
+0.0	63.4

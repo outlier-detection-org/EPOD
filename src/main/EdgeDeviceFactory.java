@@ -4,10 +4,6 @@ import be.tarsos.lsh.Index;
 import be.tarsos.lsh.families.EuclidianHashFamily;
 import be.tarsos.lsh.families.HashFamily;
 import utils.Constants;
-import utils.DataGenerator;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class EdgeDeviceFactory {
     public HashFamily hashFamily;

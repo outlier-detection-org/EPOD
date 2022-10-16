@@ -1,0 +1,9 @@
+At window 0, # outliers: 6
+# Dataset: TAO
+Method: NETS
+Dim: 3
+subDim: 3
+R/K/W/S: 1.9/50/10000/500
+# of windows: 1
+Avg CPU time(s) 	 Peak memory(MB)
+0.0156	31.9

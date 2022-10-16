@@ -1,16 +1,14 @@
 package utils;
 
-import java.io.IOException;
+import dataStructure.Tuple;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import dataStructure.Tuple;
-
 public class Prioritizer {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Throwable {
 		String dataset = "GAS";
-		StreamGenerator streamGen = new StreamGenerator(dataset, 0);
+		StreamGenerator streamGen = new StreamGenerator(dataset, 0,false);
 		int dim = streamGen.getMaxValues().length;
 		Integer[] defaultList = new Integer[dim];
 		for(int i = 0; i<dim; i++) defaultList[i] = i;
