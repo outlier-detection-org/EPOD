@@ -18,8 +18,8 @@ public class testNetwork {
         double p2=0.4;
         double k = Math.log(Constants.W)/Math.log(1/p2);
         double L = Math.pow(Constants.W,Math.log(1/p1)/Math.log(1/p2));
-        int numberOfHashes = 8;
-        int numberOfHashTables = 1;
+        int numberOfHashes = 5;
+        int numberOfHashTables = 10;
         System.out.println("k is "+numberOfHashes+" L is "+numberOfHashTables);
 
         EdgeDeviceFactory edgeDeviceFactory = new EdgeDeviceFactory(numberOfHashes, numberOfHashTables);
@@ -27,6 +27,7 @@ public class testNetwork {
         EdgeNodeNetwork.createNetwork(Constants.nn,Constants.dn, edgeDeviceFactory);
         System.out.println("started!");
         EdgeNodeNetwork.startNetwork();
+//        EdgeNodeNetwork.startNetworkForTest(false);
     }
 }
 

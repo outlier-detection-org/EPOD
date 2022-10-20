@@ -30,7 +30,7 @@ public class testLsh {
         }
         for (int i=0;i<dataset.size();i++){
             for (int j=0; j<NumberOfHashTables;j++){
-                int bucketId = index.getHashTable().get(j).getHashValue(dataset.get(i));
+                long bucketId = index.getHashTable().get(j).getHashValue(dataset.get(i));
                 aggFingerprints[j].add(bucketId);
             }
         }
