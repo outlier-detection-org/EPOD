@@ -5,8 +5,10 @@ import Detector.NewNETS;
 import RPC.RPCFrame;
 import be.tarsos.lsh.Index;
 import be.tarsos.lsh.Vector;
+import be.tarsos.lsh.families.EuclideanDistance;
 import utils.Constants;
 import utils.DataGenerator;
+
 import java.util.*;
 
 @SuppressWarnings("unchecked")
@@ -14,8 +16,11 @@ public class EdgeDevice extends RPCFrame implements Runnable {
     public int deviceId;
     private final int numberOfHashTables;
     public Index index;
-    public Map<Integer,List<Vector>> aggFingerprints;
-    public Map<Integer,List<Vector>> allRawDataList;
+    /*this field is used for debugging*/
+    public List<Vector> rawData=new ArrayList<>();
+
+    public Map<Long,List<Vector>> aggFingerprints;
+    public Map<Long,List<Vector>> allRawDataList;
     public Map<Integer,ArrayList<Integer>> dependentDevice;
     public DataGenerator dataGenerator;
     public EdgeNode nearestNode;
@@ -44,8 +49,14 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         this.itr = itr;
         Date currentRealTime = dataGenerator.getFirstTimeStamp(Constants.datasetPathWithTime);
         currentRealTime.setTime(currentRealTime.getTime() + (long) Constants.S * 10 * 1000 * itr);
-        generateAggFingerprints(
-                dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S*10,deviceId));
+        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S*10,deviceId);
+        generateAggFingerprints(this.rawData);
+        sendAggFingerprints();
+        return outlier;
+    }
+
+    public Set<Vector> detectOutlier(ArrayList<Vector> data) throws Throwable {
+        generateAggFingerprints(data);
         sendAggFingerprints();
         return outlier;
     }
@@ -54,7 +65,7 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         clearFingerprints();
         for (Vector datum : data) {
             for (int j = 0; j < this.numberOfHashTables; j++) {
-                int bucketId = index.getHashTable().get(j).getHashValue(datum);
+                long bucketId = index.getHashTable().get(j).getHashValue(datum);
                 if (!aggFingerprints.containsKey(bucketId)) {
                     aggFingerprints.put(bucketId, Collections.synchronizedList(new ArrayList<Vector>()));
                     allRawDataList.put(bucketId, Collections.synchronizedList(new ArrayList<Vector>()));
@@ -95,6 +106,18 @@ public class EdgeDevice extends RPCFrame implements Runnable {
 
     public void sendAggFingerprints() throws Throwable {
         Object[] parameters = new Object[]{new ArrayList<>(aggFingerprints.keySet()),this.hashCode()};
+        /*
+        HashMap<Long,Integer> hashMap = new HashMap<>();
+        for (Long x: aggFingerprints.keySet()){
+            hashMap.put(x,aggFingerprints.get(x).size());
+        }
+        StringBuilder sb= new StringBuilder();
+        for (Long x: hashMap.keySet()) {
+            sb.append(x).append(" ").append(hashMap.get(x)).append(",");
+        }
+        sb.append("end");
+        System.out.println(sb);
+*/
         invoke("localhost",this.nearestNode.port,
                 EdgeNode.class.getMethod("upload", ArrayList.class, Integer.class),parameters);
     }
@@ -105,16 +128,32 @@ public class EdgeDevice extends RPCFrame implements Runnable {
             Thread t =new Thread(()->{
                 Object[] parameters = new Object[]{dependentDevice.get(edgeDeviceCode)};
                 try {
-                    HashMap<Integer,List<Vector>> data = (HashMap<Integer, List<Vector>>)
+                    /*use for measurement*/
+                    HashSet<Vector> dataSet = new HashSet<>();
+                    for (Vector a: this.rawData){
+                        for (Vector b: EdgeNodeNetwork.edgeDeviceHashMap.get(edgeDeviceCode).rawData){
+                            if (new EuclideanDistance().distance(a,b)<=Constants.R){
+                                dataSet.add(b);
+                            }
+                        }
+                    }
+                    /*end*/
+                    HashMap<Long,List<Vector>> data = (HashMap<Long, List<Vector>>)
                             invoke("localhost",
                             EdgeNodeNetwork.edgeDeviceHashMap.get(edgeDeviceCode).port,
                             EdgeDevice.class.getMethod("sendData", ArrayList.class),parameters);
-                    for (Integer x:data.keySet()) {
+
+                    /*use for measurement*/
+                    HashSet<Vector> dataSet1 = new HashSet<>();
+                    for (Long x:data.keySet()) {
                         try {
+                            dataSet1.addAll(data.get(x));
                             this.allRawDataList.get(x).addAll(data.get(x));
                         } catch (NullPointerException ignored) {
                         }
                     }
+                    System.out.println("neighbor = " + dataSet.size() + " transferred = "+ dataSet1.size() +
+                            " neighbor / transferred data  = " + dataSet.size()*1.0/dataSet1.size());
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -133,9 +172,9 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         System.out.println(this+" Final data size: "+tmp.size());
     }
 
-    public HashMap<Integer,List<Vector>> sendData(ArrayList<Integer> bucketIds){
-        HashMap<Integer,List<Vector>> data = new HashMap<>();
-        for (Integer x:bucketIds){
+    public HashMap<Long,List<Vector>> sendData(ArrayList<Long> bucketIds){
+        HashMap<Long,List<Vector>> data = new HashMap<>();
+        for (Long x:bucketIds){
             data.put(x, aggFingerprints.get(x));
         }
         return data;

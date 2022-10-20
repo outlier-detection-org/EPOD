@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @SuppressWarnings("unchecked")
 public class EdgeNode extends RPCFrame implements Runnable {
 
-    public Map<Integer,List<Integer>> localAggFingerprints;
-    public Map<Integer,List<Integer>> reverseFingerprints;
-    public Map<Integer,List<Integer>> result;
+    public Map<Long,List<Integer>> localAggFingerprints;
+    public Map<Integer,List<Long>> reverseFingerprints;
+    public Map<Long,List<Integer>> result;
     public ArrayList<Integer> edgeDevice;
     public AtomicInteger count;
     volatile Boolean flag = false;
@@ -22,11 +22,11 @@ public class EdgeNode extends RPCFrame implements Runnable {
         this.count= new AtomicInteger(0);
     }
 
-    public void upload(ArrayList<Integer> aggFingerprints,Integer edgeDeviceHashCode) throws Throwable {
+    public void upload(ArrayList<Long> aggFingerprints,Integer edgeDeviceHashCode) throws Throwable {
         this.flag = false;
         ArrayList<Thread> threads = new ArrayList<>();
         this.reverseFingerprints.put(edgeDeviceHashCode,aggFingerprints);
-        for (Integer id:aggFingerprints){
+        for (Long id:aggFingerprints){
             if (!this.localAggFingerprints.containsKey(id)){
               this.localAggFingerprints.put(id,Collections.synchronizedList(new ArrayList<Integer>()));
               this.result.put(id,Collections.synchronizedList(new ArrayList<Integer>()));
@@ -47,11 +47,11 @@ public class EdgeNode extends RPCFrame implements Runnable {
 //                System.out.println(Thread.currentThread().getName()+": "+this+" new thread for invoke compareAndSend to "+node);
                     try {
                         Object[] parameters = new Object[]{this.localAggFingerprints};
-                        Map<Integer, ArrayList<Integer>> tmp = (Map<Integer, ArrayList<Integer>>)
+                        Map<Long, ArrayList<Integer>> tmp = (Map<Long, ArrayList<Integer>>)
                                 invoke("localhost", node.port, EdgeNode.class.getMethod
                                         ("compareAndSend", Map.class), parameters);
                         //TODO: java.lang.NullPointerException
-                        for (Integer x : tmp.keySet()) {
+                        for (Long x : tmp.keySet()) {
                             if (!result.containsKey(x)) {
                                 result.put(x, Collections.synchronizedList(new ArrayList<Integer>()));
                             }
@@ -73,13 +73,13 @@ public class EdgeNode extends RPCFrame implements Runnable {
         }
     }
 
-    public HashMap<Integer,List<Integer>> compareAndSend(Map<Integer,ArrayList<Integer>> aggFingerprints) throws Throwable {
+    public HashMap<Long,List<Integer>> compareAndSend(Map<Integer,ArrayList<Integer>> aggFingerprints) throws Throwable {
          //等待这个node的所有device数据上传完成
-        HashMap<Integer, List<Integer>> result = new HashMap<>();
-        HashSet<Integer> intersection = new HashSet<>(localAggFingerprints.keySet());
+        HashMap<Long, List<Integer>> result = new HashMap<>();
+        HashSet<Long> intersection = new HashSet<>(localAggFingerprints.keySet());
         intersection.retainAll(aggFingerprints.keySet());
         if (!intersection.isEmpty()) {
-            for (Integer x : intersection) {
+            for (Long x : intersection) {
                 result.put(x, localAggFingerprints.get(x));
             }
         }
@@ -91,14 +91,14 @@ public class EdgeNode extends RPCFrame implements Runnable {
         ArrayList<Thread> threads = new ArrayList<>();
         for (Integer edgeDeviceCode : this.edgeDevice) {
             Thread t = new Thread(() -> {
-                HashMap<Integer, ArrayList<Integer>> dependent = new HashMap<>();
-                for (Integer x : this.reverseFingerprints.get(edgeDeviceCode)) {
+                HashMap<Integer, ArrayList<Long>> dependent = new HashMap<>();
+                for (Long x : this.reverseFingerprints.get(edgeDeviceCode)) {
                     if (!result.containsKey(x)) continue;
                     for (Integer y : result.get(x)) {
                         if (y==edgeDeviceCode.hashCode())continue;
 //                        if (Objects.equals(edgeDeviceCode, y))continue;
                         if (!dependent.containsKey(y)) {
-                            dependent.put(y, new ArrayList<Integer>());
+                            dependent.put(y, new ArrayList<Long>());
                         }
                         dependent.get(y).add(x);
                     }

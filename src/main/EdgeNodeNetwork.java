@@ -3,14 +3,12 @@ package main;
 import be.tarsos.lsh.Vector;
 import dataStructure.Tuple;
 import utils.Constants;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+@SuppressWarnings("unchecked")
 public class EdgeNodeNetwork {
     public static ArrayList<EdgeNode> edgeNodes = new ArrayList<>();
     public static HashMap<Integer,EdgeDevice> edgeDeviceHashMap = new HashMap<>();
@@ -77,7 +75,11 @@ public class EdgeNodeNetwork {
 
         int itr=0;
         while (itr < Constants.nS+Constants.nW-1) {
-            System.out.println("This is the "+itr + " turn.");
+            System.out.println("===============================");
+            System.out.println("This is the "+itr + " slides.");
+            if(itr>=Constants.nS-1) {
+                System.out.println("Window " + (itr - Constants.nS + 1));
+            }
             ArrayList<Thread> arrayList = new ArrayList<>();
             for (EdgeDevice device : edgeDeviceHashMap.values()) {
                 int finalItr = itr;
@@ -125,6 +127,78 @@ public class EdgeNodeNetwork {
 //            testNetwork.index = new HashMap<>();
 //            testNetwork.buckets= new ArrayList<>();
 //            testNetwork.all = new HashMap<>();
+        }
+        for (BufferedWriter bufferedWriter: outlierFw){
+            bufferedWriter.close();
+        }
+        stopNetwork();
+    }
+
+    public static void startNetworkForTest(boolean allTransfer) throws Throwable {
+        System.out.println("allTransfer: "+allTransfer);
+        for (EdgeNode node : edgeNodes) {
+            node.active = true;
+            Thread t1 = new Thread(node);
+            threads.add(t1);
+            t1.start();
+        }
+        for (EdgeDevice device : edgeDeviceHashMap.values()) {
+            device.active = true;
+            Thread t2 = new Thread(device);
+            threads.add(t2);
+            t2.start();
+        }
+        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("src/Result/TaoBucketing.txt"));
+        ArrayList<ArrayList<Vector>> buckets = (ArrayList<ArrayList<Vector>>) objectInputStream.readObject();
+        ArrayList<ArrayList<Vector>> data;
+        if (allTransfer){
+            data = new ArrayList<>();
+            int lengthOfData = (int) Math.ceil(buckets.get(0).size()*1.0/edgeDeviceHashMap.values().size());
+            for (int i=0;i<edgeDeviceHashMap.values().size();i++){
+                int left = Math.min(i*lengthOfData,buckets.get(0).size());
+                int right = Math.min((i+1)*lengthOfData,buckets.get(0).size());
+                System.out.println(left);
+                System.out.println(right);
+                data.add(new ArrayList<>(buckets.get(0).subList(left,right)));
+            }
+        }else data = buckets;
+
+        int itr=0;
+        while (itr < 1) {
+            System.out.println("This is the "+itr + " turn.");
+            ArrayList<Thread> arrayList = new ArrayList<>();
+            for (EdgeDevice device : edgeDeviceHashMap.values()) {
+                int finalItr = itr;
+                Thread t = new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            ArrayList<Vector> tmp = data.remove(0);
+                            System.out.println(tmp.size());
+                            Set<Vector> outlier = device.detectOutlier(tmp);
+                            if(finalItr>=Constants.nS-1) {
+                                outlierFw[device.deviceId].write("Window " +(finalItr-Constants.nS+1)+"\n");
+                                for (Vector v : outlier) {
+                                    StringBuilder sb =new StringBuilder();
+                                    for (Double d: ((Tuple)v).value) {
+                                        sb.append(String.format("%.2f ",d));
+                                    }
+                                    outlierFw[device.deviceId].write(sb.toString() +"\n");
+                                }
+                                outlierFw[device.deviceId].flush();
+                            }
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                t.start();
+                arrayList.add(t);
+            }
+            for (Thread t : arrayList) {
+                t.join();
+            }
+            itr++;
         }
         for (BufferedWriter bufferedWriter: outlierFw){
             bufferedWriter.close();

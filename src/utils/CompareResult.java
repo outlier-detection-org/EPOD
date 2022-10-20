@@ -22,11 +22,11 @@ public class CompareResult {
     }
     
     public static double[] compare(String filename1) throws IOException{
-        int number = 6;
+        int number = 2;
         BufferedReader[] approx = new BufferedReader[number];
         String[] fileNames = new String[]{
-                "src/Result/Result_TAO_NETS_true_2_3_0_outliers.txt",
-                "src/Result/Result_TAO_NETS_true_2_3_1_outliers.txt",
+                "src/Result/Result_TAO_NETS_true_1_2_0_outliers.txt",
+                "src/Result/Result_TAO_NETS_true_1_2_1_outliers.txt",
                 "src/Result/Result_TAO_NETS_true_2_3_2_outliers.txt",
                 "src/Result/Result_TAO_NETS_true_2_3_3_outliers.txt",
                 "src/Result/Result_TAO_NETS_true_2_3_4_outliers.txt",

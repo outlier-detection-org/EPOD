@@ -156,9 +156,9 @@ public class Index implements Serializable {
                 result.add(v);
                 count++;
             }
-            if (count == maxSize) {
-                break;
-            }
+//            if (count == maxSize) {
+//                break;
+//            }
         }
 //                System.out.println("Count = "+count);
         //
@@ -255,4 +255,10 @@ public class Index implements Serializable {
         }
     }
 
+    public void clear(){
+        for (HashTable table : hashTable) {
+           table.clear();
+            System.out.println(hashTable.size());
+        }
+    }
 }

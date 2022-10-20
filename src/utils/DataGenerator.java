@@ -16,7 +16,7 @@ public class DataGenerator {
 
     public static DataGenerator getInstance(String type, int deviceId) throws Throwable {
         switch (type) {
-            case "ForestCover":
+            case "FC":
                 Constants.datasetPath = Constants.forestCoverFileName;
                 break;
             case "TAO":
@@ -25,7 +25,7 @@ public class DataGenerator {
             case "EM":
                 Constants.datasetPath = Constants.emFileName;
                 break;
-            case "STOCK":
+            case "STK":
                 Constants.datasetPath = Constants.stockFileName;
                 break;
             case "GAU":
@@ -250,7 +250,7 @@ public class DataGenerator {
     public static ArrayList<ArrayList<Vector>> bucketing(String type) throws Throwable {
         DataGenerator dataGenerator = DataGenerator.getInstance(type, 0);
         ArrayList<Vector> dataset = new ArrayList<>(dataGenerator.dataQueue);
-        double r = 1.9;
+        double r = Constants.R;
         int[] flag = new int[dataset.size()];
         ArrayList<ArrayList<Vector>> buckets = new ArrayList<>();
         DistanceMeasure measure = new EuclideanDistance();
