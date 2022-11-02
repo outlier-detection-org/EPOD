@@ -1,6 +1,10 @@
 package main;
 
+import Detector.NewNETS;
 import RPC.RPCFrame;
+import be.tarsos.lsh.Vector;
+import utils.Constants;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -29,9 +33,11 @@ public class EdgeNode extends RPCFrame implements Runnable {
         for (Long id:aggFingerprints){
             if (!this.localAggFingerprints.containsKey(id)){
               this.localAggFingerprints.put(id,Collections.synchronizedList(new ArrayList<Integer>()));
-              this.result.put(id,Collections.synchronizedList(new ArrayList<Integer>()));
             }
             this.localAggFingerprints.get(id).add(edgeDeviceHashCode);
+            if (!this.result.containsKey(id)){
+                this.result.put(id,Collections.synchronizedList(new ArrayList<Integer>()));
+            }
             this.result.get(id).add(edgeDeviceHashCode);
         }
         count.incrementAndGet();
@@ -73,17 +79,43 @@ public class EdgeNode extends RPCFrame implements Runnable {
         }
     }
 
-    public HashMap<Long,List<Integer>> compareAndSend(Map<Integer,ArrayList<Integer>> aggFingerprints) throws Throwable {
+    public HashMap<Long,List<Integer>> compareAndSend(Map<Long,ArrayList<Integer>> aggFingerprints) throws Throwable {
          //等待这个node的所有device数据上传完成
+
         HashMap<Long, List<Integer>> result = new HashMap<>();
-        HashSet<Long> intersection = new HashSet<>(localAggFingerprints.keySet());
-        intersection.retainAll(aggFingerprints.keySet());
-        if (!intersection.isEmpty()) {
-            for (Long x : intersection) {
-                result.put(x, localAggFingerprints.get(x));
+        //cellID 比较的过程
+
+        if (Objects.equals(Constants.methodToGenerateFingerprint, "CELLID")){
+            for (Long id:aggFingerprints.keySet()){
+                ArrayList<Short> dimId = EdgeDevice.hashBucket.get(id);
+                for (Long id0:localAggFingerprints.keySet()){
+                    ArrayList<Short> dimId0 = EdgeDevice.hashBucket.get(id0);
+                    if (neighboringSet(dimId,dimId0))
+                        result.put(id0, localAggFingerprints.get(id0));
+                }
+            }
+        }
+        else if (Objects.equals(Constants.methodToGenerateFingerprint, "LSH")){
+            HashSet<Long> intersection = new HashSet<>(localAggFingerprints.keySet());
+            intersection.retainAll(aggFingerprints.keySet());
+            if (!intersection.isEmpty()) {
+                for (Long x : intersection) {
+                    result.put(x, localAggFingerprints.get(x));
+                }
             }
         }
         return result;
+    }
+
+    public boolean neighboringSet(ArrayList<Short> c1, ArrayList<Short> c2) {
+        double ss = 0;
+        double cellIdxDist = Math.sqrt(Constants.dim)*2;
+        double threshold =cellIdxDist*cellIdxDist;
+        for(int k = 0; k<c1.size(); k++) {
+            ss += Math.pow((c1.get(k) - c2.get(k)),2);
+            if (ss >= threshold) return false;
+        }
+        return true;
     }
 
     public void sendBackResult() throws Throwable {
@@ -93,14 +125,30 @@ public class EdgeNode extends RPCFrame implements Runnable {
             Thread t = new Thread(() -> {
                 HashMap<Integer, ArrayList<Long>> dependent = new HashMap<>();
                 for (Long x : this.reverseFingerprints.get(edgeDeviceCode)) {
-                    if (!result.containsKey(x)) continue;
-                    for (Integer y : result.get(x)) {
-                        if (y==edgeDeviceCode.hashCode())continue;
-//                        if (Objects.equals(edgeDeviceCode, y))continue;
-                        if (!dependent.containsKey(y)) {
-                            dependent.put(y, new ArrayList<Long>());
+                    //CellId
+                    if (Objects.equals(Constants.methodToGenerateFingerprint, "CELLID")) {
+                        for (Long id : result.keySet()) {
+                            if (neighboringSet(EdgeDevice.hashBucket.get(x), EdgeDevice.hashBucket.get(id))) {
+                                for (Integer y : result.get(id)) {
+                                    if (y == edgeDeviceCode.hashCode()) continue;
+                                    if (!dependent.containsKey(y)) {
+                                        dependent.put(y, new ArrayList<Long>());
+                                    }
+                                    dependent.get(y).add(id);
+                                }
+                            }
                         }
-                        dependent.get(y).add(x);
+                    }
+                    else if (Objects.equals(Constants.methodToGenerateFingerprint, "LSH")) {
+                        //LSH
+                        if (!result.containsKey(x)) continue;
+                        for (Integer y : result.get(x)) {
+                            if (y == edgeDeviceCode.hashCode()) continue;
+                            if (!dependent.containsKey(y)) {
+                                dependent.put(y, new ArrayList<Long>());
+                            }
+                            dependent.get(y).add(x);
+                        }
                     }
                 }
                 Object[] parameters = new Object[]{dependent};

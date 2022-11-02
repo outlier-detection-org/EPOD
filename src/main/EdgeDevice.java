@@ -9,6 +9,7 @@ import be.tarsos.lsh.families.EuclideanDistance;
 import utils.Constants;
 import utils.DataGenerator;
 
+import javax.lang.model.util.ElementScanner6;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
@@ -28,6 +29,8 @@ public class EdgeDevice extends RPCFrame implements Runnable {
     public long itr;
     public HashSet<Vector> outlier;
 
+    public static HashMap<Long,ArrayList<Short>>hashBucket;
+
     public EdgeDevice(Index index, int NumberOfHashTables,int deviceId) throws Throwable {
         this.port = new Random().nextInt(50000)+10000;
         this.deviceId = deviceId;
@@ -38,6 +41,9 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         this.aggFingerprints = Collections.synchronizedMap(new HashMap<>());
         this.allRawDataList = Collections.synchronizedMap(new HashMap<>());
         this.dataGenerator = DataGenerator.getInstance(Constants.dataset,deviceId);
+        if (hashBucket==null){
+            hashBucket = new HashMap<>();
+        }
     }
 
     public void clearFingerprints(){
@@ -63,15 +69,37 @@ public class EdgeDevice extends RPCFrame implements Runnable {
 
     public void generateAggFingerprints(List<Vector> data) {
         clearFingerprints();
-        for (Vector datum : data) {
-            for (int j = 0; j < this.numberOfHashTables; j++) {
-                long bucketId = index.getHashTable().get(j).getHashValue(datum);
+
+        if (Objects.equals(Constants.methodToGenerateFingerprint, "CELLID")) {
+            for (Vector t : data) {
+                ArrayList<Short> fullDimCellIdx = new ArrayList<Short>();
+                for (int j = 0; j < Constants.dim; j++) {
+                    short dimIdx = (short) ((t.values[j] - ((NewNETS) this.detector).minValues[j]) /
+                            ((NewNETS) this.detector).dimLength[j]);
+                    fullDimCellIdx.add(dimIdx);
+                }
+                Long bucketId = (long) fullDimCellIdx.hashCode();
+                if (!hashBucket.containsKey(bucketId)) {
+                    hashBucket.put(bucketId, fullDimCellIdx);
+                }
                 if (!aggFingerprints.containsKey(bucketId)) {
                     aggFingerprints.put(bucketId, Collections.synchronizedList(new ArrayList<Vector>()));
                     allRawDataList.put(bucketId, Collections.synchronizedList(new ArrayList<Vector>()));
                 }
-                aggFingerprints.get(bucketId).add(datum);
-                allRawDataList.get(bucketId).add(datum);
+                aggFingerprints.get(bucketId).add(t);
+                allRawDataList.get(bucketId).add(t);
+            }
+        } else if (Objects.equals(Constants.methodToGenerateFingerprint, "LSH")) {
+            for (Vector datum : data) {
+                for (int j = 0; j < this.numberOfHashTables; j++) {
+                    long bucketId = index.getHashTable().get(j).getHashValue(datum);
+                    if (!aggFingerprints.containsKey(bucketId)) {
+                        aggFingerprints.put(bucketId, Collections.synchronizedList(new ArrayList<Vector>()));
+                        allRawDataList.put(bucketId, Collections.synchronizedList(new ArrayList<Vector>()));
+                    }
+                    aggFingerprints.get(bucketId).add(datum);
+                    allRawDataList.get(bucketId).add(datum);
+                }
             }
         }
 //        StringBuilder sb =  new StringBuilder();
