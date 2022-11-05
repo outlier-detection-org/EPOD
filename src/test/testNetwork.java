@@ -25,10 +25,10 @@ public class testNetwork {
         System.out.println("k is "+numberOfHashes+" L is "+numberOfHashTables);
         PrintStream ps = null;
         if (Constants.methodToGenerateFingerprint=="CELLID") {
-            ps = new PrintStream(new FileOutputStream("src/Result/" + Constants.dataset + "_" + Constants.methodToGenerateFingerprint + "_kmeans.txt"));
+            ps = new PrintStream(new FileOutputStream("src/Result/" + Constants.dataset + "_" + Constants.methodToGenerateFingerprint + ".txt"));
         }else {
             ps = new PrintStream(new FileOutputStream("src/Result/" + Constants.dataset + "_" + Constants.methodToGenerateFingerprint +
-                    "_"+numberOfHashes+"_"+numberOfHashTables +"_kmeans.txt"));
+                    "_"+numberOfHashes+"_"+numberOfHashTables +".txt"));
         }
         System.setOut(ps);
 
