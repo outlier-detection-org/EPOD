@@ -1,0 +1,343 @@
+started!
+===============================
+This is the 0 slides.
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+===============================
+This is the 1 slides.
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+===============================
+This is the 2 slides.
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 3 slides.
+1232306490 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+===============================
+This is the 4 slides.
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 5 slides.
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+===============================
+This is the 6 slides.
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 7 slides.
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 8 slides.
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 9 slides.
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 10 slides.
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 11 slides.
+2042495840 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+===============================
+This is the 12 slides.
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 13 slides.
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+===============================
+This is the 14 slides.
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+===============================
+This is the 15 slides.
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 16 slides.
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+===============================
+This is the 17 slides.
+2042495840 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+===============================
+This is the 18 slides.
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+===============================
+This is the 19 slides.
+Window 0
+2042495840 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+===============================
+This is the 20 slides.
+Window 1
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+===============================
+This is the 21 slides.
+Window 2
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+===============================
+This is the 22 slides.
+Window 3
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+===============================
+This is the 23 slides.
+Window 4
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+Ended!

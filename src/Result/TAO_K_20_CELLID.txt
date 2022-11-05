@@ -1,0 +1,368 @@
+started!
+===============================
+This is the 0 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 transferred # is 0
+1037324811 from 1627821297 transferred # is 0
+1525037790 from 1037324811 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 3,neighbor# is 3, transfer# is 3
+601893033 from 1525037790: recall = 1.000000, precious = 0.384615, intersection# is 30,neighbor# is 30, transfer# is 78
+1037324811 from 601893033: recall = 1.000000, precious = 0.141304, intersection# is 13,neighbor# is 13, transfer# is 92
+1627821297 from 601893033: recall = 1.000000, precious = 0.280702, intersection# is 16,neighbor# is 16, transfer# is 57
+601893033 from 1627821297: recall = 1.000000, precious = 0.473684, intersection# is 36,neighbor# is 36, transfer# is 76
+1525037790 from 601893033: recall = 1.000000, precious = 0.423913, intersection# is 39,neighbor# is 39, transfer# is 92
+Time cost for this window is : 142
+===============================
+This is the 1 slides.
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 transferred # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 2,neighbor# is 2, transfer# is 2
+1627821297 from 1037324811 transferred # is 0
+1037324811 from 601893033: recall = 1.000000, precious = 0.108108, intersection# is 8,neighbor# is 8, transfer# is 74
+601893033 from 1627821297: recall = 1.000000, precious = 0.554217, intersection# is 46,neighbor# is 46, transfer# is 83
+1627821297 from 601893033: recall = 1.000000, precious = 0.343284, intersection# is 23,neighbor# is 23, transfer# is 67
+601893033 from 1525037790: recall = 1.000000, precious = 0.493506, intersection# is 38,neighbor# is 38, transfer# is 77
+1525037790 from 601893033: recall = 1.000000, precious = 0.369048, intersection# is 31,neighbor# is 31, transfer# is 84
+Time cost for this window is : 102
+===============================
+This is the 2 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+1037324811 from 1525037790 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 4,neighbor# is 4, transfer# is 4
+1627821297 from 601893033: recall = 1.000000, precious = 0.350000, intersection# is 21,neighbor# is 21, transfer# is 60
+1037324811 from 1627821297 transferred # is 0
+1037324811 from 601893033: recall = 1.000000, precious = 0.093023, intersection# is 8,neighbor# is 8, transfer# is 86
+1525037790 from 601893033: recall = 1.000000, precious = 0.530120, intersection# is 44,neighbor# is 44, transfer# is 83
+601893033 from 1525037790: recall = 1.000000, precious = 0.528736, intersection# is 46,neighbor# is 46, transfer# is 87
+601893033 from 1627821297: recall = 1.000000, precious = 0.473684, intersection# is 36,neighbor# is 36, transfer# is 76
+Time cost for this window is : 98
+===============================
+This is the 3 slides.
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 18
+1525037790 from 601893033 neighbor # is 36
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 45
+601893033 from 1525037790 neighbor # is 38
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 1,neighbor# is 1, transfer# is 1
+1037324811 from 601893033: recall = 1.000000, precious = 0.098592, intersection# is 7,neighbor# is 7, transfer# is 71
+Time cost for this window is : 81
+===============================
+This is the 4 slides.
+1037324811 from 1627821297 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 1525037790 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 3,neighbor# is 3, transfer# is 3
+1525037790 from 1627821297: recall = 1.000000, precious = 1.000000, intersection# is 1,neighbor# is 1, transfer# is 1
+1037324811 from 601893033: recall = 1.000000, precious = 0.108108, intersection# is 8,neighbor# is 8, transfer# is 74
+1525037790 from 1037324811 transferred # is 0
+601893033 from 1627821297: recall = 1.000000, precious = 0.506494, intersection# is 39,neighbor# is 39, transfer# is 77
+601893033 from 1525037790: recall = 1.000000, precious = 0.647059, intersection# is 55,neighbor# is 55, transfer# is 85
+1627821297 from 601893033: recall = 1.000000, precious = 0.323944, intersection# is 23,neighbor# is 23, transfer# is 71
+1627821297 from 1525037790: recall = 1.000000, precious = 0.084337, intersection# is 7,neighbor# is 7, transfer# is 83
+1525037790 from 601893033: recall = 1.000000, precious = 0.395349, intersection# is 34,neighbor# is 34, transfer# is 86
+Time cost for this window is : 75
+===============================
+This is the 5 slides.
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 1627821297 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 4,neighbor# is 4, transfer# is 4
+1525037790 from 601893033: recall = 1.000000, precious = 0.433735, intersection# is 36,neighbor# is 36, transfer# is 83
+1627821297 from 601893033: recall = 1.000000, precious = 0.338462, intersection# is 22,neighbor# is 22, transfer# is 65
+601893033 from 1627821297: recall = 1.000000, precious = 0.548780, intersection# is 45,neighbor# is 45, transfer# is 82
+601893033 from 1525037790: recall = 1.000000, precious = 0.544118, intersection# is 37,neighbor# is 37, transfer# is 68
+1037324811 from 601893033: recall = 1.000000, precious = 0.134146, intersection# is 11,neighbor# is 11, transfer# is 82
+Time cost for this window is : 84
+===============================
+This is the 6 slides.
+1627821297 from 1037324811 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 8,neighbor# is 8, transfer# is 8
+1525037790 from 1627821297: recall = 1.000000, precious = 1.000000, intersection# is 1,neighbor# is 1, transfer# is 1
+1525037790 from 1037324811 transferred # is 0
+1037324811 from 1627821297 transferred # is 0
+1037324811 from 1525037790 transferred # is 0
+1627821297 from 1525037790: recall = 1.000000, precious = 0.068182, intersection# is 3,neighbor# is 3, transfer# is 44
+1627821297 from 601893033: recall = 1.000000, precious = 0.212500, intersection# is 17,neighbor# is 17, transfer# is 80
+601893033 from 1525037790: recall = 1.000000, precious = 0.636364, intersection# is 49,neighbor# is 49, transfer# is 77
+1037324811 from 601893033: recall = 1.000000, precious = 0.078652, intersection# is 7,neighbor# is 7, transfer# is 89
+601893033 from 1627821297: recall = 1.000000, precious = 0.500000, intersection# is 39,neighbor# is 39, transfer# is 78
+1525037790 from 601893033: recall = 1.000000, precious = 0.406977, intersection# is 35,neighbor# is 35, transfer# is 86
+Time cost for this window is : 67
+===============================
+This is the 7 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+1627821297 from 601893033: recall = 1.000000, precious = 0.271186, intersection# is 16,neighbor# is 16, transfer# is 59
+1525037790 from 601893033: recall = 1.000000, precious = 0.357895, intersection# is 34,neighbor# is 34, transfer# is 95
+1037324811 from 1525037790 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 6,neighbor# is 6, transfer# is 6
+1037324811 from 1627821297 transferred # is 0
+1037324811 from 601893033: recall = 1.000000, precious = 0.137931, intersection# is 12,neighbor# is 12, transfer# is 87
+601893033 from 1627821297: recall = 1.000000, precious = 0.387500, intersection# is 31,neighbor# is 31, transfer# is 80
+601893033 from 1525037790: recall = 1.000000, precious = 0.643678, intersection# is 56,neighbor# is 56, transfer# is 87
+Time cost for this window is : 79
+===============================
+This is the 8 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 5,neighbor# is 5, transfer# is 5
+1627821297 from 1037324811 transferred # is 0
+1037324811 from 1525037790 transferred # is 0
+1627821297 from 601893033: recall = 1.000000, precious = 0.311475, intersection# is 19,neighbor# is 19, transfer# is 61
+601893033 from 1627821297: recall = 1.000000, precious = 0.463768, intersection# is 32,neighbor# is 32, transfer# is 69
+1037324811 from 1627821297 transferred # is 0
+601893033 from 1525037790: recall = 1.000000, precious = 0.544444, intersection# is 49,neighbor# is 49, transfer# is 90
+1525037790 from 601893033: recall = 1.000000, precious = 0.352273, intersection# is 31,neighbor# is 31, transfer# is 88
+1037324811 from 601893033: recall = 1.000000, precious = 0.136842, intersection# is 13,neighbor# is 13, transfer# is 95
+Time cost for this window is : 100
+===============================
+This is the 9 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 5,neighbor# is 5, transfer# is 5
+1525037790 from 1037324811 transferred # is 0
+1037324811 from 1525037790 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+1037324811 from 1627821297 transferred # is 0
+601893033 from 1627821297: recall = 1.000000, precious = 0.473684, intersection# is 36,neighbor# is 36, transfer# is 76
+601893033 from 1525037790: recall = 1.000000, precious = 0.494118, intersection# is 42,neighbor# is 42, transfer# is 85
+1627821297 from 601893033: recall = 1.000000, precious = 0.362069, intersection# is 21,neighbor# is 21, transfer# is 58
+1037324811 from 601893033: recall = 1.000000, precious = 0.125000, intersection# is 10,neighbor# is 10, transfer# is 80
+1525037790 from 601893033: recall = 1.000000, precious = 0.534091, intersection# is 47,neighbor# is 47, transfer# is 88
+Time cost for this window is : 84
+===============================
+This is the 10 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+1037324811 from 1525037790 transferred # is 0
+1037324811 from 1627821297 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 7,neighbor# is 7, transfer# is 7
+1627821297 from 601893033: recall = 1.000000, precious = 0.390625, intersection# is 25,neighbor# is 25, transfer# is 64
+1525037790 from 601893033: recall = 1.000000, precious = 0.447059, intersection# is 38,neighbor# is 38, transfer# is 85
+601893033 from 1525037790: recall = 1.000000, precious = 0.674157, intersection# is 60,neighbor# is 60, transfer# is 89
+1037324811 from 601893033: recall = 1.000000, precious = 0.123711, intersection# is 12,neighbor# is 12, transfer# is 97
+601893033 from 1627821297: recall = 1.000000, precious = 0.600000, intersection# is 48,neighbor# is 48, transfer# is 80
+Time cost for this window is : 87
+===============================
+This is the 11 slides.
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1037324811 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 2,neighbor# is 2, transfer# is 2
+1037324811 from 1525037790: recall = 1.000000, precious = 0.333333, intersection# is 1,neighbor# is 1, transfer# is 3
+1037324811 from 1627821297 transferred # is 0
+601893033 from 1627821297: recall = 1.000000, precious = 0.485714, intersection# is 34,neighbor# is 34, transfer# is 70
+1627821297 from 601893033: recall = 1.000000, precious = 0.444444, intersection# is 24,neighbor# is 24, transfer# is 54
+601893033 from 1525037790: recall = 1.000000, precious = 0.487805, intersection# is 40,neighbor# is 40, transfer# is 82
+1525037790 from 601893033: recall = 1.000000, precious = 0.395604, intersection# is 36,neighbor# is 36, transfer# is 91
+1037324811 from 601893033: recall = 1.000000, precious = 0.058824, intersection# is 5,neighbor# is 5, transfer# is 85
+1525037790 from 1037324811: recall = 1.000000, precious = 0.990654, intersection# is 106,neighbor# is 106, transfer# is 107
+Time cost for this window is : 86
+===============================
+This is the 12 slides.
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1627821297 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+1525037790 from 1627821297 neighbor # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 4,neighbor# is 4, transfer# is 4
+1525037790 from 1037324811 transferred # is 0
+1037324811 from 1525037790 transferred # is 0
+1037324811 from 601893033: recall = 1.000000, precious = 0.064935, intersection# is 5,neighbor# is 5, transfer# is 77
+1627821297 from 601893033: recall = 1.000000, precious = 0.450000, intersection# is 27,neighbor# is 27, transfer# is 60
+601893033 from 1525037790: recall = 1.000000, precious = 0.580645, intersection# is 54,neighbor# is 54, transfer# is 93
+601893033 from 1627821297: recall = 1.000000, precious = 0.492958, intersection# is 35,neighbor# is 35, transfer# is 71
+1525037790 from 601893033: recall = 1.000000, precious = 0.423529, intersection# is 36,neighbor# is 36, transfer# is 85
+Time cost for this window is : 79
+===============================
+This is the 13 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1037324811: recall = 0.600000, precious = 1.000000, intersection# is 3,neighbor# is 5, transfer# is 3
+1525037790 from 1037324811 transferred # is 0
+1037324811 from 1525037790 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+1037324811 from 1627821297 transferred # is 0
+601893033 from 1525037790: recall = 1.000000, precious = 0.468354, intersection# is 37,neighbor# is 37, transfer# is 79
+1037324811 from 601893033: recall = 1.000000, precious = 0.104478, intersection# is 7,neighbor# is 7, transfer# is 67
+601893033 from 1627821297: recall = 1.000000, precious = 0.530120, intersection# is 44,neighbor# is 44, transfer# is 83
+1627821297 from 601893033: recall = 1.000000, precious = 0.454545, intersection# is 30,neighbor# is 30, transfer# is 66
+1525037790 from 601893033: recall = 1.000000, precious = 0.369048, intersection# is 31,neighbor# is 31, transfer# is 84
+Time cost for this window is : 73
+===============================
+This is the 14 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1627821297: recall = 1.000000, precious = 0.090909, intersection# is 1,neighbor# is 1, transfer# is 11
+1525037790 from 1037324811 transferred # is 0
+1037324811 from 1525037790 transferred # is 0
+1627821297 from 1037324811: recall = 1.000000, precious = 0.333333, intersection# is 1,neighbor# is 1, transfer# is 3
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 9,neighbor# is 9, transfer# is 9
+601893033 from 1525037790: recall = 1.000000, precious = 0.526316, intersection# is 40,neighbor# is 40, transfer# is 76
+1627821297 from 601893033: recall = 1.000000, precious = 0.296875, intersection# is 19,neighbor# is 19, transfer# is 64
+1037324811 from 601893033: recall = 1.000000, precious = 0.131868, intersection# is 12,neighbor# is 12, transfer# is 91
+1525037790 from 601893033: recall = 1.000000, precious = 0.439024, intersection# is 36,neighbor# is 36, transfer# is 82
+601893033 from 1627821297: recall = 1.000000, precious = 0.425000, intersection# is 34,neighbor# is 34, transfer# is 80
+Time cost for this window is : 81
+===============================
+This is the 15 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+1037324811 from 1627821297 transferred # is 0
+1525037790 from 601893033: recall = 1.000000, precious = 0.443299, intersection# is 43,neighbor# is 43, transfer# is 97
+1627821297 from 601893033: recall = 1.000000, precious = 0.264151, intersection# is 14,neighbor# is 14, transfer# is 53
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 3,neighbor# is 3, transfer# is 3
+1037324811 from 601893033: recall = 1.000000, precious = 0.164706, intersection# is 14,neighbor# is 14, transfer# is 85
+1037324811 from 1525037790 transferred # is 0
+601893033 from 1525037790: recall = 1.000000, precious = 0.662338, intersection# is 51,neighbor# is 51, transfer# is 77
+601893033 from 1627821297: recall = 1.000000, precious = 0.416667, intersection# is 35,neighbor# is 35, transfer# is 84
+Time cost for this window is : 82
+===============================
+This is the 16 slides.
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 transferred # is 0
+1037324811 from 1627821297 transferred # is 0
+1525037790 from 1037324811 transferred # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 5,neighbor# is 5, transfer# is 5
+1627821297 from 1037324811 transferred # is 0
+1037324811 from 601893033: recall = 1.000000, precious = 0.087500, intersection# is 7,neighbor# is 7, transfer# is 80
+1525037790 from 601893033: recall = 1.000000, precious = 0.426829, intersection# is 35,neighbor# is 35, transfer# is 82
+601893033 from 1525037790: recall = 1.000000, precious = 0.475000, intersection# is 38,neighbor# is 38, transfer# is 80
+601893033 from 1627821297: recall = 1.000000, precious = 0.540230, intersection# is 47,neighbor# is 47, transfer# is 87
+1627821297 from 601893033: recall = 1.000000, precious = 0.421875, intersection# is 27,neighbor# is 27, transfer# is 64
+Time cost for this window is : 76
+===============================
+This is the 17 slides.
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1037324811 transferred # is 0
+1525037790 from 1037324811 transferred # is 0
+1037324811 from 1627821297 transferred # is 0
+1037324811 from 1525037790 transferred # is 0
+1627821297 from 601893033: recall = 1.000000, precious = 0.365079, intersection# is 23,neighbor# is 23, transfer# is 63
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 6,neighbor# is 6, transfer# is 6
+1037324811 from 601893033: recall = 1.000000, precious = 0.060976, intersection# is 5,neighbor# is 5, transfer# is 82
+1525037790 from 601893033: recall = 1.000000, precious = 0.366667, intersection# is 33,neighbor# is 33, transfer# is 90
+601893033 from 1627821297: recall = 1.000000, precious = 0.594595, intersection# is 44,neighbor# is 44, transfer# is 74
+601893033 from 1525037790: recall = 1.000000, precious = 0.590361, intersection# is 49,neighbor# is 49, transfer# is 83
+Time cost for this window is : 81
+===============================
+This is the 18 slides.
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 transferred # is 0
+1037324811 from 1627821297 transferred # is 0
+1627821297 from 601893033: recall = 1.000000, precious = 0.296875, intersection# is 19,neighbor# is 19, transfer# is 64
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 2,neighbor# is 2, transfer# is 2
+601893033 from 1627821297: recall = 1.000000, precious = 0.487805, intersection# is 40,neighbor# is 40, transfer# is 82
+601893033 from 1525037790: recall = 1.000000, precious = 0.659091, intersection# is 58,neighbor# is 58, transfer# is 88
+1037324811 from 601893033: recall = 1.000000, precious = 0.157143, intersection# is 11,neighbor# is 11, transfer# is 70
+1525037790 from 601893033: recall = 1.000000, precious = 0.382022, intersection# is 34,neighbor# is 34, transfer# is 89
+Time cost for this window is : 64
+===============================
+This is the 19 slides.
+Window 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790: recall = 1.000000, precious = 0.028571, intersection# is 1,neighbor# is 1, transfer# is 35
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1037324811: recall = 1.000000, precious = 0.500000, intersection# is 2,neighbor# is 2, transfer# is 4
+1037324811 from 601893033: recall = 1.000000, precious = 0.142857, intersection# is 10,neighbor# is 10, transfer# is 70
+1525037790 from 601893033: recall = 1.000000, precious = 0.355556, intersection# is 32,neighbor# is 32, transfer# is 90
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 4,neighbor# is 4, transfer# is 4
+1627821297 from 601893033: recall = 1.000000, precious = 0.265625, intersection# is 17,neighbor# is 17, transfer# is 64
+601893033 from 1525037790: recall = 1.000000, precious = 0.573171, intersection# is 47,neighbor# is 47, transfer# is 82
+601893033 from 1627821297: recall = 1.000000, precious = 0.526316, intersection# is 40,neighbor# is 40, transfer# is 76
+Time cost for this window is : 71
+===============================
+This is the 20 slides.
+Window 1
+1037324811 from 1525037790: recall = 1.000000, precious = 1.000000, intersection# is 1,neighbor# is 1, transfer# is 1
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1627821297 transferred # is 0
+1627821297 from 1037324811 transferred # is 0
+1525037790 from 601893033: recall = 1.000000, precious = 0.454545, intersection# is 35,neighbor# is 35, transfer# is 77
+1037324811 from 601893033: recall = 1.000000, precious = 0.135593, intersection# is 8,neighbor# is 8, transfer# is 59
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 3,neighbor# is 3, transfer# is 3
+601893033 from 1525037790: recall = 1.000000, precious = 0.512195, intersection# is 42,neighbor# is 42, transfer# is 82
+1627821297 from 601893033: recall = 1.000000, precious = 0.352941, intersection# is 24,neighbor# is 24, transfer# is 68
+601893033 from 1627821297: recall = 1.000000, precious = 0.454545, intersection# is 30,neighbor# is 30, transfer# is 66
+1525037790 from 1037324811: recall = 1.000000, precious = 0.990099, intersection# is 100,neighbor# is 100, transfer# is 101
+Time cost for this window is : 65
+===============================
+This is the 21 slides.
+Window 2
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 transferred # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 transferred # is 0
+1525037790 from 1037324811 transferred # is 0
+1627821297 from 601893033: recall = 1.000000, precious = 0.333333, intersection# is 20,neighbor# is 20, transfer# is 60
+1037324811 from 601893033: recall = 1.000000, precious = 0.070588, intersection# is 6,neighbor# is 6, transfer# is 85
+1525037790 from 601893033: recall = 1.000000, precious = 0.488372, intersection# is 42,neighbor# is 42, transfer# is 86
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 2,neighbor# is 2, transfer# is 2
+1037324811 from 1627821297 transferred # is 0
+601893033 from 1525037790: recall = 1.000000, precious = 0.493671, intersection# is 39,neighbor# is 39, transfer# is 79
+601893033 from 1627821297: recall = 1.000000, precious = 0.528571, intersection# is 37,neighbor# is 37, transfer# is 70
+Time cost for this window is : 80
+===============================
+This is the 22 slides.
+Window 3
+1037324811 from 1525037790 transferred # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 3,neighbor# is 3, transfer# is 3
+1627821297 from 1037324811: recall = 1.000000, precious = 0.500000, intersection# is 1,neighbor# is 1, transfer# is 2
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1627821297: recall = 1.000000, precious = 0.052632, intersection# is 1,neighbor# is 1, transfer# is 19
+1525037790 from 1037324811 transferred # is 0
+601893033 from 1627821297: recall = 1.000000, precious = 0.465753, intersection# is 34,neighbor# is 34, transfer# is 73
+601893033 from 1525037790: recall = 1.000000, precious = 0.505618, intersection# is 45,neighbor# is 45, transfer# is 89
+1627821297 from 601893033: recall = 1.000000, precious = 0.355932, intersection# is 21,neighbor# is 21, transfer# is 59
+1037324811 from 601893033: recall = 1.000000, precious = 0.071429, intersection# is 6,neighbor# is 6, transfer# is 84
+1525037790 from 601893033: recall = 1.000000, precious = 0.420455, intersection# is 37,neighbor# is 37, transfer# is 88
+Time cost for this window is : 66
+===============================
+This is the 23 slides.
+Window 4
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 transferred # is 0
+601893033 from 1037324811: recall = 1.000000, precious = 1.000000, intersection# is 1,neighbor# is 1, transfer# is 1
+1037324811 from 1627821297 transferred # is 0
+1037324811 from 601893033: recall = 1.000000, precious = 0.102941, intersection# is 7,neighbor# is 7, transfer# is 68
+1627821297 from 601893033: recall = 1.000000, precious = 0.380952, intersection# is 24,neighbor# is 24, transfer# is 63
+1525037790 from 601893033: recall = 1.000000, precious = 0.457831, intersection# is 38,neighbor# is 38, transfer# is 83
+601893033 from 1627821297: recall = 1.000000, precious = 0.519481, intersection# is 40,neighbor# is 40, transfer# is 77
+601893033 from 1525037790: recall = 1.000000, precious = 0.534884, intersection# is 46,neighbor# is 46, transfer# is 86
+Time cost for this window is : 60
+Ended!
+Average time cost is: 81.79166666666667

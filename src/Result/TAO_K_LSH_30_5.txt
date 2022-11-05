@@ -1,0 +1,368 @@
+started!
+===============================
+This is the 0 slides.
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 982007015: recall = 0.562500, precious = 1.000000, intersection# is 9,neighbor# is 16, transfer# is 9
+982007015 from 1663166483: recall = 1.000000, precious = 1.000000, intersection# is 54,neighbor# is 54, transfer# is 54
+2042495840 from 982007015: recall = 0.250000, precious = 1.000000, intersection# is 1,neighbor# is 4, transfer# is 1
+982007015 from 2042495840: recall = 0.216495, precious = 1.000000, intersection# is 21,neighbor# is 97, transfer# is 21
+Time cost for this window is : 127
+===============================
+This is the 1 slides.
+1232306490 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+2042495840 from 982007015: recall = 0.400000, precious = 1.000000, intersection# is 6,neighbor# is 15, transfer# is 6
+1663166483 from 982007015: recall = 0.823529, precious = 1.000000, intersection# is 14,neighbor# is 17, transfer# is 14
+982007015 from 2042495840: recall = 0.447761, precious = 1.000000, intersection# is 30,neighbor# is 67, transfer# is 30
+982007015 from 1663166483: recall = 0.677419, precious = 1.000000, intersection# is 21,neighbor# is 31, transfer# is 21
+Time cost for this window is : 78
+===============================
+This is the 2 slides.
+1232306490 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 982007015: recall = 1.000000, precious = 0.857143, intersection# is 6,neighbor# is 6, transfer# is 7
+2042495840 from 982007015: recall = 0.446429, precious = 1.000000, intersection# is 25,neighbor# is 56, transfer# is 25
+982007015 from 1232306490 neighbor # is 0
+982007015 from 2042495840: recall = 0.067568, precious = 1.000000, intersection# is 5,neighbor# is 74, transfer# is 5
+982007015 from 1663166483: recall = 1.000000, precious = 0.567568, intersection# is 21,neighbor# is 21, transfer# is 37
+Time cost for this window is : 50
+===============================
+This is the 3 slides.
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+982007015 from 2042495840: recall = 0.071429, precious = 1.000000, intersection# is 3,neighbor# is 42, transfer# is 3
+2042495840 from 982007015: recall = 0.278689, precious = 1.000000, intersection# is 17,neighbor# is 61, transfer# is 17
+Time cost for this window is : 53
+===============================
+This is the 4 slides.
+1663166483 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 2042495840: recall = 0.283582, precious = 1.000000, intersection# is 19,neighbor# is 67, transfer# is 19
+2042495840 from 982007015: recall = 0.351852, precious = 1.000000, intersection# is 19,neighbor# is 54, transfer# is 19
+Time cost for this window is : 100
+===============================
+This is the 5 slides.
+1232306490 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+2042495840 from 982007015: recall = 0.563636, precious = 1.000000, intersection# is 62,neighbor# is 110, transfer# is 62
+982007015 from 2042495840: recall = 0.295775, precious = 1.000000, intersection# is 21,neighbor# is 71, transfer# is 21
+Time cost for this window is : 79
+===============================
+This is the 6 slides.
+982007015 from 1663166483 neighbor # is 24
+1232306490 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 4
+982007015 from 2042495840: recall = 0.176471, precious = 1.000000, intersection# is 3,neighbor# is 17, transfer# is 3
+2042495840 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+2042495840 from 982007015: recall = 0.625000, precious = 1.000000, intersection# is 15,neighbor# is 24, transfer# is 15
+Time cost for this window is : 67
+===============================
+This is the 7 slides.
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 1
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 13
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 1
+2042495840 from 982007015 neighbor # is 22
+Time cost for this window is : 48
+===============================
+This is the 8 slides.
+1232306490 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+2042495840 from 982007015: recall = 0.200000, precious = 1.000000, intersection# is 5,neighbor# is 25, transfer# is 5
+1663166483 from 982007015: recall = 0.333333, precious = 1.000000, intersection# is 5,neighbor# is 15, transfer# is 5
+982007015 from 1663166483: recall = 0.642857, precious = 1.000000, intersection# is 18,neighbor# is 28, transfer# is 18
+982007015 from 2042495840: recall = 0.492308, precious = 1.000000, intersection# is 32,neighbor# is 65, transfer# is 32
+Time cost for this window is : 59
+===============================
+This is the 9 slides.
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 1663166483: recall = 0.750000, precious = 1.000000, intersection# is 15,neighbor# is 20, transfer# is 15
+1663166483 from 982007015: recall = 0.627273, precious = 0.985714, intersection# is 69,neighbor# is 110, transfer# is 70
+Time cost for this window is : 70
+===============================
+This is the 10 slides.
+2042495840 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+Time cost for this window is : 19
+===============================
+This is the 11 slides.
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+Time cost for this window is : 42
+===============================
+This is the 12 slides.
+1663166483 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+Time cost for this window is : 39
+===============================
+This is the 13 slides.
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+Time cost for this window is : 41
+===============================
+This is the 14 slides.
+1663166483 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+Time cost for this window is : 30
+===============================
+This is the 15 slides.
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+Time cost for this window is : 44
+===============================
+This is the 16 slides.
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+Time cost for this window is : 33
+===============================
+This is the 17 slides.
+1232306490 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+Time cost for this window is : 37
+===============================
+This is the 18 slides.
+1663166483 from 1232306490 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+Time cost for this window is : 34
+===============================
+This is the 19 slides.
+Window 0
+2042495840 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+Time cost for this window is : 26
+===============================
+This is the 20 slides.
+Window 1
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+Time cost for this window is : 44
+===============================
+This is the 21 slides.
+Window 2
+1663166483 from 1232306490 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+Time cost for this window is : 40
+===============================
+This is the 22 slides.
+Window 3
+2042495840 from 1663166483 neighbor # is 0
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 1
+1232306490 from 1663166483 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+982007015 from 1663166483 neighbor # is 18
+982007015 from 1232306490 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+Time cost for this window is : 54
+===============================
+This is the 23 slides.
+Window 4
+1663166483 from 1232306490 neighbor # is 0
+2042495840 from 1663166483 neighbor # is 0
+982007015 from 1663166483 neighbor # is 0
+1232306490 from 1663166483 neighbor # is 0
+982007015 from 1232306490 neighbor # is 0
+2042495840 from 1232306490 neighbor # is 0
+1663166483 from 2042495840 neighbor # is 0
+1232306490 from 2042495840 neighbor # is 0
+982007015 from 2042495840 neighbor # is 0
+2042495840 from 982007015 neighbor # is 0
+1663166483 from 982007015 neighbor # is 0
+1232306490 from 982007015 neighbor # is 0
+Time cost for this window is : 35
+Ended!
+Average time cost is: 52.041666666666664

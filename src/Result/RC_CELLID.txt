@@ -1,0 +1,343 @@
+started!
+===============================
+This is the 0 slides.
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+===============================
+This is the 1 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 2 slides.
+601893033 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 3 slides.
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+===============================
+This is the 4 slides.
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+===============================
+This is the 5 slides.
+1037324811 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+===============================
+This is the 6 slides.
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+===============================
+This is the 7 slides.
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+===============================
+This is the 8 slides.
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+===============================
+This is the 9 slides.
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 10 slides.
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 11 slides.
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+===============================
+This is the 12 slides.
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 13 slides.
+601893033 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+===============================
+This is the 14 slides.
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 15 slides.
+1525037790 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+===============================
+This is the 16 slides.
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+===============================
+This is the 17 slides.
+601893033 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+===============================
+This is the 18 slides.
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+===============================
+This is the 19 slides.
+Window 0
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 20 slides.
+Window 1
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 21 slides.
+Window 2
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 22 slides.
+Window 3
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+===============================
+This is the 23 slides.
+Window 4
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+Ended!

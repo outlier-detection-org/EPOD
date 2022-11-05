@@ -1,0 +1,368 @@
+started!
+===============================
+This is the 0 slides.
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1627821297 from 601893033: recall = 1.000000, precious = 0.071429, intersection# is 4,neighbor# is 4, transfer# is 56
+601893033 from 1627821297: recall = 1.000000, precious = 0.808333, intersection# is 97,neighbor# is 97, transfer# is 120
+601893033 from 1525037790: recall = 1.000000, precious = 0.465517, intersection# is 54,neighbor# is 54, transfer# is 116
+1525037790 from 601893033: recall = 1.000000, precious = 0.145455, intersection# is 16,neighbor# is 16, transfer# is 110
+Time cost for this window is : 103
+===============================
+This is the 1 slides.
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1525037790: recall = 1.000000, precious = 0.430556, intersection# is 31,neighbor# is 31, transfer# is 72
+1525037790 from 601893033: recall = 1.000000, precious = 0.346939, intersection# is 17,neighbor# is 17, transfer# is 49
+1627821297 from 601893033: recall = 1.000000, precious = 0.197368, intersection# is 15,neighbor# is 15, transfer# is 76
+601893033 from 1627821297: recall = 1.000000, precious = 0.582609, intersection# is 67,neighbor# is 67, transfer# is 115
+Time cost for this window is : 57
+===============================
+This is the 2 slides.
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+601893033 from 1627821297: recall = 1.000000, precious = 0.611570, intersection# is 74,neighbor# is 74, transfer# is 121
+1525037790 from 601893033: recall = 1.000000, precious = 0.250000, intersection# is 6,neighbor# is 6, transfer# is 24
+1627821297 from 601893033: recall = 1.000000, precious = 0.589474, intersection# is 56,neighbor# is 56, transfer# is 95
+601893033 from 1525037790: recall = 1.000000, precious = 0.218750, intersection# is 21,neighbor# is 21, transfer# is 96
+Time cost for this window is : 41
+===============================
+This is the 3 slides.
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+601893033 from 1525037790 transferred # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 601893033 transferred # is 0
+601893033 from 1627821297: recall = 1.000000, precious = 0.362069, intersection# is 42,neighbor# is 42, transfer# is 116
+1627821297 from 601893033: recall = 1.000000, precious = 0.516949, intersection# is 61,neighbor# is 61, transfer# is 118
+Time cost for this window is : 60
+===============================
+This is the 4 slides.
+1037324811 from 1627821297 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 601893033 transferred # is 0
+601893033 from 1525037790 transferred # is 0
+601893033 from 1627821297: recall = 1.000000, precious = 0.598214, intersection# is 67,neighbor# is 67, transfer# is 112
+1627821297 from 601893033: recall = 1.000000, precious = 0.486486, intersection# is 54,neighbor# is 54, transfer# is 111
+Time cost for this window is : 71
+===============================
+This is the 5 slides.
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 601893033 transferred # is 0
+601893033 from 1037324811 neighbor # is 0
+601893033 from 1525037790 transferred # is 0
+1627821297 from 601893033: recall = 1.000000, precious = 0.894309, intersection# is 110,neighbor# is 110, transfer# is 123
+601893033 from 1627821297: recall = 1.000000, precious = 0.788889, intersection# is 71,neighbor# is 71, transfer# is 90
+Time cost for this window is : 71
+===============================
+This is the 6 slides.
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 601893033: recall = 1.000000, precious = 0.057143, intersection# is 4,neighbor# is 4, transfer# is 70
+601893033 from 1627821297: recall = 1.000000, precious = 0.346939, intersection# is 17,neighbor# is 17, transfer# is 49
+601893033 from 1525037790: recall = 1.000000, precious = 0.260870, intersection# is 24,neighbor# is 24, transfer# is 92
+1627821297 from 601893033: recall = 1.000000, precious = 0.252632, intersection# is 24,neighbor# is 24, transfer# is 95
+Time cost for this window is : 64
+===============================
+This is the 7 slides.
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 601893033: recall = 1.000000, precious = 0.045455, intersection# is 1,neighbor# is 1, transfer# is 22
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 601893033: recall = 1.000000, precious = 0.213592, intersection# is 22,neighbor# is 22, transfer# is 103
+601893033 from 1525037790: recall = 1.000000, precious = 0.013333, intersection# is 1,neighbor# is 1, transfer# is 75
+601893033 from 1627821297: recall = 1.000000, precious = 0.156627, intersection# is 13,neighbor# is 13, transfer# is 83
+Time cost for this window is : 74
+===============================
+This is the 8 slides.
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1525037790: recall = 1.000000, precious = 0.560000, intersection# is 28,neighbor# is 28, transfer# is 50
+1525037790 from 601893033: recall = 1.000000, precious = 0.180723, intersection# is 15,neighbor# is 15, transfer# is 83
+1627821297 from 601893033: recall = 1.000000, precious = 0.297619, intersection# is 25,neighbor# is 25, transfer# is 84
+601893033 from 1627821297: recall = 1.000000, precious = 0.546218, intersection# is 65,neighbor# is 65, transfer# is 119
+Time cost for this window is : 72
+===============================
+This is the 9 slides.
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 601893033 neighbor # is 110
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 20
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+Time cost for this window is : 15
+===============================
+This is the 10 slides.
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 601893033 transferred # is 0
+601893033 from 1627821297 transferred # is 0
+1525037790 from 601893033 transferred # is 0
+601893033 from 1525037790 transferred # is 0
+Time cost for this window is : 56
+===============================
+This is the 11 slides.
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 601893033 transferred # is 0
+601893033 from 1525037790 transferred # is 0
+Time cost for this window is : 59
+===============================
+This is the 12 slides.
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1525037790 transferred # is 0
+1525037790 from 601893033 transferred # is 0
+Time cost for this window is : 59
+===============================
+This is the 13 slides.
+601893033 from 1627821297 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1525037790 transferred # is 0
+1525037790 from 601893033 transferred # is 0
+Time cost for this window is : 30
+===============================
+This is the 14 slides.
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 601893033 transferred # is 0
+601893033 from 1525037790 transferred # is 0
+Time cost for this window is : 72
+===============================
+This is the 15 slides.
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1525037790 from 601893033 transferred # is 0
+601893033 from 1627821297 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+601893033 from 1525037790 transferred # is 0
+Time cost for this window is : 60
+===============================
+This is the 16 slides.
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1627821297 transferred # is 0
+1627821297 from 601893033 transferred # is 0
+601893033 from 1525037790 transferred # is 0
+1525037790 from 601893033 transferred # is 0
+Time cost for this window is : 48
+===============================
+This is the 17 slides.
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1525037790 from 601893033 transferred # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+601893033 from 1525037790 transferred # is 0
+Time cost for this window is : 52
+===============================
+This is the 18 slides.
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1525037790 from 601893033 transferred # is 0
+601893033 from 1525037790 transferred # is 0
+Time cost for this window is : 63
+===============================
+This is the 19 slides.
+Window 0
+1037324811 from 1627821297 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 601893033 transferred # is 0
+601893033 from 1525037790 transferred # is 0
+Time cost for this window is : 40
+===============================
+This is the 20 slides.
+Window 1
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+Time cost for this window is : 26
+===============================
+This is the 21 slides.
+Window 2
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+Time cost for this window is : 24
+===============================
+This is the 22 slides.
+Window 3
+1627821297 from 1525037790 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+601893033 from 1627821297 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+601893033 from 1525037790: recall = 1.000000, precious = 0.174757, intersection# is 18,neighbor# is 18, transfer# is 103
+1525037790 from 601893033: recall = 1.000000, precious = 0.033333, intersection# is 1,neighbor# is 1, transfer# is 30
+Time cost for this window is : 50
+===============================
+This is the 23 slides.
+Window 4
+601893033 from 1627821297 neighbor # is 0
+1037324811 from 1627821297 neighbor # is 0
+601893033 from 1525037790 neighbor # is 0
+1037324811 from 1525037790 neighbor # is 0
+601893033 from 1037324811 neighbor # is 0
+1037324811 from 601893033 neighbor # is 0
+1627821297 from 1525037790 neighbor # is 0
+1525037790 from 1627821297 neighbor # is 0
+1627821297 from 601893033 neighbor # is 0
+1525037790 from 601893033 neighbor # is 0
+1627821297 from 1037324811 neighbor # is 0
+1525037790 from 1037324811 neighbor # is 0
+Time cost for this window is : 43
+Ended!
+Average time cost is: 54.583333333333336
