@@ -17,21 +17,21 @@ public class EdgeNodeNetwork {
     public static BufferedWriter[] outlierFw = new BufferedWriter[Constants.dn*Constants.nn];
 
     static {
-        try {
-            for (int i = 0;i<Constants.dn*Constants.nn;i++){
-                outlierFw[i] = new BufferedWriter(new FileWriter(new File(
-                        "src\\Result\\Result_"+
-                                Constants.dataset+
-                                "_NETS"+"_"
-                                +Constants.withTime+"_"
-                                +Constants.nn+"_"
-                                +Constants.dn+"_"
-                                +i+"_"
-                                + "outliers.txt")));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            for (int i = 0;i<Constants.dn*Constants.nn;i++){
+//                outlierFw[i] = new BufferedWriter(new FileWriter(new File(
+//                        "src\\Result\\Result_"+
+//                                Constants.dataset+
+//                                "_NETS"+"_"
+//                                +Constants.withTime+"_"
+//                                +Constants.nn+"_"
+//                                +Constants.dn+"_"
+//                                +i+"_"
+//                                + "outliers.txt")));
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void setNumberOfHashTables(int number) {
@@ -74,6 +74,7 @@ public class EdgeNodeNetwork {
         }
 
         int itr=0;
+        long time = 0;
         while (itr < Constants.nS+Constants.nW-1) {
             System.out.println("===============================");
             System.out.println("This is the "+itr + " slides.");
@@ -81,6 +82,7 @@ public class EdgeNodeNetwork {
                 System.out.println("Window " + (itr - Constants.nS + 1));
             }
             ArrayList<Thread> arrayList = new ArrayList<>();
+            long start = System.currentTimeMillis();
             for (EdgeDevice device : edgeDeviceHashMap.values()) {
                 int finalItr = itr;
                 Thread t = new Thread() {
@@ -88,18 +90,18 @@ public class EdgeNodeNetwork {
                     public void run() {
                         try {
                             Set<Vector> outlier = device.detectOutlier(finalItr);
-                            if(finalItr>=Constants.nS-1) {
-                                outlierFw[device.deviceId].write("Window " +(finalItr-Constants.nS+1)+"\n");
-                                for (Vector v : outlier) {
-                                    StringBuilder sb =new StringBuilder();
-//                                    sb.append(String.format("%d ",((Tuple)v).id));
-                                    for (Double d: ((Tuple)v).value) {
-                                        sb.append(String.format("%.2f ",d));
-                                    }
-                                    outlierFw[device.deviceId].write(sb.toString() +"\n");
-                                }
-                                outlierFw[device.deviceId].flush();
-                            }
+//                            if(finalItr>=Constants.nS-1) {
+//                                outlierFw[device.deviceId].write("Window " +(finalItr-Constants.nS+1)+"\n");
+//                                for (Vector v : outlier) {
+//                                    StringBuilder sb =new StringBuilder();
+////                                    sb.append(String.format("%d ",((Tuple)v).id));
+//                                    for (Double d: ((Tuple)v).value) {
+//                                        sb.append(String.format("%.2f ",d));
+//                                    }
+//                                    outlierFw[device.deviceId].write(sb.toString() +"\n");
+//                                }
+//                                outlierFw[device.deviceId].flush();
+//                            }
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }
@@ -111,6 +113,8 @@ public class EdgeNodeNetwork {
             for (Thread t : arrayList) {
                 t.join();
             }
+            time += System.currentTimeMillis()-start;
+            System.out.println("Time cost for this window is : "+(System.currentTimeMillis()-start));
             itr++;
 
 //            System.out.println("total" + testNetwork.total);
@@ -128,10 +132,11 @@ public class EdgeNodeNetwork {
 //            testNetwork.buckets= new ArrayList<>();
 //            testNetwork.all = new HashMap<>();
         }
-        for (BufferedWriter bufferedWriter: outlierFw){
-            bufferedWriter.close();
-        }
+//        for (BufferedWriter bufferedWriter: outlierFw){
+//            bufferedWriter.close();
+//        }
         stopNetwork();
+        System.out.println("Average time cost is: "+time*1.0/(Constants.nS+Constants.nW-1));
     }
 
     public static void startNetworkForTest(boolean allTransfer) throws Throwable {

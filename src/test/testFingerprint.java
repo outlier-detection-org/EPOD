@@ -2,14 +2,12 @@ package test;
 
 import be.tarsos.lsh.Vector;
 import be.tarsos.lsh.families.EuclideanDistance;
-import be.tarsos.lsh.families.EuclidianHashFamily;
 import be.tarsos.lsh.util.TestUtils;
 import main.EdgeDevice;
 import main.EdgeDeviceFactory;
 import utils.Constants;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;

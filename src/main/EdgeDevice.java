@@ -8,9 +8,8 @@ import be.tarsos.lsh.Vector;
 import be.tarsos.lsh.families.EuclideanDistance;
 import utils.Constants;
 import utils.DataGenerator;
-
-import javax.lang.model.util.ElementScanner6;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @SuppressWarnings("unchecked")
 public class EdgeDevice extends RPCFrame implements Runnable {
@@ -29,7 +28,7 @@ public class EdgeDevice extends RPCFrame implements Runnable {
     public long itr;
     public HashSet<Vector> outlier;
 
-    public static HashMap<Long,ArrayList<Short>>hashBucket;
+    public static Map<Long,ArrayList<Short>>hashBucket;
 
     public EdgeDevice(Index index, int NumberOfHashTables,int deviceId) throws Throwable {
         this.port = new Random().nextInt(50000)+10000;
@@ -42,7 +41,7 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         this.allRawDataList = Collections.synchronizedMap(new HashMap<>());
         this.dataGenerator = DataGenerator.getInstance(Constants.dataset,deviceId);
         if (hashBucket==null){
-            hashBucket = new HashMap<>();
+            hashBucket = Collections.synchronizedMap(new HashMap<>());
         }
     }
 
@@ -152,42 +151,60 @@ public class EdgeDevice extends RPCFrame implements Runnable {
 
     public void getData() throws InterruptedException {
         ArrayList<Thread> threads = new ArrayList<>();
-        for (Integer edgeDeviceCode :dependentDevice.keySet()){
-            Thread t =new Thread(()->{
-                Object[] parameters = new Object[]{dependentDevice.get(edgeDeviceCode)};
-                try {
-                    /*use for measurement*/
-                    HashSet<Vector> dataSet = new HashSet<>();
-                    for (Vector a: this.rawData){
-                        for (Vector b: EdgeNodeNetwork.edgeDeviceHashMap.get(edgeDeviceCode).rawData){
-                            if (new EuclideanDistance().distance(a,b)<=Constants.R){
-                                dataSet.add(b);
+        for (Integer edgeDeviceCode :EdgeNodeNetwork.edgeDeviceHashMap.keySet()){
+            if (this.hashCode() ==edgeDeviceCode) continue;
+            /*use for measurement*/
+            AtomicReference<Double> recall = new AtomicReference<>((double) 0); // 正样本中被预测正确的
+            AtomicReference<Double> precious = new AtomicReference<>((double) 0); // 预测为正的中真实也为正的
+            HashSet<Integer> dataSet = new HashSet<>();
+            HashSet<Integer> dataSet1 = new HashSet<>();
+            for (Vector a: this.rawData){
+                for (Vector b: EdgeNodeNetwork.edgeDeviceHashMap.get(edgeDeviceCode).rawData){
+                    if (new EuclideanDistance().distance(a,b)<=Constants.R){
+                        dataSet.add(b.arrivalTime);
+                    }
+                }
+            }
+            if (dependentDevice.containsKey(edgeDeviceCode)){
+                Thread t =new Thread(()->{
+                    Object[] parameters = new Object[]{dependentDevice.get(edgeDeviceCode)};
+                    try {
+                        HashMap<Long, List<Vector>> data = (HashMap<Long, List<Vector>>)
+                                invoke("localhost",
+                                        EdgeNodeNetwork.edgeDeviceHashMap.get(edgeDeviceCode).port,
+                                        EdgeDevice.class.getMethod("sendData", ArrayList.class), parameters);
+
+                        /*use for measurement*/
+                        for (Long x : data.keySet()) {
+                            try {
+                                for (Vector v: data.get(x)){
+                                    dataSet1.add(v.arrivalTime);
+                                }
+                                this.allRawDataList.get(x).addAll(data.get(x));
+                            } catch (NullPointerException ignored) {
                             }
                         }
-                    }
-                    /*end*/
-                    HashMap<Long,List<Vector>> data = (HashMap<Long, List<Vector>>)
-                            invoke("localhost",
-                            EdgeNodeNetwork.edgeDeviceHashMap.get(edgeDeviceCode).port,
-                            EdgeDevice.class.getMethod("sendData", ArrayList.class),parameters);
-
-                    /*use for measurement*/
-                    HashSet<Vector> dataSet1 = new HashSet<>();
-                    for (Long x:data.keySet()) {
-                        try {
-                            dataSet1.addAll(data.get(x));
-                            this.allRawDataList.get(x).addAll(data.get(x));
-                        } catch (NullPointerException ignored) {
+                        if (dataSet.size() == 0) {
+                            System.out.println(this.hashCode() + " from " + edgeDeviceCode + " transferred # is " + dataSet.size());
+                        } else {
+                            HashSet<Integer> intersection = new HashSet<>(dataSet);
+                            intersection.retainAll(dataSet1);
+                            recall.set(intersection.size()* 1.0 / (dataSet.size()));
+                            precious.set(intersection.size()* 1.0 / (dataSet1.size()) );
+                            System.out.printf(this.hashCode() + " from " + edgeDeviceCode +
+                                    ": recall = %f, precious = %f, intersection# is %d,neighbor# is %d, transfer# is %d\n",
+                                    recall.get(), precious.get(),intersection.size(),dataSet.size(),dataSet1.size());
                         }
+                    } catch (Throwable e) {
+                        e.printStackTrace();
                     }
-                    System.out.println("neighbor = " + dataSet.size() + " transferred = "+ dataSet1.size() +
-                            " neighbor / transferred data  = " + dataSet.size()*1.0/dataSet1.size());
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            });
-            threads.add(t);
-            t.start();
+                });
+                threads.add(t);
+                t.start();
+                continue;
+            }
+            System.out.println(this.hashCode()+" from "+edgeDeviceCode+" neighbor # is "+dataSet.size());
+            /*end*/
         }
         for (Thread t:threads){
             t.join();
@@ -196,8 +213,8 @@ public class EdgeDevice extends RPCFrame implements Runnable {
         for (List<Vector> x: this.allRawDataList.values()) {
             tmp.addAll(x);
         }
-        outlier = detector.detectOutlier(new ArrayList<>(tmp),itr);
-        System.out.println(this+" Final data size: "+tmp.size());
+        //outlier = detector.detectOutlier(new ArrayList<>(tmp),itr);
+//        System.out.println(deviceId+" Final data size: "+tmp.size());
     }
 
     public HashMap<Long,List<Vector>> sendData(ArrayList<Long> bucketIds){
@@ -209,7 +226,7 @@ public class EdgeDevice extends RPCFrame implements Runnable {
     }
 
     public void setDependentDevice(HashMap<Integer, ArrayList<Integer>> dependentDevice) throws InterruptedException {
-        this.dependentDevice = dependentDevice;
+        this.dependentDevice = Collections.synchronizedMap(dependentDevice);
         getData();
     }
 

@@ -1,17 +1,14 @@
 package test;
 
 import be.tarsos.lsh.Vector;
-import be.tarsos.lsh.families.DistanceMeasure;
 import be.tarsos.lsh.families.EuclideanDistance;
 import main.EdgeDevice;
 import main.EdgeDeviceFactory;
-import main.EdgeNodeNetwork;
 import utils.Constants;
-import utils.DataGenerator;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 @SuppressWarnings("unchecked")

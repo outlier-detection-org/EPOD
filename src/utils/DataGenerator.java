@@ -37,6 +37,18 @@ public class DataGenerator {
             case "GAS":
                 Constants.datasetPath = Constants.gasFileName;
                 break;
+            case "RC":
+                Constants.datasetPath = Constants.randomClusterFileName;
+                break;
+            case "TAO_K":
+                Constants.datasetPath = Constants.taoKFileName;
+                break;
+            case "TAO_K_10":
+                Constants.datasetPath = Constants.taoK10FileName;
+                break;
+            case "TAO_K_20":
+                Constants.datasetPath = Constants.taoK20FileName;
+                break;
             default:
                 break;
         }
@@ -53,8 +65,15 @@ public class DataGenerator {
             String newPath = Constants.datasetPath.substring(0, Constants.datasetPath.lastIndexOf('\\')) + "\\Timestamp_data\\Time_" +
                     strings[strings.length - 1];
             Constants.datasetPathWithTime = newPath;
-            newPath = GenerateDeviceId.generateDeviceId(Constants.dn * Constants.nn, Constants.datasetPath)+
-                    "\\" + deviceId + ".txt";
+            if (Constants.dataset=="RC" || Constants.dataset =="TAO_K" ||
+                    Constants.dataset =="TAO_K_10"||Constants.dataset =="TAO_K_20"){
+                newPath = GenerateDeviceId.DivideByDeviceId(Constants.dn * Constants.nn, Constants.datasetPath)+
+                        "\\" + deviceId + ".txt";
+            }
+            else {
+                newPath = GenerateDeviceId.generateDeviceId(Constants.dn * Constants.nn, Constants.datasetPath) +
+                        "\\" + deviceId + ".txt";
+            }
             DataGenerator instance = new DataGenerator(true);
             instance.getData(newPath);
             return instance;

@@ -1,10 +1,6 @@
 package main;
-
-import Detector.NewNETS;
 import RPC.RPCFrame;
-import be.tarsos.lsh.Vector;
 import utils.Constants;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -57,11 +53,13 @@ public class EdgeNode extends RPCFrame implements Runnable {
                                 invoke("localhost", node.port, EdgeNode.class.getMethod
                                         ("compareAndSend", Map.class), parameters);
                         //TODO: java.lang.NullPointerException
-                        for (Long x : tmp.keySet()) {
-                            if (!result.containsKey(x)) {
-                                result.put(x, Collections.synchronizedList(new ArrayList<Integer>()));
+                        if (tmp!=null) {
+                            for (Long x : tmp.keySet()) {
+                                if (!result.containsKey(x)) {
+                                    result.put(x, Collections.synchronizedList(new ArrayList<Integer>()));
+                                }
+                                result.get(x).addAll(tmp.get(x));
                             }
-                            result.get(x).addAll(tmp.get(x));
                         }
                     } catch (Throwable e) {
                         e.printStackTrace();
@@ -76,6 +74,9 @@ public class EdgeNode extends RPCFrame implements Runnable {
             }
             //已经向网络中所有的node请求过数据，开始把数据发还给device
             sendBackResult();
+            this.localAggFingerprints = Collections.synchronizedMap(new HashMap<>());
+            this.reverseFingerprints = Collections.synchronizedMap(new HashMap<>());
+            this.result = Collections.synchronizedMap(new HashMap<>());
         }
     }
 

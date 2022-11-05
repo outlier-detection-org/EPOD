@@ -57,16 +57,6 @@ public class GenerateTimestamp {
     }
 
     public static void main(String[] args) throws Throwable {
-//        String newPath = generate(5000, Constants.emFileName);
-//        DataGenerator dataGenerator = DataGenerator.getInstance("EM", true);
-//        Date currentRealTime = dataGenerator.getFirstTimeStamp(newPath);
-//        for (int i = 0; i < 5; i++) {
-//            ArrayList<Vector> data = dataGenerator.getTimeBasedIncomingData(currentRealTime, 5000*10);
-//            if (data.size() == 0) break;
-//            System.out.println(data.size());
-//            System.out.println(data.get(0).arrivalRealTime);
-//            System.out.println(data.get(data.size() - 1).arrivalRealTime);
-//            currentRealTime.setTime(currentRealTime.getTime() + 5000 * 10 * 1000);
-//        }
+        generate(500,"C:\\Users\\14198\\Desktop\\outlier_detection\\Datasets\\tao_kmeans_clustering_20.txt");
     }
 }
