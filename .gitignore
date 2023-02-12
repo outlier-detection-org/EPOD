@@ -1,6 +1,6 @@
 /NETS.iml
 /.idea/
 /out/
-/bin/
-/src/test/test.txt
-/src/files/
+/src/rtree
+/src/test/test.java
+/src/utils/Constants.java
