@@ -1,5 +1,4 @@
-package dataStructure;
-import be.tarsos.lsh.Vector;
+package DataStructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +6,6 @@ import java.util.Iterator;
 
 public class Tuple extends Vector {
 		public int id;
-		public int slideID;
 		public double[] value;
 		public int nn;
 		public int nnIn; //number of neighbors inside the same cell
@@ -18,6 +16,8 @@ public class Tuple extends Vector {
 		public int lastNNSlideID;
 		public ArrayList<Short> subDimCellIdx;
 		public ArrayList<Short> fullDimCellIdx;
+
+		public int last_calculate_time;
 		
 		public Tuple(int id, int slideID, double[] value) {
 			this.id = id;
@@ -26,6 +26,7 @@ public class Tuple extends Vector {
 			this.unSafeOutNeighbors = new HashMap<Integer, Integer>();
 			this.lastNNSlideID = -1;
 			this.safeness = false;
+			this.last_calculate_time = -1;
 		}
 		
 		public int getNN() {
@@ -33,7 +34,7 @@ public class Tuple extends Vector {
 			return nn;
 		}
 		
-		public void removeOutdatedNNUnsafeOut(long itr, int nS) {
+		public void removeOutdatedNNUnsafeOut(int itr, int nS) {
 			Iterator<Integer> it = unSafeOutNeighbors.keySet().iterator();
 			
 			while (it.hasNext()) {
@@ -44,10 +45,4 @@ public class Tuple extends Vector {
 				}
 			}
 		}
-		
-		public void truncate() {
-			this.unSafeOutNeighbors.clear();
-		}
-		
-		
 	}

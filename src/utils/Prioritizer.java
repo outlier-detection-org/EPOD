@@ -1,6 +1,6 @@
 package utils;
 
-import dataStructure.Tuple;
+import DataStructure.Tuple;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,7 +40,6 @@ public class Prioritizer {
 			double var = getVariance(cnt, mean);
 			double VMR = var/mean;
 			VMRMap.put(i, VMR);
-			//System.out.println("Dim "+i+": "+VMR);
 		}
 		
 		HashMap<Double,Integer> VMRMap_Inv = new HashMap<Double,Integer>();

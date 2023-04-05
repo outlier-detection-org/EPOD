@@ -1,7 +1,7 @@
 package utils;
 
-import be.tarsos.lsh.Vector;
-import dataStructure.Tuple;
+import DataStructure.Vector;
+import DataStructure.Tuple;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
@@ -92,7 +92,8 @@ public class StreamGenerator {
 				sortPriority(random);
 				break;	
 		}
-		dataGenerator = DataGenerator.getInstance(dataset,0);
+		//TODO
+//		dataGenerator = DataGenerator.getInstance(dataset,0);
 		//System.out.println("Priority of dims: "+priorityList);
 	}
 	
@@ -134,9 +135,10 @@ public class StreamGenerator {
 			}
 		}
 		else {
-			Date currentRealTime = dataGenerator.getFirstTimeStamp(Constants.datasetPathWithTime);
+			//TODO
+			Date currentRealTime = null;/*dataGenerator.getFirstTimeStamp(DataGenerator.datasetPathWithTime);*/
 			currentRealTime.setTime(currentRealTime.getTime() + (long) Constants.S * 10 * 1000 * itr);
-			ArrayList<Vector>tmp = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S*10,0);
+			ArrayList<Vector>tmp = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S*10);
 			for (Vector v:tmp){
 				double[] value = new double[v.values.length];
 				int j = 0;

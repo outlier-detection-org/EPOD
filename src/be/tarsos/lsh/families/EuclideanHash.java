@@ -25,7 +25,7 @@ package be.tarsos.lsh.families;
 
 import java.util.Random;
 
-import be.tarsos.lsh.Vector;
+import DataStructure.Vector;
 
 public class EuclideanHash implements HashFunction{
 	/**

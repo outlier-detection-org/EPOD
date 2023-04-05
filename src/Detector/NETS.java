@@ -1,6 +1,6 @@
 package Detector;
-import dataStructure.Cell;
-import dataStructure.Tuple;
+import DataStructure.Cell;
+import DataStructure.Tuple;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -159,7 +159,7 @@ public class NETS {
 				}else {
 					for (int j = 0; j<dim; j++) cellCenter[j] = minValues[j] + fullDimCellIdx.get(j)*dimLength[j]+dimLength[j]/2;
 				}
-				slideIn.put(idxEncoder.get(subDimCellIdx), new Cell(subDimCellIdx, cellCenter, subDimFlag));
+				slideIn.put(idxEncoder.get(subDimCellIdx), new Cell(subDimCellIdx, fullDimCellIdx, cellCenter, subDimFlag));
 			}
 			slideIn.get(idxEncoder.get(subDimCellIdx)).addTuple(t, subDimFlag);
 			
@@ -380,7 +380,7 @@ public class NETS {
 						HashSet<Tuple> otherTuples = new HashSet<Tuple>();
 						if(subDimFlag) {
 							//reduce search space using sub-dims
-							for(Cell allIdxCell: currentSlide.get(otherCellIdx).childCells.values()) {
+							for(Cell allIdxCell: currentSlide.get(otherCellIdx).fullCells.values()) {
 								if(!allIdxCell.cellIdx.equals(tCand.fullDimCellIdx) 
 								   && neighboringSet(allIdxCell.cellIdx, tCand.fullDimCellIdx))
 									otherTuples.addAll(allIdxCell.tuples);

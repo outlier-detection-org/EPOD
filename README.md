@@ -1,82 +1,99 @@
-# NETS:Extremely Fast Outlier Detection from a Data Stream via Set-Based Processing
+# EPOD
 
-This is the implementation of the paper published in PVLDB 2019 [[Paper](http://www.vldb.org/pvldb/vol12/p1303-yoon.pdf)] [[Slide](https://drive.google.com/file/d/1wqKJZhEE4nTWe0zODu21ejgPDsDA_xaF/view)] [[Poster](https://drive.google.com/file/d/1qF8b9uvBZcirBYtnEtSEMMP5UEAbkJND/view)] [[Video](https://youtu.be/9l4gY_8taCg)]
+## 1. Architecture Introduction
 
-## 1. Overview
-This paper addresses the problem of efficiently detecting outliers from a data stream as old data points expire from and new data points enter the window incrementally. The proposed method is based on a newly discovered characteristic of a data stream, that the change in the locations of data points in the data space is typically very insignificant. This observation has led to the finding that the existing distance-based outlier detection algorithms perform excessive unnecessary computations that are repetitive and/or canceling out the effects. Thus, in this paper, we propose a novel set-based approach to detecting outliers, whereby data points at similar locations are grouped and the detection of outliers or inliers is handled at the group level. Specifically, a new algorithm NETS is proposed to achieve a remarkable performance improvement by realizing set-based early identification of outliers or inliers and taking advantage of the "net effect" between expired and new data points. Additionally, NETS is capable of achieving the same efficiency even for a high-dimensional data stream through two dimensional-level filtering.  Comprehensive experiments using six real-world data streams show 5 to 25 times faster processing time than state-of-the-art algorithms with comparable memory consumption. We assert that NETS opens a new possibility to real-time data stream outlier detection.
+<img src="README.assets/image-20230213194924216.png" alt="image-20230213194924216" style="zoom: 80%;" />
 
-## 2. Algorithms
-- **NETS**: our algorithm 
-- MCOD [1]([source code[3]](https://infolab.usc.edu/Luan/Outlier/CountBasedWindow/DODDS/))
-- LEAP [2]([source code[3]](https://infolab.usc.edu/Luan/Outlier/CountBasedWindow/DODDS/))
+- **Components**: Edge devices and Edge nodes
+- **Workflow**:
+  - Each device collect vector.
+  - Each device generate fingerprints for each vector and find outliers
+  - Upload fingerprint to the nearest node.
+  - Nodes collect fingerprints from all its devices.
+  - Interacts with all nodes on the network and derive the support devices for all its edge devices
+  - Based on the information from edge node, each device ask its dependent devices for necessary vector
+  - After receiving all vector, run the rest streaming detecting algorithm
 
->__*Reference*__</br>
-[1]   M. Kontaki, A. Gounaris, A. N. Papadopoulos, K. Tsichlas, and Y. Manolopoulos, "Continuous monitoring of distance-based outliers over data streams," in 2011 IEEE 27th International Conference on Data Engineering, pp. 135-146, 2011.</br>
-[2] L. Cao, D. Yang, Q. Wang, Y. Yu, J. Wang, and E. A. Rundensteiner, "Scalable distance-based outlier detection over high-volume data streams," in 2014 IEEE 30th International Conference on Data Engineering, pp. 76-87, 2014.</br>
-[3] L. Tran, L. Fan, and C. Shahabi, "Distance-based outlier detection in data streams," in Proceedings of the VLDB Endowment, vol. 9, pp. 1089-1100, 2016.</br>
+## 2. Datasets
 
-## 3. Data Sets
-| Name    | # data points  | # Dim    | Size    | Link           |
-| :-----: | :------------: | :------: |:-------:|:--------------:|
-| GAU     | 1M             | 1        |  7.74MB  |[link](https://infolab.usc.edu/Luan/Outlier/Datasets/gaussian.txt) |
-| STK     | 1.05M          | 1        |  7.57MB |[link](https://infolab.usc.edu/Luan/Outlier/Datasets/stock.txt) |
-| TAO     | 0.58M          | 3        |  10.7MB |[link](https://infolab.usc.edu/Luan/Outlier/Datasets/tao.txt) |
-| HPC     | 1M             | 7        |  28.4MB  |[link](https://infolab.usc.edu/Luan/Outlier/Datasets/household2.txt) |
-| GAS     | 0.93M          | 10       |  70.7MB  |[link](http://archive.ics.uci.edu/ml/machine-learning-databases/00362/HT_Sensor_UCIsubmission.zip) |
-| EM      | 1M             | 16       |  119MB  |[link](https://infolab.usc.edu/Luan/Outlier/Datasets/ethylene.txt) |
-| FC      | 1M             | 55       |  72.2MB  |[link](https://infolab.usc.edu/Luan/Outlier/Datasets/fc.data) |
+### #1 Original Datasets
 
-## 4. Configuration
-NETS algorithm was implemented in JAVA and run on **JDK 1.8.0_191.**
-- Compile
-```
-cd ~/NETS/src
-javac test/testBase.java
-```
+|    Name    | # vector points | # Dim | k    | r     | s    | w      | Size   | Link                                                         |
+| :--------: | :-----------: | :---: | ---- | ----- | ---- | ------ | ------ | ------------------------------------------------------------ |
+| GAU(gauss) |      1M       |   1   | 50   | 0.028 | 5000 | 100000 | 7.74MB | [link](https://infolab.usc.edu/Luan/Outlier/Datasets/gaussian.txt) |
+|    STK     |     1.05M     |   1   | 50   | 0.45  | 5000 | 100000 | 7.57MB | [link](https://infolab.usc.edu/Luan/Outlier/Datasets/stock.txt) |
+|    TAO     |     0.58M     |   3   | 50   | 1.9   | 500  | 10000  | 10.7MB | [link](https://infolab.usc.edu/Luan/Outlier/Datasets/tao.txt) |
+|    HPC     |      1M       |   7   | 50   | 6.5   | 5000 | 100000 | 28.4MB | [link](https://infolab.usc.edu/Luan/Outlier/Datasets/household2.txt) |
+|    GAS     |     0.93M     |  10   | 50   | 2.75  | 5000 | 100000 | 70.7MB | [link](http://archive.ics.uci.edu/ml/machine-learning-databases/00362/HT_Sensor_UCIsubmission.zip) |
+|     EM     |      1M       |  16   | 50   | 115   | 5000 | 100000 | 119MB  | [link](https://infolab.usc.edu/Luan/Outlier/Datasets/ethylene.txt) |
+|     FC     |      1M       |  55   | 50   | 525   | 500  | 10000  | 72.2MB | [link](https://infolab.usc.edu/Luan/Outlier/Datasets/fc.vector) |
 
-## 5. How to run
-- Parameter options
-```
---dataset: title of datasets (string, one of {GAU, STK, TAO, HPC, GAS, EM, FC})
---W: the size of a window (integer)
---S: the size of a slide (integer)
---R: the distance threshold (double)
---K: the number of neighbors threshold (integer)
---D: the number of full dimensions (integer)
---sD: the number of sub dimensions (integer)
---nW: the number of windows (integer)
-```
+### #2 Extreme cases
 
-- Run a sample experiment
-```
-cd ~/NETS/src
-java test.testBase --dataset TAO --W 10000 --S 500 --R 1.9 --K 50 --D 3 --sD 3 --nW 1
-```
-- Check the result
-```
-cd ~/NETS/src/Result
-cat Result_TAO_NETS_D3_sD3_rand0_R1.9_K50_S500_W10000_nW1.txt
-At window 0, # outliers: 169
-# Dataset: TAO
-Method: NETS
-Dim: 3
-subDim: 3
-R/K/W/S: 1.9/50/10000/500
-# of windows: 1
-Avg CPU time(s) 	 Peak memory(MB)
-0.0025	4.3
-```
+- Cluster the datasets, and assign the different clusters to different devices (case 1)
 
-## 6. Citation
-```
-@article{yoon2019nets,
-  title={NETS: Extremely Fast Outlier Detection from a Data Stream via Set-Based Processing},
-  author={Yoon, Susik and Lee, Jae-Gil and Lee, Byung Suk},
-  journal={Proceedings of the VLDB Endowment},
-  volume={12},
-  number={11},
-  pages={1303--1315},
-  year={2019},
-  publisher={VLDB Endowment}
-}
-````
+- Cluster the datasets, and distribute the same cluster to different devices (case 2)
+
+### #3 Normal cases
+
+- Cluster the datasets, and mix a% vector of each cluster then assign the different clusters to different devices
+
+- Expected result:
+
+  - No transfer between devices in case 1
+
+  - All devices exchange vector in case 2
+
+  - Other cases lie in between
+
+### #4 Dataset Path
+
+original datasets: \NETS\Datasets
+
+vector with device ID: \NETS\Datasets\DeviceId _data
+
+vector with timestamp: \NETS\Datasets\Timestamp_data
+
+## 3. How to run
+
+注意：若每次重新准备数据，需要删除DeviceId _data和Timestamp_data下的文件夹
+
+### run Original Datasets
+
+- 修改 **NETS\src\utils\Constants.java**的参数
+
+![image-20230318190809628](README.assets/image-20230318190809628.png)
+
+- 运行 **\utils\PrepareDatasets.java** (for the first time only)
+- 运行 **\test\testNetwork.java**
+
+### run K_means dataset and Random Data(self-generated clustering vector)
+
+- 生成k_means的datasets：
+
+  - \utils\k_means_clustering.py：修改下图参数跑，每次跑要删除之前的目录不然会报错
+
+    ![image-20230318201252601](README.assets/image-20230318201252601.png)
+
+- 生成random cluster vector
+  - utils\GenerateRandomClusteringData.java 修改参数生成特定的cluster
+  - 现在统一命名成RC，后期可根据需要修改
+  - constants.java 中的参数也要对应修改
+
+![image-20230318210024640](README.assets/image-20230318210024640.png)
+
+![image-20230318205753984](README.assets/image-20230318205753984.png)
+
+- 接着运行run Original Datasets下的指令
+
+## 4 NETs 需要确认的参数
+
+- subdim
+
+- 每个维度的最大值最小值 this.maxValues, this.minValues
+
+  - random cluster需要运行 utils\decideMaxMin.java，再修改NewNETS中的值
+
+- 维度的优先级：this.priorityList
+
+  

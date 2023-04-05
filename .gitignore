@@ -1,6 +1,7 @@
-/NETS.iml
-/.idea/
-/out/
-/src/rtree
-/src/test/test.java
-/src/utils/Constants.java
+Datasets/
+vene/
+out/
+.idea/
+src/Result/
+*.iml
+
