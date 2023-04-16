@@ -37,9 +37,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 
     public void receiveAndProcessFP(Map<List<Double>, Integer> fingerprints, int edgeDeviceHashCode) {
         this.flag = false;
-        System.out.println(40);
         for (List<Double> id : fingerprints.keySet()) {
-            System.out.println(42);
             id.forEach(System.out::println);
             System.out.println(fingerprints.get(id)== Integer.MIN_VALUE);
             if (fingerprints.get(id) == Integer.MIN_VALUE) {
@@ -48,21 +46,17 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                     unitsStatusMap.remove(id);
                 }
             }
-            System.out.println(49);
             if (!unitsStatusMap.containsKey(id)) {
                 unitsStatusMap.put(id, new UnitInNode(id, 0));
             }
-            System.out.println(53);
             unitsStatusMap.get(id).updateCount(fingerprints.get(id));
             unitsStatusMap.get(id).updateDeltaCount(fingerprints.get(id));
             unitsStatusMap.get(id).update();
             unitsStatusMap.get(id).belongedDevices.add(edgeDeviceHashCode);
         }
-        System.out.println(56);
         ArrayList<Thread> threads = new ArrayList<>();
         count.incrementAndGet();
         boolean flag = count.compareAndSet(this.clientsForDevices.size(), 0);
-        System.out.println(60);
         if (flag) {
             // node has finished collecting data, entering into the N-N phase, only one thread go into this loop
             this.flag = true; //indicate to other nodes I am ready
