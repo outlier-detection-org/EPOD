@@ -26,7 +26,7 @@ public class EdgeNode {
         transports = new ArrayList<>();
     }
 
-    public void start() {
+    public void begin() {
         Runnable simple = () -> simple(processor);
         new Thread(simple).start();
     }
@@ -39,7 +39,7 @@ public class EdgeNode {
 
     public void simple(EdgeNodeService.Processor<EdgeNodeImpl> processor) {
         try {
-            TServerTransport serverTransport = new TServerSocket(9090);
+            TServerTransport serverTransport = new TServerSocket(port);
 //            TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
             // Use this for a multithreaded server
             server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));

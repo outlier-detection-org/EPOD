@@ -25,7 +25,7 @@ public class Device {
         transports = new ArrayList<>();
     }
 
-    public void start(){
+    public void begin(){
         Runnable simple = () -> simple(processor);
         new Thread(simple).start();
     }
@@ -42,7 +42,7 @@ public class Device {
             TServerTransport serverTransport = new TServerSocket(port);
             // Use this for a multithreaded server
             server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
-            System.out.println("Starting the device "+ handler.deviceId+" ...");
+            System.out.printf("Starting the device at port %d...\n", port);
             server.serve();
         } catch (Exception e) {
             e.printStackTrace();

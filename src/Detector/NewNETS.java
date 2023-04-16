@@ -291,26 +291,25 @@ public class NewNETS extends Detector {
                 fullDimCellWindowCnt.put(key, 0);
             }
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) + fullDimCellSlideInCnt.get(key));
-            //����ָ��
+
             ArrayList<Double> fingerprint = new ArrayList<>();
             idxDecoder.get(key).forEach(idx -> fingerprint.add((double)idx));
             if (!deviceImpl.fullCellDelta.containsKey(fingerprint)) {
                 deviceImpl.fullCellDelta.put(fingerprint, 0);
             }
             deviceImpl.fullCellDelta.put(fingerprint,
-                    deviceImpl.fullCellDelta.get(idxDecoder.get(key)) + fullDimCellSlideInCnt.get(key));
+                    deviceImpl.fullCellDelta.get(fingerprint) + fullDimCellSlideInCnt.get(key));
         }
 
         for (Integer key : fullDimCellSlideOutCnt.keySet()) {
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) - fullDimCellSlideOutCnt.get(key));
-            //����ָ��
             ArrayList<Double> fingerprint = new ArrayList<>();
             idxDecoder.get(key).forEach(idx -> fingerprint.add((double)idx));
             if (!deviceImpl.fullCellDelta.containsKey(fingerprint)) {
                 deviceImpl.fullCellDelta.put(fingerprint, 0);
             }
             deviceImpl.fullCellDelta.put(fingerprint,
-                    deviceImpl.fullCellDelta.get(idxDecoder.get(key)) - fullDimCellSlideInCnt.get(key));
+                    deviceImpl.fullCellDelta.get(fingerprint) - fullDimCellSlideInCnt.get(key));
             if (fullDimCellWindowCnt.get(key) < 1) {
                 fullDimCellWindowCnt.remove(key);
                 deviceImpl.fullCellDelta.put(fingerprint, Integer.MIN_VALUE);

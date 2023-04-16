@@ -16,7 +16,7 @@ public class DeviceImpl implements DeviceService.Iface {
     public int deviceId;
     volatile public boolean ready = false;
     public List<Vector> rawData = new ArrayList<>();
-    public HashMap<List<Double>, Integer> fullCellDelta; //fingerprint
+    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
     public DataGenerator dataGenerator;
     public Detector detector;
     public HashMap<Integer, Integer> historyRecord; //用来记录每个device的上次发送的历史记录，deviceID->slideID
@@ -60,7 +60,7 @@ public class DeviceImpl implements DeviceService.Iface {
         //step2: 上传指纹
         if (itr >= Constants.nS - 1) {
             this.clientsForNearestNode.receiveAndProcessFP(fullCellDelta, this.hashCode());
-        }
+        } else return new HashSet<>();
 
         //本地获取数据 + 处理outliers
         while (!this.ready) {

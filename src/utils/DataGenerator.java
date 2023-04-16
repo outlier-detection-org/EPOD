@@ -48,7 +48,7 @@ public class DataGenerator {
                     String[] atts = line.split(",");
                     ArrayList<Double> d = new ArrayList<>();
                     for (int i = 1; i < atts.length; i++) {
-                        d.set(i - 1, Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000);
+                        d.add(Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000);
                     }
                     Vector data = new Vector(d);
                     data.arrivalRealTime = formatter.parse(atts[0]);

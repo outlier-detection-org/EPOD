@@ -8,10 +8,10 @@ public class Constants {
     // Configuration
     public static int currentSlideID = -1;
     public static int nn = 2;
-    public static int dn = 2;
+    public static int dn = 1;
     public static int nW = 500;
     public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD"
-    public static String dataset = "RC";
+    public static String dataset = "TAO";
 
 
     //calculated automatically
@@ -25,7 +25,7 @@ public class Constants {
 
     //fixed
     public static int K = 50; // neighborhood threshold, default = 50
-    public static String prefix = "C:\\Users\\14198\\Desktop\\outlier_detection\\NETS\\Datasets\\";
+    public static String prefix = "C:\\Users\\14198\\Desktop\\outlier_detection\\EPOD\\Datasets\\";
 
     //Paths
     //    public static String prefix = "/home/xinyingzheng/Desktop/outlier_detection";
@@ -49,7 +49,7 @@ public class Constants {
             S = 5000;
             W = 100000;
         }
-        nS = S / W;
+        nS = W / S;
 
         if (dataset.contains("FC")) {
             R = 525;

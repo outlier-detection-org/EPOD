@@ -39,13 +39,6 @@ public class EdgeNodeNetwork {
             }
             node.setDevices(devicesCodes);
         }
-        //set clients for nodes and devices
-        for (EdgeNode node : nodeHashMap.values()) {
-            setClientsForEdgeNodes(node);
-        }
-        for (Device device : deviceHashMap.values()) {
-            setClientsForDevices(device);
-        }
     }
 
     public static void startNetwork() throws Throwable {
@@ -57,10 +50,18 @@ public class EdgeNodeNetwork {
         System.out.println("R/K/W/S: " + Constants.R + "/" + Constants.K + "/" + Constants.W + "/" + Constants.S);
         System.out.println("# of windows: " + (Constants.nW));
         for (EdgeNode node : nodeHashMap.values()) {
-            node.start();
+            node.begin();
         }
         for (Device device : deviceHashMap.values()) {
-            device.start();
+            device.begin();
+        }
+
+        //set clients for nodes and devices
+        for (EdgeNode node : nodeHashMap.values()) {
+            setClientsForEdgeNodes(node);
+        }
+        for (Device device : deviceHashMap.values()) {
+            setClientsForDevices(device);
         }
 
         int itr = 0;
@@ -112,7 +113,7 @@ public class EdgeNodeNetwork {
         Map<Integer, DeviceService.Client> clientsForDevices = new HashMap<>();
 
         for (Integer nodeHashCode : nodeHashMap.keySet()) {
-            TTransport transport = new TSocket("localhost", nodeHashMap.get(nodeHashCode).port);
+            TTransport transport = new TSocket("172.30.32.1", nodeHashMap.get(nodeHashCode).port);
             transport.open();
             node.transports.add(transport);
             TProtocol protocol = new TBinaryProtocol(transport);
@@ -121,7 +122,7 @@ public class EdgeNodeNetwork {
         }
 
         for (Integer deviceCode : node.devicesCodes) {
-            TTransport transport = new TSocket("localhost", deviceHashMap.get(deviceCode).port);
+            TTransport transport = new TSocket("172.30.32.1", deviceHashMap.get(deviceCode).port);
             transport.open();
             node.transports.add(transport);
             TProtocol protocol = new TBinaryProtocol(transport);
@@ -133,7 +134,7 @@ public class EdgeNodeNetwork {
 
 
     public static void setClientsForDevices(Device device) throws TTransportException {
-        TTransport transport = new TSocket("localhost", nodeHashMap.get(device.nearestNodeCode).port);
+        TTransport transport = new TSocket("172.30.32.1", nodeHashMap.get(device.nearestNodeCode).port);
         transport.open();
         device.transports.add(transport);
         TProtocol protocol = new TBinaryProtocol(transport);
@@ -142,7 +143,7 @@ public class EdgeNodeNetwork {
         Map<Integer, DeviceService.Client> clientsForDevices = new HashMap<>();
         for (Integer deviceHashCode : deviceHashMap.keySet()) {
             if (deviceHashCode == device.hashCode()) continue;
-            TTransport transport1 = new TSocket("localhost", deviceHashMap.get(deviceHashCode).port);
+            TTransport transport1 = new TSocket("172.30.32.1", deviceHashMap.get(deviceHashCode).port);
             transport1.open();
             device.transports.add(transport1);
             TProtocol protocol1 = new TBinaryProtocol(transport1);
