@@ -1,14 +1,6 @@
 package utils;
 
-import DataStructure.Vector;
-import be.tarsos.lsh.families.EuclideanDistance;
-import be.tarsos.lsh.util.TestUtils;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-
+/*
 public class GenerateRandomClusteringData {
     static int dim = 5;
     static int clusterNum = 4;
@@ -70,3 +62,4 @@ public class GenerateRandomClusteringData {
 
     }
 }
+*/
