@@ -34,7 +34,7 @@ service DeviceService {
    * lists and exception lists are specified using the exact same syntax as
    * field lists in struct or exception definitions.
    */
-   map<list<double>, list<Vector>> sendData(1: set<list<double>> bucketIds, 2: i32 deviceHashCode),
-   void getExternalData(1: map<list<double>, i32> status, 2: map<i32, set<list<double>>> result) throws (1: InvalidException invalid)
-
+   map<list<double>, list<Vector>> sendData(1: set<list<double>> bucketIds, 2: i32 deviceHashCode) throws (1: InvalidException invalid),
+   void getExternalData(1: map<list<double>, i32> status, 2: map<i32, set<list<double>>> result) throws (1: InvalidException invalid),
+   list<Vector> sendAllLocalData() throws (1: InvalidException invalid),
 }

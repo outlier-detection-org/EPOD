@@ -2,6 +2,7 @@ package Framework;
 
 import Handler.*;
 import RPC.*;
+import RPC.Vector;
 import org.apache.thrift.TException;
 import utils.Constants;
 
@@ -174,6 +175,11 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void uploadAllLocalData(List<Vector> data) throws InvalidException, TException {
+
     }
 
     public void processResult(List<Double> unitID, List<UnitInNode> unitInNodeList) {

@@ -118,4 +118,9 @@ public class DeviceImpl implements DeviceService.Iface {
         this.ready = true;
     }
 
+    @Override
+    public List<Vector> sendAllLocalData() {
+        return null;
+    }
+
 }
