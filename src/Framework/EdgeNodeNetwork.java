@@ -113,6 +113,7 @@ public class EdgeNodeNetwork {
         Map<Integer, DeviceService.Client> clientsForDevices = new HashMap<>();
 
         for (Integer nodeHashCode : nodeHashMap.keySet()) {
+            if (nodeHashCode == node.hashCode()) continue;
             TTransport transport = new TSocket("172.30.32.1", nodeHashMap.get(nodeHashCode).port);
             transport.open();
             node.transports.add(transport);

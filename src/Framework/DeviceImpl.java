@@ -13,15 +13,22 @@ import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class DeviceImpl implements DeviceService.Iface {
+
+    //=============================For All===============================
     public int deviceId;
-    volatile public boolean ready = false;
     public List<Vector> rawData = new ArrayList<>();
-    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
     public DataGenerator dataGenerator;
     public Detector detector;
+    volatile public boolean ready = false;
+
+    //=============================EPOD===============================
+    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
     public HashMap<Integer, Integer> historyRecord; //用来记录每个device的上次发送的历史记录，deviceID->slideID
-    public Map<Integer, DeviceService.Client> clientsForDevices;
+    public Map<Integer, DeviceService.Client> clientsForDevices; //And for P2P
     public EdgeNodeService.Client clientsForNearestNode;
+
+    //=============================P2P===============================
+    public List<Vector> AllData = new ArrayList<>();
 
     public DeviceImpl(int deviceId) {
         this.deviceId = deviceId;
@@ -38,18 +45,22 @@ public class DeviceImpl implements DeviceService.Iface {
         }
     }
 
-    public void setClients(EdgeNodeService.Client clientsForNearestNode, Map<Integer,DeviceService.Client> clientsForDevices){
+    public void setClients(EdgeNodeService.Client clientsForNearestNode, Map<Integer, DeviceService.Client> clientsForDevices) {
         this.clientsForDevices = clientsForDevices;
         this.clientsForNearestNode = clientsForNearestNode;
+    }
+
+    public void getRawData(int itr) {
+        Date currentRealTime = new Date();
+        currentRealTime.setTime(dataGenerator.firstTimeStamp.getTime() + (long) Constants.S * 10 * 1000 * itr);
+        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S * 10);
     }
 
     public Set<? extends Vector> detectOutlier(int itr) throws Throwable {
         this.ready = false;
         //get initial data
         Constants.currentSlideID = itr;
-        Date currentRealTime = new Date();
-        currentRealTime.setTime(dataGenerator.firstTimeStamp.getTime() + (long) Constants.S * 10 * 1000 * itr);
-        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S * 10);
+        getRawData(itr);
 
         //step1: 产生指纹 + 本地先检测出outliers
         if (itr > Constants.nS - 1) {
@@ -109,7 +120,7 @@ public class DeviceImpl implements DeviceService.Iface {
             t.start();
         }
         for (Thread t : threads) {
-            try{
+            try {
                 t.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -118,9 +129,50 @@ public class DeviceImpl implements DeviceService.Iface {
         this.ready = true;
     }
 
-    @Override
-    public List<Vector> sendAllLocalData() {
-        return null;
+    public Set<? extends Vector> detectOutlier_P2P(int itr) throws Throwable {
+        this.ready = false;
+        Constants.currentSlideID = itr;
+        getRawData(itr);
+        //step1: 自己取data
+        if (itr > Constants.nS - 1) {
+            AllData.clear();
+        }
+        AllData.addAll(rawData);
+
+        //step2: 收集其他device的data
+        if (itr >= Constants.nS - 1) {
+            ArrayList<Thread> threads = new ArrayList<>();
+            for (DeviceService.Client client : clientsForDevices.values()) {
+                Thread t = new Thread(() -> {
+                    try {
+                        List<Vector> data = client.sendAllLocalData();
+                        AllData.addAll(data);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                });
+                threads.add(t);
+                t.start();
+            }
+            for (Thread t : threads) {
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            this.ready = true;
+        }
+
+        //step3: detectOutlier
+        while (!this.ready) {}
+        this.detector.detectOutlier(AllData);
+        return this.detector.outlierVector;
     }
 
+    //传新slide的点
+    @Override
+    public List<Vector> sendAllLocalData() {
+        return this.rawData;
+    }
 }
