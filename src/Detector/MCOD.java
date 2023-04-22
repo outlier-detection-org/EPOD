@@ -10,17 +10,17 @@ import mtree.utils.MTreeClass;
 import utils.Constants;
 
 public class MCOD extends Detector {
-    public static HashMap<List<Double>, MCO> map_to_MCO;
-    public static Map<Integer, ArrayList<MCO>> internal_dataList; // {slideId, MCO}
+    public HashMap<List<Double>, MCO> map_to_MCO;
+    public Map<Integer, ArrayList<MCO>> internal_dataList; // {slideId, MCO}
     //--------------------------------------------------------------------------------
-    public static HashMap<MCO, ArrayList<MCO>> filled_clusters; // {d.center, cluster}
-    public static HashMap<MCO, ArrayList<MCO>> unfilled_clusters;
+    public HashMap<MCO, ArrayList<MCO>> filled_clusters; // {d.center, cluster}
+    public HashMap<MCO, ArrayList<MCO>> unfilled_clusters;
     // 全局的--------------------------------------------------------------
-    public static MTreeClass mtree;
-    public static HashSet<MCO> outliers;
-    public static PriorityQueue<MCO> eventQueue;
+    public MTreeClass mtree;
+    public HashSet<MCO> outliers;
+    public PriorityQueue<MCO> eventQueue;
 
-    public static HashMap<List<Double>, Integer> external_info;
+    public HashMap<List<Double>, Integer> external_info;
 
     public MCOD(DeviceImpl deviceImpl) {
         super(deviceImpl);
@@ -599,14 +599,6 @@ public class MCOD extends Detector {
         return Integer.compare(o1.slideID, o2.slideID);
     }
 
-//    public ArrayList<?> transferToArrayList(double[] a) {
-//        ArrayList<Double> result = new ArrayList<>();
-//        for (double d : a) {
-//            result.add(d);
-//        }
-//        return result;
-//    }
-
     public void update_fingerprint(List<Double> key, boolean isAdd) {
         if (!this.deviceImpl.fullCellDelta.containsKey(key)) {
             this.deviceImpl.fullCellDelta.put(key, 0);
@@ -615,39 +607,4 @@ public class MCOD extends Detector {
         int delta = isAdd ? 1 : -1;
         this.deviceImpl.fullCellDelta.put(key, origin + delta);
     }
-
-//    static class MCComparator implements Comparator<MCO> {
-//        @Override
-//        public int compare(MCO o1, MCO o2) {
-//            if (o1.ev < o2.ev) {
-//                return -1;
-//            } else if (o1.ev == o2.ev) {
-//                return 0;
-//            } else {
-//                return 1;
-//            }
-//        }
-//    }
-//
-//    static class MCComparatorArrivalTime implements Comparator<MCO> {
-//        @Override
-//        public int compare(MCO o1, MCO o2) {
-//            if (o1.arrivalTime < o2.arrivalTime) {
-//                return -1;
-//            } else if (o1.arrivalTime == o2.arrivalTime) {
-//                return 0;
-//            } else {
-//                return 1;
-//            }
-//        }
-//    }
-//public int isSameSlide(Vector o1, Vector o2) {
-//    if ((o1.arrivalTime - 1) / Constants.S == (o2.arrivalTime - 1) / Constants.S) {
-//        return 0;
-//    } else if ((o1.arrivalTime - 1) / Constants.S < (o2.arrivalTime - 1) / Constants.S) {
-//        return -1;
-//    } else {
-//        return 1;
-//    }
-//}
 }
