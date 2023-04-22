@@ -130,9 +130,9 @@ public class DeviceImpl implements DeviceService.Iface {
         Constants.currentSlideID = itr;
         getRawData(itr);
         //step1: 自己取data
-        if (itr > Constants.nS - 1) {
-            allData.clear();
-        }
+//        if (itr > Constants.nS - 1) {
+//            allData.clear();
+//        }
         allData.addAll(rawData);
 
         //step2: 收集其他device的data
