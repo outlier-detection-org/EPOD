@@ -36,8 +36,8 @@ public class NewNETS extends Detector {
 
     public int candidateCellsTupleCnt = 0;
 
-    public NewNETS(int random, DeviceImpl deviceImpl) {
-        super(deviceImpl);
+    public NewNETS(int random) {
+        super();
         this.subDimFlag = Constants.dim != Constants.subDim;
         this.random = random;
         determineMinMax();
@@ -294,25 +294,25 @@ public class NewNETS extends Detector {
 
             ArrayList<Double> fingerprint = new ArrayList<>();
             idxDecoder.get(key).forEach(idx -> fingerprint.add((double)idx));
-            if (!deviceImpl.fullCellDelta.containsKey(fingerprint)) {
-                deviceImpl.fullCellDelta.put(fingerprint, 0);
+            if (!this.fullCellDelta.containsKey(fingerprint)) {
+                this.fullCellDelta.put(fingerprint, 0);
             }
-            deviceImpl.fullCellDelta.put(fingerprint,
-                    deviceImpl.fullCellDelta.get(fingerprint) + fullDimCellSlideInCnt.get(key));
+            this.fullCellDelta.put(fingerprint,
+                    this.fullCellDelta.get(fingerprint) + fullDimCellSlideInCnt.get(key));
         }
 
         for (Integer key : fullDimCellSlideOutCnt.keySet()) {
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) - fullDimCellSlideOutCnt.get(key));
             ArrayList<Double> fingerprint = new ArrayList<>();
             idxDecoder.get(key).forEach(idx -> fingerprint.add((double)idx));
-            if (!deviceImpl.fullCellDelta.containsKey(fingerprint)) {
-                deviceImpl.fullCellDelta.put(fingerprint, 0);
+            if (!this.fullCellDelta.containsKey(fingerprint)) {
+                this.fullCellDelta.put(fingerprint, 0);
             }
-            deviceImpl.fullCellDelta.put(fingerprint,
-                    deviceImpl.fullCellDelta.get(fingerprint) - fullDimCellSlideInCnt.get(key));
+            this.fullCellDelta.put(fingerprint,
+                    this.fullCellDelta.get(fingerprint) - fullDimCellSlideInCnt.get(key));
             if (fullDimCellWindowCnt.get(key) < 1) {
                 fullDimCellWindowCnt.remove(key);
-                deviceImpl.fullCellDelta.put(fingerprint, Integer.MIN_VALUE);
+                this.fullCellDelta.put(fingerprint, Integer.MIN_VALUE);
             }
         }
     }

@@ -1,5 +1,7 @@
 package Framework;
 
+import Detector.MCOD;
+import Detector.NewNETS;
 import RPC.DeviceService;
 import RPC.EdgeNodeService;
 import RPC.Vector;
@@ -11,15 +13,11 @@ import org.apache.thrift.transport.TTransportException;
 import utils.Constants;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class EdgeNodeNetwork {
     public static HashMap<Integer, Device> deviceHashMap = new HashMap<>();
     public static HashMap<Integer, EdgeNode> nodeHashMap = new HashMap<>();
-    public static ArrayList<Thread> threads = new ArrayList<>();
 
     public static EdgeNode createEdgeNode() {
         EdgeNode edgeNode = new EdgeNode();
@@ -79,7 +77,13 @@ public class EdgeNodeNetwork {
                 int finalItr = itr;
                 Thread t = new Thread(() -> {
                     try {
-                        Set<? extends Vector> outlier = device.handler.detectOutlier(finalItr);
+                        if (Constants.methodToGenerateFingerprint.contains("CENTRALIZE")){
+                            Set<? extends Vector> outlier = device.handler.detectOutlier_Centralize(finalItr);
+                        }else if (Objects.equals(Constants.methodToGenerateFingerprint, "P2P")){
+                            Set<? extends Vector> outlier = device.handler.detectOutlier_P2P(finalItr);
+                        }else {
+                            Set<? extends Vector> outlier = device.handler.detectOutlier(finalItr);
+                        }
                     } catch (Throwable e) {
                         e.printStackTrace();
                     }

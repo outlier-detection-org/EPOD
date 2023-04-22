@@ -1,5 +1,6 @@
 package Framework;
 
+import Detector.*;
 import Handler.*;
 import RPC.*;
 import RPC.Vector;
@@ -15,15 +16,29 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public Handler handler;
     public Map<Integer, EdgeNodeService.Client> clientsForEdgeNodes;
     public Map<Integer, DeviceService.Client> clientsForDevices;
+    /* this two fields are used for judge whether the node has complete uploading*/
+    public AtomicInteger count;
+    volatile Boolean flag = false;
+
+    //=============================Centralize===============================
+    public Detector detector;
+    public List<Vector> allData;
 
     public EdgeNodeImpl() {
         this.unitsStatusMap = Collections.synchronizedMap(new HashMap<>());
         this.unitResultInfo = Collections.synchronizedMap(new HashMap<>());
+        this.allData = Collections.synchronizedList(new ArrayList<>());
         this.count = new AtomicInteger(0);
         if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS")) {
             this.handler = new NETSHandler(this);
         } else if (Objects.equals(Constants.methodToGenerateFingerprint, "MCOD")) {
             this.handler = new MCODHandler(this);
+        }
+
+        if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS_CENTRALIZE")){
+            this.detector = new NewNETS(0);
+        }else if (Objects.equals(Constants.methodToGenerateFingerprint, "MCOD_CENTRALIZE")){
+            this.detector = new MCOD();
         }
     }
 
@@ -31,10 +46,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         this.clientsForDevices = clientsForDevices;
         this.clientsForEdgeNodes = clientsForEdgeNodes;
     }
-
-    /* this two fields are used for judge whether the node has complete uploading*/
-    public AtomicInteger count;
-    volatile Boolean flag = false;
 
     public void receiveAndProcessFP(Map<List<Double>, Integer> fingerprints, int edgeDeviceHashCode) {
         this.flag = false;
@@ -177,9 +188,27 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         }
     }
 
+    public Set<Vector> result;
     @Override
-    public void uploadAllLocalData(List<Vector> data) throws InvalidException, TException {
-
+    public Set<Vector> uploadAndDetectOutlier(List<Vector> data) throws InvalidException, TException {
+        flag = false;
+        allData.addAll(data);
+        count.incrementAndGet();
+        if (count.get()== Constants.dn){
+            this.detector.detectOutlier(allData);
+            if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS_CENTRALIZE")){
+                NewNETS newNETS = (NewNETS) this.detector;
+                result = new HashSet<>(newNETS.outliers);
+            }else if (Objects.equals(Constants.methodToGenerateFingerprint, "MCOD_CENTRALIZE")){
+                MCOD mcod = (MCOD) this.detector;
+                result = new HashSet<>(mcod.outliers);
+            }
+            this.count = new AtomicInteger(0);
+            flag = true;
+        }
+        while (!flag){
+        }
+        return result;
     }
 
     public void processResult(List<Double> unitID, List<UnitInNode> unitInNodeList) {

@@ -22,23 +22,23 @@ public class DeviceImpl implements DeviceService.Iface {
     volatile public boolean ready = false;
 
     //=============================EPOD===============================
-    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
+//    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
     public HashMap<Integer, Integer> historyRecord; //用来记录每个device的上次发送的历史记录，deviceID->slideID
     public Map<Integer, DeviceService.Client> clientsForDevices; //And for P2P
     public EdgeNodeService.Client clientsForNearestNode;
 
     //=============================P2P===============================
-    public List<Vector> AllData = new ArrayList<>();
+    public List<Vector> allData;
 
     public DeviceImpl(int deviceId) {
         this.deviceId = deviceId;
         this.dataGenerator = new DataGenerator(deviceId);
+        this.allData = Collections.synchronizedList(new ArrayList<>());
         if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS")) {
-            this.detector = new NewNETS(0, this);
+            this.detector = new NewNETS(0);
         } else if (Objects.equals(Constants.methodToGenerateFingerprint, "MCOD")) {
-            this.detector = new MCOD(this);
+            this.detector = new MCOD();
         }
-        this.fullCellDelta = new HashMap<>();
         this.historyRecord = new HashMap<>();
         for (int deviceHashCode : EdgeNodeNetwork.deviceHashMap.keySet()) {
             this.historyRecord.put(deviceHashCode, 0);
@@ -64,13 +64,13 @@ public class DeviceImpl implements DeviceService.Iface {
 
         //step1: 产生指纹 + 本地先检测出outliers
         if (itr > Constants.nS - 1) {
-            clearFingerprints();
+            this.detector.clearFingerprints();
         }
         this.detector.detectOutlier(this.rawData);
 
         //step2: 上传指纹
         if (itr >= Constants.nS - 1) {
-            this.clientsForNearestNode.receiveAndProcessFP(fullCellDelta, this.hashCode());
+            this.clientsForNearestNode.receiveAndProcessFP(this.detector.fullCellDelta, this.hashCode());
         } else return new HashSet<>();
 
         //本地获取数据 + 处理outliers
@@ -80,10 +80,6 @@ public class DeviceImpl implements DeviceService.Iface {
         return this.detector.outlierVector;
     }
 
-
-    public void clearFingerprints() {
-        this.fullCellDelta = new HashMap<>();
-    }
 
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         //根据历史记录来发送数据
@@ -135,9 +131,9 @@ public class DeviceImpl implements DeviceService.Iface {
         getRawData(itr);
         //step1: 自己取data
         if (itr > Constants.nS - 1) {
-            AllData.clear();
+            allData.clear();
         }
-        AllData.addAll(rawData);
+        allData.addAll(rawData);
 
         //step2: 收集其他device的data
         if (itr >= Constants.nS - 1) {
@@ -146,7 +142,7 @@ public class DeviceImpl implements DeviceService.Iface {
                 Thread t = new Thread(() -> {
                     try {
                         List<Vector> data = client.sendAllLocalData();
-                        AllData.addAll(data);
+                        allData.addAll(data);
                     } catch (Throwable e) {
                         e.printStackTrace();
                     }
@@ -166,8 +162,14 @@ public class DeviceImpl implements DeviceService.Iface {
 
         //step3: detectOutlier
         while (!this.ready) {}
-        this.detector.detectOutlier(AllData);
+        this.detector.detectOutlier(allData);
         return this.detector.outlierVector;
+    }
+
+    public Set<? extends Vector> detectOutlier_Centralize(int itr) throws Throwable {
+        Constants.currentSlideID = itr;
+        getRawData(itr);
+        return clientsForNearestNode.uploadAndDetectOutlier(this.rawData);
     }
 
     //传新slide的点
