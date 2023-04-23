@@ -130,39 +130,40 @@ public class DeviceImpl implements DeviceService.Iface {
         Constants.currentSlideID = itr;
         getRawData(itr);
         //step1: 自己取data
-//        if (itr > Constants.nS - 1) {
-//            allData.clear();
-//        }
+        if (itr > Constants.nS - 1) {
+            allData.clear();
+        }
         allData.addAll(rawData);
 
         //step2: 收集其他device的data
-        if (itr >= Constants.nS - 1) {
-            ArrayList<Thread> threads = new ArrayList<>();
-            for (DeviceService.Client client : clientsForDevices.values()) {
-                Thread t = new Thread(() -> {
-                    try {
-                        List<Vector> data = client.sendAllLocalData();
-                        allData.addAll(data);
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                });
-                threads.add(t);
-                t.start();
-            }
-            for (Thread t : threads) {
+        ArrayList<Thread> threads = new ArrayList<>();
+        for (DeviceService.Client client : clientsForDevices.values()) {
+            Thread t = new Thread(() -> {
                 try {
-                    t.join();
-                } catch (InterruptedException e) {
+                    List<Vector> data = client.sendAllLocalData();
+                    allData.addAll(data);
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
-            }
-            this.ready = true;
+            });
+            threads.add(t);
+            t.start();
         }
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        this.ready = true;
 
         //step3: detectOutlier
-        while (!this.ready) {}
-        this.detector.detectOutlier(allData);
+        while (!this.ready) {
+        }
+        if (itr >= Constants.nS - 1) {
+            this.detector.detectOutlier(allData);
+        }
         return this.detector.outlierVector;
     }
 

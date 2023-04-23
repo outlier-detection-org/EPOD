@@ -192,9 +192,13 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     @Override
     public Set<Vector> uploadAndDetectOutlier(List<Vector> data) throws InvalidException, TException {
         flag = false;
+        if (Constants.currentSlideID > Constants.nS - 1) {
+            allData.clear();
+        }
         allData.addAll(data);
         count.incrementAndGet();
-        if (count.get()== Constants.dn){
+        // wait for all nodes to finish uploading && current slide after first window
+        if (count.get()== Constants.dn && Constants.currentSlideID >= Constants.nS - 1) {
             this.detector.detectOutlier(allData);
             if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS_CENTRALIZE")){
                 NewNETS newNETS = (NewNETS) this.detector;
