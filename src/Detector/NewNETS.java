@@ -318,6 +318,7 @@ public class NewNETS extends Detector {
     }
 
     public void processOutliers() {
+        System.out.printf("Thead %d processOutliers. \n", Thread.currentThread().getId());
         // after receive external data, we need to process outliers once again
         Iterator<Tuple> it = outliers.iterator();
         OutlierLoop:

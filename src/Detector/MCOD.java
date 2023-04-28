@@ -407,6 +407,7 @@ public class MCOD extends Detector {
     }
 
     public void processOutliers() {
+        System.out.printf("Thead %d processOutliers. \n", Thread.currentThread().getId());
         update_external_info();
         check_local_outliers();
         this.outlierVector = outliers;

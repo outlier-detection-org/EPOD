@@ -66,7 +66,7 @@ public class DeviceImpl implements DeviceService.Iface {
         if (itr > Constants.nS - 1) {
             this.detector.clearFingerprints();
         }
-        this.detector.detectOutlier(this.rawData);
+        this.detector.detectOutlier(this.rawData); //TODO:在第一个window后，这里出bug，亟待解决
 
         //step2: 上传指纹
         if (itr >= Constants.nS - 1) {
@@ -82,6 +82,7 @@ public class DeviceImpl implements DeviceService.Iface {
 
 
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
+        System.out.printf("Thead %d sendData. \n", Thread.currentThread().getId());
         //根据历史记录来发送数据
         int lastSent = Math.max(this.historyRecord.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
         this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
@@ -89,6 +90,7 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public void getExternalData(Map<List<Double>, Integer> status, Map<Integer, Set<List<Double>>> result) {
+        System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
         this.detector.status = status; //用来判断outliers是否需要重新计算，用在processOutliers()中
         ArrayList<Thread> threads = new ArrayList<>();
         for (Integer deviceCode : result.keySet()) {
@@ -176,6 +178,7 @@ public class DeviceImpl implements DeviceService.Iface {
     //传新slide的点
     @Override
     public List<Vector> sendAllLocalData() {
+        System.out.printf("Thead %d sendAllLocalData. \n", Thread.currentThread().getId());
         return this.rawData;
     }
 }

@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class EdgeNodeImpl implements EdgeNodeService.Iface {
+    public EdgeNode belongedNode;
     public Map<List<Double>, List<UnitInNode>> unitResultInfo; //primly used for pruning
     public Map<List<Double>, UnitInNode> unitsStatusMap; // used to maintain the status of the unit in a node
     public Handler handler;
@@ -24,7 +25,8 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public Detector detector;
     public List<Vector> allData;
 
-    public EdgeNodeImpl() {
+    public EdgeNodeImpl(EdgeNode edgeNode) {
+        this.belongedNode = edgeNode;
         this.unitsStatusMap = Collections.synchronizedMap(new HashMap<>());
         this.unitResultInfo = Collections.synchronizedMap(new HashMap<>());
         this.allData = Collections.synchronizedList(new ArrayList<>());
@@ -48,10 +50,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     }
 
     public void receiveAndProcessFP(Map<List<Double>, Integer> fingerprints, int edgeDeviceHashCode) {
+        System.out.printf("Thead %d receiveAndProcessFP. \n", Thread.currentThread().getId());
         this.flag = false;
         for (List<Double> id : fingerprints.keySet()) {
-            id.forEach(System.out::println);
-            System.out.println(fingerprints.get(id)== Integer.MIN_VALUE);
             if (fingerprints.get(id) == Integer.MIN_VALUE) {
                 unitsStatusMap.get(id).belongedDevices.remove(edgeDeviceHashCode);
                 if (unitsStatusMap.get(id).belongedDevices.isEmpty()) {
@@ -70,20 +71,21 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         count.incrementAndGet();
         boolean flag = count.compareAndSet(this.clientsForDevices.size(), 0);
         if (flag) {
+            System.out.printf("Thead %d: Node has finished collecting data, enter into N-N phase.\n",Thread.currentThread().getId());
             // node has finished collecting data, entering into the N-N phase, only one thread go into this loop
             this.flag = true; //indicate to other nodes I am ready
+            System.out.printf("Thead %d: Node is ready.\n",Thread.currentThread().getId());
             for (UnitInNode unitInNode : unitsStatusMap.values()) {
                 unitInNode.updateSafeness();
             }
             // 计算出unSafeUnits，对于这些unSafeUnits, 我们需要从别的设备中寻找邻居
             List<List<Double>> unSafeUnits =
                     unitsStatusMap.keySet().stream().filter(key -> unitsStatusMap.get(key).isSafe != 2).toList();
-
             // 第一阶段: 从属于同一个node下的其他device里找邻居, 会包括本身
             for (List<Double> unsafeUnit : unSafeUnits) {
-                List<UnitInNode> unitInNodeList = unitsStatusMap.values().stream().filter(x -> x.isUpdated.get(this.hashCode()) == 1)
+                List<UnitInNode> unitInNodeList = unitsStatusMap.values().stream().filter(x -> x.isUpdated.get(this.belongedNode.hashCode()) == 0)
                         .filter(x -> this.handler.neighboringSet(unsafeUnit, x.unitID)).toList();
-                unitInNodeList.forEach(x -> x.isUpdated.put(this.hashCode(), 0));
+                unitInNodeList.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
                 if (!unitResultInfo.containsKey(unsafeUnit)) {
                     unitResultInfo.put(unsafeUnit, new ArrayList<>());
                 }
@@ -103,7 +105,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             }
             pruning(1);
             unSafeUnits = unitsStatusMap.keySet().stream().filter(key -> unitsStatusMap.get(key).isSafe != 2).toList();
-
+            System.out.printf("Thead %d: Node has finished local pruning, enter into N-N phase.\n", Thread.currentThread().getId());
             //开始node - node 通信
             for (int edgeNodeCode : this.clientsForEdgeNodes.keySet()) {
 
@@ -162,6 +164,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
      * @description find whether there are neighbor unit in local node
      */
     public void provideNeighborsResult(List<List<Double>> unSateUnits, int edgeNodeHash) {
+        System.out.printf("Thead %d provideNeighborsResult. \n", Thread.currentThread().getId());
         ArrayList<Thread> threads = new ArrayList<>();
         //对于每个unsafeUnit,计算完后马上发还消息，以达到pipeline的目标
         for (List<Double> unit : unSateUnits) {
@@ -191,6 +194,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public Set<Vector> result;
     @Override
     public Set<Vector> uploadAndDetectOutlier(List<Vector> data) throws InvalidException, TException {
+        System.out.printf("Thead %d uploadAndDetectOutlier. \n", Thread.currentThread().getId());
         flag = false;
         if (Constants.currentSlideID > Constants.nS - 1) {
             allData.clear();
@@ -216,6 +220,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     }
 
     public void processResult(List<Double> unitID, List<UnitInNode> unitInNodeList) {
+        System.out.printf("Thead %d processResult. \n", Thread.currentThread().getId());
         if (!unitResultInfo.containsKey(unitID)) {
             unitResultInfo.put(unitID, unitInNodeList); // rpc streaming过来的是一个新的list，所以不用担心深浅拷贝的问题
             return;

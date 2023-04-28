@@ -1,7 +1,5 @@
 package Framework;
 
-import Detector.MCOD;
-import Detector.NewNETS;
 import RPC.DeviceService;
 import RPC.EdgeNodeService;
 import RPC.Vector;
@@ -12,7 +10,6 @@ import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import utils.Constants;
 
-import java.io.IOException;
 import java.util.*;
 
 public class EdgeNodeNetwork {
@@ -118,7 +115,7 @@ public class EdgeNodeNetwork {
 
         for (Integer nodeHashCode : nodeHashMap.keySet()) {
             if (nodeHashCode == node.hashCode()) continue;
-            TTransport transport = new TSocket("172.30.32.1", nodeHashMap.get(nodeHashCode).port);
+            TTransport transport = new TSocket("127.0.0.1", nodeHashMap.get(nodeHashCode).port);
             transport.open();
             node.transports.add(transport);
             TProtocol protocol = new TBinaryProtocol(transport);
@@ -127,19 +124,19 @@ public class EdgeNodeNetwork {
         }
 
         for (Integer deviceCode : node.devicesCodes) {
-            TTransport transport = new TSocket("172.30.32.1", deviceHashMap.get(deviceCode).port);
+            TTransport transport = new TSocket("127.0.0.1", deviceHashMap.get(deviceCode).port);
             transport.open();
             node.transports.add(transport);
             TProtocol protocol = new TBinaryProtocol(transport);
-            EdgeNodeService.Client client = new EdgeNodeService.Client(protocol);
-            clientsForEdgeNodes.put(deviceCode, client);
+            DeviceService.Client client = new DeviceService.Client(protocol);
+            clientsForDevices.put(deviceCode, client);
         }
         node.handler.setClients(clientsForEdgeNodes, clientsForDevices);
     }
 
 
     public static void setClientsForDevices(Device device) throws TTransportException {
-        TTransport transport = new TSocket("172.30.32.1", nodeHashMap.get(device.nearestNodeCode).port);
+        TTransport transport = new TSocket("127.0.0.1", nodeHashMap.get(device.nearestNodeCode).port);
         transport.open();
         device.transports.add(transport);
         TProtocol protocol = new TBinaryProtocol(transport);
@@ -148,7 +145,7 @@ public class EdgeNodeNetwork {
         Map<Integer, DeviceService.Client> clientsForDevices = new HashMap<>();
         for (Integer deviceHashCode : deviceHashMap.keySet()) {
             if (deviceHashCode == device.hashCode()) continue;
-            TTransport transport1 = new TSocket("172.30.32.1", deviceHashMap.get(deviceHashCode).port);
+            TTransport transport1 = new TSocket("127.0.0.1", deviceHashMap.get(deviceHashCode).port);
             transport1.open();
             device.transports.add(transport1);
             TProtocol protocol1 = new TBinaryProtocol(transport1);

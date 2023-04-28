@@ -25,7 +25,7 @@ public class Constants {
 
     //fixed
     public static int K = 50; // neighborhood threshold, default = 50
-    public static String prefix = "C:\\Users\\14198\\Desktop\\outlier_detection\\EPOD\\Datasets\\";
+    public static String prefix = "C:\\Users\\Lenovo\\Desktop\\outlier_detection\\EPOD\\Datasets\\";
 
     //Paths
     //    public static String prefix = "/home/xinyingzheng/Desktop/outlier_detection";

@@ -20,7 +20,7 @@ public class EdgeNode {
     public ArrayList<TTransport> transports;
 
     public EdgeNode() {
-        handler = new EdgeNodeImpl();
+        handler = new EdgeNodeImpl(this);
         processor = new EdgeNodeService.Processor<>(handler);
         port = new Random().nextInt(50000) + 10000;
         transports = new ArrayList<>();
