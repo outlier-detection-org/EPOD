@@ -360,6 +360,29 @@ public class MCOD extends Detector {
 
     // 保留最少数目proceeding
     // 检查是否为safe | 剩余inlier（queue） | outlier
+    private void checkInlier(MCO inPD, Iterator<MCO> iterator) {
+        Collections.sort(inPD.exps);
+
+        while (inPD.exps.size() > Constants.K - inPD.numberOfSucceeding && inPD.exps.size() > 0) {
+            inPD.exps.remove(0);
+        }
+        if (inPD.exps.size() > 0) inPD.ev = inPD.exps.get(0);
+        else inPD.ev = 0;
+
+        if (inPD.exps.size() + inPD.numberOfSucceeding >= Constants.K) {
+            if (inPD.numberOfSucceeding >= Constants.K) {
+                eventQueue.remove(inPD);
+                iterator.remove();
+            } else {
+                iterator.remove();
+                if (!eventQueue.contains(inPD)) eventQueue.add(inPD);
+            }
+        } else {
+            eventQueue.remove(inPD);
+            outliers.add(inPD);
+        }
+    }
+
     private void checkInlier(MCO inPD) {
         Collections.sort(inPD.exps);
 
@@ -388,6 +411,9 @@ public class MCOD extends Detector {
 
         while (x != null && x.ev <= Constants.currentSlideID) {
             x = eventQueue.poll();
+//            if (x.exps.size()==0){
+//                System.out.println();
+//            }
             while (x.exps.get(0) <= Constants.currentSlideID) {
                 x.exps.remove(0);
                 if (x.exps.isEmpty()) {
@@ -418,7 +444,7 @@ public class MCOD extends Detector {
         externalData.remove(Constants.currentSlideID - Constants.nS);
 
         Iterator<Integer> it_time = externalData.keySet().iterator();
-        while (it_time.hasNext()){
+        while (it_time.hasNext()) {
             //每个时间点
             Integer time = it_time.next();
             Map<List<Double>, List<Vector>> clusters = externalData.get(time);
@@ -441,10 +467,10 @@ public class MCOD extends Detector {
                     }
                 }
                 if (clusters.get(key).size() == 0) {
-                   it_cluster.remove();
+                    it_cluster.remove();
                 }
             }
-            if (externalData.get(time).size()==0){
+            if (externalData.get(time).size() == 0) {
                 it_time.remove();
             }
         }
@@ -521,13 +547,15 @@ public class MCOD extends Detector {
                                 // 在当前的时间点看是否有此cluster
                                 List<Vector> cur_cluster_data = cur_data.get(c);
                                 // 如果有
-                                for (Vector v : cur_cluster_data) {
-                                    if (distance(v.values, o.values) <= Constants.R) {
-                                        if (isSameSlide(o, v) <= 0) {
-                                            o.numberOfSucceeding++;
-                                        } else {
-                                            //p is preceding neighbor
-                                            o.exps.add(v.slideID + Constants.nS);
+                                if (cur_cluster_data != null) {
+                                    for (Vector v : cur_cluster_data) {
+                                        if (distance(v.values, o.values) <= Constants.R) {
+                                            if (isSameSlide(o, v) <= 0) {
+                                                o.numberOfSucceeding++;
+                                            } else {
+                                                //p is preceding neighbor
+                                                o.exps.add(v.slideID + Constants.nS);
+                                            }
                                         }
                                     }
                                 }
@@ -535,6 +563,7 @@ public class MCOD extends Detector {
                         }
                         o.last_calculate_time++;
 //                        checkInlier(o); //TODO: bug is caused here!!!!!!! @shimin
+                        checkInlier(o, iterator);
                         if (o.numberOfSucceeding + o.exps.size() >= Constants.K) {
                             continue outlierLoop;
                         }
