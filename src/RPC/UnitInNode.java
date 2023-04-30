@@ -28,7 +28,7 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
 
   public @org.apache.thrift.annotation.Nullable java.util.List<java.lang.Double> unitID; // required
   public int pointCnt; // required
-  public int isSafe; // required
+  public int isSafe; // required // 0-outlier 1-undetermined 2-safe
   public int deltaCnt; // required
   public @org.apache.thrift.annotation.Nullable java.util.Map<java.lang.Integer,java.lang.Integer> isUpdated; // required
   public @org.apache.thrift.annotation.Nullable java.util.Set<java.lang.Integer> belongedDevices; // required
@@ -145,6 +145,7 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
     this.pointCnt = pointCnt;
     this.deltaCnt = 0;
     this.isUpdated = new HashMap<>();
+    this.isSafe = 1; //initally we should set it to be undetermined
     for (Integer hashcode : EdgeNodeNetwork.nodeHashMap.keySet()) {
       // initially we put 1 into it, indicating the first time we need to get the data
       isUpdated.put(hashcode, 1);
@@ -205,7 +206,7 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
     setPointCntIsSet(false);
     this.pointCnt = 0;
     setIsSafeIsSet(false);
-    this.isSafe = 0;
+    this.isSafe = 1; // should be set to undetermined
     setDeltaCntIsSet(false);
     this.deltaCnt = 0;
     this.isUpdated = null;

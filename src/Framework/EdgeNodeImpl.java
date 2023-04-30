@@ -82,10 +82,12 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             List<List<Double>> unSafeUnits =
                     unitsStatusMap.keySet().stream().filter(key -> unitsStatusMap.get(key).isSafe != 2).toList();
             // 第一阶段: 从属于同一个node下的其他device里找邻居, 会包括本身
+            HashSet<UnitInNode> needUpdate = new HashSet<>();
             for (List<Double> unsafeUnit : unSafeUnits) {
-                List<UnitInNode> unitInNodeList = unitsStatusMap.values().stream().filter(x -> x.isUpdated.get(this.belongedNode.hashCode()) == 0)
+                List<UnitInNode> unitInNodeList = unitsStatusMap.values().stream().filter(x -> x.isUpdated.get(this.belongedNode.hashCode()) == 1)
                         .filter(x -> this.handler.neighboringSet(unsafeUnit, x.unitID)).toList();
-                unitInNodeList.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
+//                unitInNodeList.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));//可能有不同的unsafeUnit, 要一次性更新 @shimin
+                needUpdate.addAll(unitInNodeList);
                 if (!unitResultInfo.containsKey(unsafeUnit)) {
                     unitResultInfo.put(unsafeUnit, new ArrayList<>());
                 }
@@ -103,6 +105,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                         }
                 );
             }
+            needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0)); //改成在这里一次性更新 @shimin
             pruning(1);
             unSafeUnits = unitsStatusMap.keySet().stream().filter(key -> unitsStatusMap.get(key).isSafe != 2).toList();
             System.out.printf("Thead %d: Node has finished local pruning, enter into N-N phase.\n", Thread.currentThread().getId());

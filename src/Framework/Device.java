@@ -20,7 +20,7 @@ public class Device {
 
     public Device(int deviceId){
         port = new Random().nextInt(50000) + 10000;
-        handler = new DeviceImpl(deviceId);
+        handler = new DeviceImpl(deviceId, this);
         processor = new DeviceService.Processor<>(handler);
         transports = new ArrayList<>();
     }

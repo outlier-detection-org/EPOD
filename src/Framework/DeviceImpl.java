@@ -15,6 +15,7 @@ import java.util.*;
 public class DeviceImpl implements DeviceService.Iface {
 
     //=============================For All===============================
+    public Device belongedDevice;
     public int deviceId;
     public List<Vector> rawData = new ArrayList<>();
     public DataGenerator dataGenerator;
@@ -30,7 +31,8 @@ public class DeviceImpl implements DeviceService.Iface {
     //=============================P2P===============================
     public List<Vector> allData;
 
-    public DeviceImpl(int deviceId) {
+    public DeviceImpl(int deviceId, Device belongedDevice) {
+        this.belongedDevice = belongedDevice;
         this.deviceId = deviceId;
         this.dataGenerator = new DataGenerator(deviceId);
         this.allData = Collections.synchronizedList(new ArrayList<>());
@@ -66,17 +68,18 @@ public class DeviceImpl implements DeviceService.Iface {
         if (itr > Constants.nS - 1) {
             this.detector.clearFingerprints();
         }
-        this.detector.detectOutlier(this.rawData); //TODO:在第一个window后，这里出bug，亟待解决
+        this.detector.detectOutlier(this.rawData);
 
         //step2: 上传指纹
         if (itr >= Constants.nS - 1) {
-            this.clientsForNearestNode.receiveAndProcessFP(this.detector.fullCellDelta, this.hashCode());
+            this.clientsForNearestNode.receiveAndProcessFP(this.detector.fullCellDelta, this.belongedDevice.hashCode());
         } else return new HashSet<>();
 
         //本地获取数据 + 处理outliers
         while (!this.ready) {
         }
         this.detector.processOutliers();
+        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
         return this.detector.outlierVector;
     }
 
