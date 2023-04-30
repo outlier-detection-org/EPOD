@@ -126,8 +126,8 @@ public class StreamGenerator {
 						value[j] = Double.parseDouble(rawValues[i]);
 						j++;
 					}
-					Tuple tuple = new Tuple(tid, itr, value);
-					newSlide.add(tuple);
+//					Tuple tuple = new Tuple(tid, itr, value);
+//					newSlide.add(tuple);
 				}
 				tid++;
 				if (tid == (itr + 1) * S) break;
@@ -146,8 +146,8 @@ public class StreamGenerator {
 					value[j] = v.values.get(i);
 					j++;
 				}
-				Tuple tuple = new Tuple(tid++, itr, value);
-				newSlide.add(tuple);
+//				Tuple tuple = new Tuple(tid++, itr, value);
+//				newSlide.add(tuple);
 			}
 		}
 		return newSlide;

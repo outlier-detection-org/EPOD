@@ -5,10 +5,11 @@ import RPC.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class Tuple extends Vector {
 		public int id;
-		public double[] value;
+//		public double[] value;
 		public int nn;
 		public int nnIn; //number of neighbors inside the same cell
 		public int nnSafeOut; //number of succeeding neighbors outside the cell 
@@ -21,10 +22,10 @@ public class Tuple extends Vector {
 
 		public int last_calculate_time;
 		
-		public Tuple(int id, int slideID, double[] value) {
+		public Tuple(int id, int slideID, List<Double> value) {
 			this.id = id;
 			this.slideID = slideID;
-			this.value = value;
+			this.values = value;
 			this.unSafeOutNeighbors = new HashMap<Integer, Integer>();
 			this.lastNNSlideID = -1;
 			this.safeness = false;

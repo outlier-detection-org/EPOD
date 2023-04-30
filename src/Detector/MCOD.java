@@ -464,6 +464,7 @@ public class MCOD extends Detector {
     }
 
     public void check_local_outliers() {
+        System.out.printf("Thead %d check_local_outliers. \n", Thread.currentThread().getId());
         Iterator<MCO> iterator = outliers.iterator();//实例化迭代器
         outlierLoop:
         while (iterator.hasNext()) {
@@ -533,7 +534,7 @@ public class MCOD extends Detector {
                             }
                         }
                         o.last_calculate_time++;
-                        checkInlier(o);
+//                        checkInlier(o); //TODO: bug is caused here!!!!!!! @shimin
                         if (o.numberOfSucceeding + o.exps.size() >= Constants.K) {
                             continue outlierLoop;
                         }
