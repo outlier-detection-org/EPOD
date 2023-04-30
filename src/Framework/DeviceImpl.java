@@ -170,6 +170,7 @@ public class DeviceImpl implements DeviceService.Iface {
         if (itr >= Constants.nS - 1) {
             this.detector.detectOutlier(allData);
         }
+        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
         return this.detector.outlierVector;
     }
 
@@ -177,7 +178,9 @@ public class DeviceImpl implements DeviceService.Iface {
         System.out.println("Thead " + Thread.currentThread().getId() + " detectOutlier_Centralize");
         Constants.currentSlideID = itr;
         getRawData(itr);
-        return clientsForNearestNode.uploadAndDetectOutlier(this.rawData);
+        Set<? extends Vector> result = clientsForNearestNode.uploadAndDetectOutlier(this.rawData);
+        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
+        return result;
     }
 
     //????slide???

@@ -32,7 +32,6 @@ public class MCOD extends Detector {
         outliers = new HashSet<>();
         eventQueue = new PriorityQueue<>(new MCComparator());
         external_info = new HashMap<>();
-        externalData = Collections.synchronizedMap(new HashMap<>());
     }
 
     // 预处理入口函数
@@ -351,7 +350,7 @@ public class MCOD extends Detector {
                 min_distance = mtree.getDistanceFunction().calculate(nearest_unfilled_center_id, d);
             }
             if (min_distance <= Constants.R / 2) {
-                addToUnfilledCluster(nearest_filled_center, d);
+                addToUnfilledCluster(nearest_unfilled_center_id, d);
             } else {
                 // 3.自己成一个unfilled_cluster
                 formUnfilledCluster(d);
