@@ -31,9 +31,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         this.unitResultInfo = Collections.synchronizedMap(new HashMap<>());
         this.allData = Collections.synchronizedList(new ArrayList<>());
         this.count = new AtomicInteger(0);
-        if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS")) {
+        if (Constants.methodToGenerateFingerprint.contains("NETS")) {
             this.handler = new NETSHandler(this);
-        } else if (Objects.equals(Constants.methodToGenerateFingerprint, "MCOD")) {
+        } else if (Constants.methodToGenerateFingerprint.contains("MCOD")) {
             this.handler = new MCODHandler(this);
         }
 
@@ -51,7 +51,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 
     public void receiveAndProcessFP(Map<List<Double>, Integer> fingerprints, int edgeDeviceHashCode) {
         System.out.printf("Thead %d receiveAndProcessFP. \n", Thread.currentThread().getId());
-        this.flag = false;
         for (List<Double> id : fingerprints.keySet()) {
             if (fingerprints.get(id) == Integer.MIN_VALUE) {
                 unitsStatusMap.get(id).belongedDevices.remove(edgeDeviceHashCode);
@@ -138,6 +137,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             pruning(2);
             //send result back to the belonged device;
             sendDeviceResult();
+            this.flag = false;
         }
     }
 
@@ -197,15 +197,13 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public Set<Vector> result;
     @Override
     public Set<Vector> uploadAndDetectOutlier(List<Vector> data) throws InvalidException, TException {
-        System.out.printf("Thead %d uploadAndDetectOutlier. \n", Thread.currentThread().getId());
-        flag = false;
-        if (Constants.currentSlideID > Constants.nS - 1) {
-            allData.clear();
-        }
+        System.out.printf("Thead %d uploadAndDetectOutlier.\n", Thread.currentThread().getId() );
         allData.addAll(data);
         count.incrementAndGet();
+        boolean flag = count.compareAndSet(Constants.dn * Constants.nn, 0);
         // wait for all nodes to finish uploading && current slide after first window
-        if (count.get()== Constants.dn && Constants.currentSlideID >= Constants.nS - 1) {
+        if (flag) {
+            System.out.printf("Thead %d all nodes have finished uploading data.\n", Thread.currentThread().getId() );
             this.detector.detectOutlier(allData);
             if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS_CENTRALIZE")){
                 NewNETS newNETS = (NewNETS) this.detector;
@@ -214,11 +212,12 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 MCOD mcod = (MCOD) this.detector;
                 result = new HashSet<>(mcod.outliers);
             }
-            this.count = new AtomicInteger(0);
-            flag = true;
+            this.flag = true;
         }
-        while (!flag){
+        while (!this.flag){
         }
+        allData.clear(); //这里感觉每次都是要清除的 因为具体的数据结构维护在NEWNETS和MCOD里面 @shimin
+        this.flag = false;
         return result;
     }
 

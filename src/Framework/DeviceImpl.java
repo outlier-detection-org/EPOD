@@ -24,7 +24,7 @@ public class DeviceImpl implements DeviceService.Iface {
 
     //=============================EPOD===============================
 //    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
-    public HashMap<Integer, Integer> historyRecord; //用来记录每个device的上次发送的历史记录，deviceID->slideID
+    public HashMap<Integer, Integer> historyRecord; //??????????device????η????????????deviceID->slideID
     public Map<Integer, DeviceService.Client> clientsForDevices; //And for P2P
     public EdgeNodeService.Client clientsForNearestNode;
 
@@ -36,9 +36,9 @@ public class DeviceImpl implements DeviceService.Iface {
         this.deviceId = deviceId;
         this.dataGenerator = new DataGenerator(deviceId);
         this.allData = Collections.synchronizedList(new ArrayList<>());
-        if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS")) {
+        if (Constants.methodToGenerateFingerprint.contains("NETS")) {
             this.detector = new NewNETS(0);
-        } else if (Objects.equals(Constants.methodToGenerateFingerprint, "MCOD")) {
+        } else if (Constants.methodToGenerateFingerprint.contains("MCOD")) {
             this.detector = new MCOD();
         }
         this.historyRecord = new HashMap<>();
@@ -59,23 +59,24 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public Set<? extends Vector> detectOutlier(int itr) throws Throwable {
+        System.out.println("Thread " + Thread.currentThread().getId() + " detectOutlier");
         this.ready = false;
         //get initial data
         Constants.currentSlideID = itr;
         getRawData(itr);
 
-        //step1: 产生指纹 + 本地先检测出outliers
+        //step1: ??????? + ?????????outliers
         if (itr > Constants.nS - 1) {
             this.detector.clearFingerprints();
         }
         this.detector.detectOutlier(this.rawData);
 
-        //step2: 上传指纹
+        //step2: ??????
         if (itr >= Constants.nS - 1) {
             this.clientsForNearestNode.receiveAndProcessFP(this.detector.fullCellDelta, this.belongedDevice.hashCode());
         } else return new HashSet<>();
 
-        //本地获取数据 + 处理outliers
+        //?????????? + ????outliers
         while (!this.ready) {
         }
         this.detector.processOutliers();
@@ -86,7 +87,7 @@ public class DeviceImpl implements DeviceService.Iface {
 
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         System.out.printf("Thead %d sendData. \n", Thread.currentThread().getId());
-        //根据历史记录来发送数据
+        //????????????????????
         int lastSent = Math.max(this.historyRecord.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
         this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
         return this.detector.sendData(bucketIds, lastSent);
@@ -94,7 +95,7 @@ public class DeviceImpl implements DeviceService.Iface {
 
     public void getExternalData(Map<List<Double>, Integer> status, Map<Integer, Set<List<Double>>> result) {
         System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
-        this.detector.status = status; //用来判断outliers是否需要重新计算，用在processOutliers()中
+        this.detector.status = status; //?????ж?outliers?????????????????processOutliers()??
         ArrayList<Thread> threads = new ArrayList<>();
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode == this.belongedDevice.hashCode()) continue;
@@ -105,7 +106,7 @@ public class DeviceImpl implements DeviceService.Iface {
                     if (!this.detector.externalData.containsKey(Constants.currentSlideID)) {
                         this.detector.externalData.put(Constants.currentSlideID, Collections.synchronizedMap(new HashMap<>()));
                     }
-                    Map<List<Double>, List<Vector>> map = this.detector.externalData.get(Constants.currentSlideID);//TODO: Check 并发的问题
+                    Map<List<Double>, List<Vector>> map = this.detector.externalData.get(Constants.currentSlideID);//TODO: Check ??????????
                     data.keySet().forEach(
                             x -> {
                                 if (!map.containsKey(x)) {
@@ -132,16 +133,15 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public Set<? extends Vector> detectOutlier_P2P(int itr) throws Throwable {
+        System.out.println("Thead " + Thread.currentThread().getId() + " detectOutlier_P2P");
         this.ready = false;
         Constants.currentSlideID = itr;
         getRawData(itr);
-        //step1: 自己取data
-        if (itr > Constants.nS - 1) {
-            allData.clear();
-        }
+        //step1: ????data
+        allData.clear(); //allData ?????????? ?????????NETS ?? MCOD????? @shimin
         allData.addAll(rawData);
 
-        //step2: 收集其他device的data
+        //step2: ???????device??data
         ArrayList<Thread> threads = new ArrayList<>();
         for (DeviceService.Client client : clientsForDevices.values()) {
             Thread t = new Thread(() -> {
@@ -174,12 +174,13 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public Set<? extends Vector> detectOutlier_Centralize(int itr) throws Throwable {
+        System.out.println("Thead " + Thread.currentThread().getId() + " detectOutlier_Centralize");
         Constants.currentSlideID = itr;
         getRawData(itr);
         return clientsForNearestNode.uploadAndDetectOutlier(this.rawData);
     }
 
-    //传新slide的点
+    //????slide???
     @Override
     public List<Vector> sendAllLocalData() {
         System.out.printf("Thead %d sendAllLocalData. \n", Thread.currentThread().getId());

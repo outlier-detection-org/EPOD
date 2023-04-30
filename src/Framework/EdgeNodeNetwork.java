@@ -76,7 +76,7 @@ public class EdgeNodeNetwork {
                     try {
                         if (Constants.methodToGenerateFingerprint.contains("CENTRALIZE")){
                             Set<? extends Vector> outlier = device.handler.detectOutlier_Centralize(finalItr);
-                        }else if (Objects.equals(Constants.methodToGenerateFingerprint, "P2P")){
+                        }else if (Constants.methodToGenerateFingerprint.contains("P2P")){
                             Set<? extends Vector> outlier = device.handler.detectOutlier_P2P(finalItr);
                         }else {
                             Set<? extends Vector> outlier = device.handler.detectOutlier(finalItr);
