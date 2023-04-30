@@ -292,8 +292,7 @@ public class NewNETS extends Detector {
             }
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) + fullDimCellSlideInCnt.get(key));
 
-            ArrayList<Double> fingerprint = new ArrayList<>();
-            idxDecoder.get(key).forEach(idx -> fingerprint.add((double)idx));
+            ArrayList<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
             if (!this.fullCellDelta.containsKey(fingerprint)) {
                 this.fullCellDelta.put(fingerprint, 0);
             }
@@ -303,8 +302,7 @@ public class NewNETS extends Detector {
 
         for (Integer key : fullDimCellSlideOutCnt.keySet()) {
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) - fullDimCellSlideOutCnt.get(key));
-            ArrayList<Double> fingerprint = new ArrayList<>();
-            idxDecoder.get(key).forEach(idx -> fingerprint.add((double)idx));
+            ArrayList<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
             if (!this.fullCellDelta.containsKey(fingerprint)) {
                 this.fullCellDelta.put(fingerprint, 0);
             }
@@ -324,13 +322,14 @@ public class NewNETS extends Detector {
         OutlierLoop:
         while (it.hasNext()) {
             Tuple outlier = it.next();
-            if (status.get(outlier.fullDimCellIdx) == 2) {
+            ArrayList<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
+            if (status.get(tmp) == 2) {
                 it.remove();
                 continue OutlierLoop;
             }
 
             HashMap<Integer, HashMap<List<Double>, List<Vector>>> candNeighborByTime = new HashMap<>();
-            if (status.get(outlier.fullDimCellIdx) == 1) {
+            if (status.get(tmp) == 1) {
                 // undetermined point:
                 // add up all points from the cell that is less than 3/2R, if small, then outlier
                 // if large than K, then calculate distance concretely，not update nn，update unSafeout，safeout，add points to unSafeOutNeighbors，
@@ -708,5 +707,11 @@ public class NewNETS extends Detector {
             }
         }
         return true;
+    }
+
+    public ArrayList<Double> convertShortToDouble(ArrayList<Short> shortArrayList){
+        ArrayList<Double> fingerprint = new ArrayList<>();
+        shortArrayList.forEach(idx -> fingerprint.add((double)idx));
+        return fingerprint;
     }
 }

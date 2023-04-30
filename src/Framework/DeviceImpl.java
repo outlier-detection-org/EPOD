@@ -97,10 +97,11 @@ public class DeviceImpl implements DeviceService.Iface {
         this.detector.status = status; //用来判断outliers是否需要重新计算，用在processOutliers()中
         ArrayList<Thread> threads = new ArrayList<>();
         for (Integer deviceCode : result.keySet()) {
+            if (deviceCode == this.belongedDevice.hashCode()) continue;
             //HashMap<Integer,HashSet<ArrayList<?>>>
             Thread t = new Thread(() -> {
                 try {
-                    Map<List<Double>, List<Vector>> data = this.clientsForDevices.get(deviceCode).sendData(result.get(deviceCode), this.hashCode());
+                    Map<List<Double>, List<Vector>> data = this.clientsForDevices.get(deviceCode).sendData(result.get(deviceCode), this.belongedDevice.hashCode());
                     if (!this.detector.externalData.containsKey(Constants.currentSlideID)) {
                         this.detector.externalData.put(Constants.currentSlideID, Collections.synchronizedMap(new HashMap<>()));
                     }
