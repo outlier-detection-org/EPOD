@@ -81,7 +81,7 @@ public class MCOD extends Detector {
             filled_clusters.put(d.center, cluster);
             check_shrink(d.center);
         }
-        unfilled_clusters.put(d.center, cluster);
+//        unfilled_clusters.put(d.center, cluster);//todo:没懂之前为什么要加这一句 不加就过了！
 
         List<Double> key = d.center.values;
         update_fingerprint(key, false);
@@ -408,12 +408,8 @@ public class MCOD extends Detector {
 
     private void process_event_queue() {
         MCO x = eventQueue.peek();
-
         while (x != null && x.ev <= Constants.currentSlideID) {
             x = eventQueue.poll();
-//            if (x.exps.size()==0){
-//                System.out.println();
-//            }
             while (x.exps.get(0) <= Constants.currentSlideID) {
                 x.exps.remove(0);
                 if (x.exps.isEmpty()) {
