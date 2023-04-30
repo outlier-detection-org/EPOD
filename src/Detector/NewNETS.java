@@ -292,7 +292,7 @@ public class NewNETS extends Detector {
             }
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) + fullDimCellSlideInCnt.get(key));
 
-            ArrayList<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
+            List<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
             if (!this.fullCellDelta.containsKey(fingerprint)) {
                 this.fullCellDelta.put(fingerprint, 0);
             }
@@ -300,9 +300,10 @@ public class NewNETS extends Detector {
                     this.fullCellDelta.get(fingerprint) + fullDimCellSlideInCnt.get(key));
         }
 
+        assert fullDimCellSlideOutCnt != null;
         for (Integer key : fullDimCellSlideOutCnt.keySet()) {
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) - fullDimCellSlideOutCnt.get(key));
-            ArrayList<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
+            List<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
             if (!this.fullCellDelta.containsKey(fingerprint)) {
                 this.fullCellDelta.put(fingerprint, 0);
             }
@@ -322,7 +323,7 @@ public class NewNETS extends Detector {
         OutlierLoop:
         while (it.hasNext()) {
             Tuple outlier = it.next();
-            ArrayList<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
+            List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
             if (status.get(tmp) == 2) {
                 it.remove();
                 continue OutlierLoop;
@@ -430,7 +431,7 @@ public class NewNETS extends Detector {
             int index = time - Constants.currentSlideID + Constants.nS - 1;
             for (List<Double> id : bucketIds) {
                 int n = idxEncoder.get(transferFullIdToSubId(id));
-                Cell fullCell = slides.get(index).get(n).fullCells.get(id);
+                Cell fullCell = slides.get(index).get(n).fullCells.get(convertDoubleToShort(id));
                 ArrayList<Vector> tuples = new ArrayList<>(fullCell.tuples);
                 if (!data.containsKey(id)) {
                     data.put(id, new ArrayList<>());
@@ -445,7 +446,8 @@ public class NewNETS extends Detector {
     public ArrayList<Short> transferFullIdToSubId(List<Double> fullId) {
         ArrayList<Short> subId = new ArrayList<Short>();
         for (int i = 0; i < Constants.subDim; i++) {
-            Short id = (short) (Math.sqrt(Constants.subDim * 1.0 / Constants.dim) * (fullId.get(i) + minValues[i]) - minValues[i]);
+//            Short id = (short) (Math.sqrt(Constants.subDim * 1.0 / Constants.dim) * (fullId.get(i) + minValues[i]) - minValues[i]);
+            short id =(short)(fullId.get(i) * dimLength[i] /subDimLength[i]);
             subId.add(id);
         }
         return subId;
@@ -710,9 +712,15 @@ public class NewNETS extends Detector {
         return true;
     }
 
-    public ArrayList<Double> convertShortToDouble(ArrayList<Short> shortArrayList){
+    public List<Double> convertShortToDouble(List<Short> shortArrayList){
         ArrayList<Double> fingerprint = new ArrayList<>();
         shortArrayList.forEach(idx -> fingerprint.add((double)idx));
+        return fingerprint;
+    }
+
+    public List<Short> convertDoubleToShort(List<Double> doubleArrayList){
+        ArrayList<Short> fingerprint = new ArrayList<>();
+        doubleArrayList.forEach(idx -> fingerprint.add((short)(double) idx));
         return fingerprint;
     }
 }

@@ -34,6 +34,9 @@ public class EdgeNodeNetwork {
             }
             node.setDevices(devicesCodes);
         }
+        for (Device device : deviceHashMap.values()) {
+            device.handler.setHistoryRecord();
+        }
     }
 
     public static void startNetwork() throws Throwable {

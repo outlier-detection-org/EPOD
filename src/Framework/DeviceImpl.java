@@ -41,7 +41,11 @@ public class DeviceImpl implements DeviceService.Iface {
         } else if (Constants.methodToGenerateFingerprint.contains("MCOD")) {
             this.detector = new MCOD();
         }
+    }
+
+    public void setHistoryRecord() {
         this.historyRecord = new HashMap<>();
+        System.out.println(EdgeNodeNetwork.deviceHashMap.size());
         for (int deviceHashCode : EdgeNodeNetwork.deviceHashMap.keySet()) {
             this.historyRecord.put(deviceHashCode, 0);
         }
