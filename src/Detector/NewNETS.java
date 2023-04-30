@@ -309,7 +309,7 @@ public class NewNETS extends Detector {
                 this.fullCellDelta.put(fingerprint, 0);
             }
             this.fullCellDelta.put(fingerprint,
-                    this.fullCellDelta.get(fingerprint) - fullDimCellSlideInCnt.get(key));
+                    this.fullCellDelta.get(fingerprint) - fullDimCellSlideOutCnt.get(key));
             if (fullDimCellWindowCnt.get(key) < 1) {
                 fullDimCellWindowCnt.remove(key);
                 this.fullCellDelta.put(fingerprint, Integer.MIN_VALUE);
