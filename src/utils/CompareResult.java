@@ -22,8 +22,8 @@ public class CompareResult {
             for (Vector v : allData) {
                 int numOfNeighbors = 0;
                 for (Vector v2 : allData) {
-                    if (v == v2) continue;
-                    if (distance(v, v2) <= Constants.R) {
+                    if (v.equals(v2)) continue;
+                    if (distance(v, v2) <= Constants.R * Constants.R) {
                         numOfNeighbors++;
                     }
                 }

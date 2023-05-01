@@ -127,12 +127,12 @@
 //			ArrayList<Short> fullDimCellIdx = new ArrayList<Short>();
 //			ArrayList<Short> subDimCellIdx = new ArrayList<Short>();
 //			for (int j = 0; j<dim; j++) {
-//				short dimIdx = (short) ((t.value[j]-minValues[j])/dimLength[j]);
+//				short dimIdx = (short) ((t.values.get(j)-minValues[j])/dimLength[j]);
 //				fullDimCellIdx.add(dimIdx);
 //			}
 //			if (subDimFlag) {
 //				for (int j = 0; j<subDim; j++) {
-//					short dimIdx = (short) ((t.value[j]-minValues[j])/subDimLength[j]);
+//					short dimIdx = (short) ((t.values.get(j)-minValues[j])/subDimLength[j]);
 //					subDimCellIdx.add(dimIdx);
 //				}
 //			}else {
@@ -374,12 +374,12 @@
 //					CellLoop:
 //					for(Integer otherCellIdx: candCellIndices) {
 //						if(!currentSlide.containsKey(otherCellIdx)
-//							|| !neighboringTupleSet(tCand.value, currentSlide.get(otherCellIdx).cellCenter, 1.5*R))
+//							|| !neighboringTupleSet(tCand.values, currentSlide.get(otherCellIdx).cellCenter, 1.5*R))
 //							continue CellLoop;
 //
 //						HashSet<Tuple> otherTuples = new HashSet<Tuple>();
-//						if(subDimFlag) {
-//							//reduce search space using sub-dims
+////						if(subDimFlag) {
+//							reduce search space using sub-dims
 //							for(Cell allIdxCell: currentSlide.get(otherCellIdx).fullCells.values()) {
 //								if(!allIdxCell.cellIdx.equals(tCand.fullDimCellIdx)
 //								   && neighboringSet(allIdxCell.cellIdx, tCand.fullDimCellIdx))
@@ -422,7 +422,7 @@
 //	public double distTuple(Tuple t1, Tuple t2) {
 //		double ss = 0;
 //		for(int i = 0; i<dim; i++) {
-//			ss += Math.pow((t1.value[i] - t2.value[i]),2);
+//			ss += Math.pow((t1.values.get(i) - t2.values.get(i)),2);
 //		}
 //		 return Math.sqrt(ss);
 //	}
@@ -431,7 +431,7 @@
 //		double ss = 0;
 //		threshold *= threshold;
 //		for(int i = 0; i<dim; i++) {
-//			ss += Math.pow((t1.value[i] - t2.value[i]),2);
+//			ss += Math.pow((t1.values.get(i) - t2.values.get(i)),2);
 //			if(ss>threshold) return false;
 //		}
 //		return true;

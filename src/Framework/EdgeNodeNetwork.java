@@ -117,9 +117,6 @@ public class EdgeNodeNetwork {
             }
             time += System.currentTimeMillis() - start;
             System.out.println("Time cost for this slide is : " + (System.currentTimeMillis() - start));
-            if (itr == Constants.nS -1){
-                int a =1;
-            }
             printOutliers();
 
             //========================== NAIVE ================================

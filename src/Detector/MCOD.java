@@ -71,6 +71,7 @@ public class MCOD extends Detector {
         // 2.process new data
         internal_dataList.put(Constants.currentSlideID, new ArrayList<>());
         data.forEach(this::processNewData);
+        this.outlierVector = outliers;
     }
 
     private void removeFromFilledCluster(MCO d) {

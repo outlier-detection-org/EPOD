@@ -207,19 +207,10 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         if (flag) {
             System.out.printf("Thead %d all nodes have finished uploading data.\n", Thread.currentThread().getId() );
             this.detector.detectOutlier(allData);
-            if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS_CENTRALIZE")){
-                NewNETS newNETS = (NewNETS) this.detector;
-                if (Constants.currentSlideID >= Constants.nS - 1){
-                    result = new HashSet<>(newNETS.outliers);
-                }
-                else result = new HashSet<>();
-            }else if (Objects.equals(Constants.methodToGenerateFingerprint, "MCOD_CENTRALIZE")){
-                MCOD mcod = (MCOD) this.detector;
-                if (Constants.currentSlideID >= Constants.nS - 1) {
-                    result = new HashSet<>(mcod.outliers);
-                }
-                else result = new HashSet<>();
+            if (Constants.currentSlideID >= Constants.nS - 1){
+                result = new HashSet<>(this.detector.outlierVector);
             }
+            else result = new HashSet<>();
             this.flag = true;
         }
         while (!this.flag){

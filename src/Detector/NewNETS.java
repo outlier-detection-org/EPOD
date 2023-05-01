@@ -108,10 +108,15 @@ public class NewNETS extends Detector {
 
     @Override
     public void detectOutlier(List<Vector> data) {
+        Optional<Vector> optional = data.stream().filter(x->x.values.get(0)==-0.07 && x.values.get(1) == 91.81).findAny();
+        if (optional.isPresent()){
+            System.out.println("find");
+        }
         if (data.isEmpty()) return;
         ArrayList<Tuple> newSlide = preprocessData(data); //vector to tuple
         calcNetChange(newSlide, Constants.currentSlideID);
         findOutlier("NETS", Constants.currentSlideID);
+        this.outlierVector = outliers;
     }
 
     public ArrayList<Tuple> preprocessData(List<Vector> data) {
