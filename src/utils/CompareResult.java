@@ -1,19 +1,57 @@
 package utils;
 
+import RPC.Vector;
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
 public class CompareResult {
     public static int nW=Constants.nW;
     public static int W=Constants.W;
-    public static String dataset = "TAO";
+    public static String dataset = Constants.dataset;
     public static BufferedWriter outlierFw;
+    public static HashMap<Integer,List<Vector>> allDataByTime = new HashMap<>();
 
+    public static void detectOutliersNaive(List<Vector> data, int itr) throws IOException {
+        System.out.println("Detecting outliers using Naive method..");
+        allDataByTime.put(itr,data);
+        if (itr >= Constants.nS - 1){
+            if (itr >= Constants.nS) allDataByTime.remove(itr - Constants.nS);
+            List<Vector> allData = new ArrayList<>();
+            allDataByTime.values().forEach(allData::addAll);
+            HashSet<Vector> outliers = new HashSet<Vector>();
+            for (Vector v : allData) {
+                int numOfNeighbors = 0;
+                for (Vector v2 : allData) {
+                    if (v == v2) continue;
+                    if (distance(v, v2) <= Constants.R) {
+                        numOfNeighbors++;
+                    }
+                }
+                if (numOfNeighbors < Constants.K) {
+                    outliers.add(v);
+                }
+            }
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(
+                    "src\\Result\\"+new Random().nextInt(100)+"_Result_Naive_" + dataset + "_outliers.txt"));
+            for (Vector v : outliers) {
+                bufferedWriter.write(v.toString() + "\n");
+            }
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        }
+    }
+
+    public static double distance(Vector v1, Vector v2){
+        double ss = 0;
+        for (int i = 0; i < v2.values.size(); i++) {
+            ss += Math.pow((v1.values.get(i) - v2.values.get(i)), 2);
+        }
+        return ss;
+    }
     public static void main(String[] args) throws IOException{
-        outlierFw = new BufferedWriter(new FileWriter(new File(
-                "src\\Result\\"+"compare_result_"+dataset+".txt")));
-        double[] result = compare("src/Result/Result_NETS_true_"+dataset+"_outliers.txt");
+        outlierFw = new BufferedWriter(new FileWriter(
+                "src\\Result\\"+"compare_result_"+dataset+".txt"));
+        double[] result = compare("src/Result/49_79"+".txt");
         outlierFw.write("Dataset is "+dataset+"\n");
         outlierFw.write("Precision: "+result[0]/nW+"\n");
         outlierFw.write("Recall: "+result[1]/nW+"\n");
@@ -25,19 +63,15 @@ public class CompareResult {
         int number = 2;
         BufferedReader[] approx = new BufferedReader[number];
         String[] fileNames = new String[]{
-                "src/Result/Result_TAO_NETS_true_1_2_0_outliers.txt",
-                "src/Result/Result_TAO_NETS_true_1_2_1_outliers.txt",
-                "src/Result/Result_TAO_NETS_true_2_3_2_outliers.txt",
-                "src/Result/Result_TAO_NETS_true_2_3_3_outliers.txt",
-                "src/Result/Result_TAO_NETS_true_2_3_4_outliers.txt",
-                "src/Result/Result_TAO_NETS_true_2_3_5_outliers.txt"
+                "src/Result/49_Result_Naive_TAO_outliers.txt",
+                "src/Result/79_Result_NETS_CENTRALIZE_TAO_outliers.txt",
         };
         for (int i=0;i<number;i++){
-            approx[i] = new BufferedReader(new FileReader(new File(fileNames[i])));
+            approx[i] = new BufferedReader(new FileReader(fileNames[i]));
             approx[i].readLine();
         };
 
-        BufferedReader exact = new BufferedReader(new FileReader(new File(filename1)));
+        BufferedReader exact = new BufferedReader(new FileReader(filename1));
         exact.readLine();
 
         double[] precisions = new double[nW];
@@ -46,8 +80,8 @@ public class CompareResult {
 
         for (int j=0;j<Constants.nW;j++) {
             outlierFw.write("Window "+j+"\n");
-            HashSet<String> approxValues = new HashSet<String>();
-            HashSet<String> exactValues = new HashSet<String>();
+            HashSet<String> approxValues = new HashSet<>();
+            HashSet<String> exactValues = new HashSet<>();
 
             String line = "";
             for (int i =0;i<number;i++) {

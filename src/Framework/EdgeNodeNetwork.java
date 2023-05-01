@@ -8,13 +8,28 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
+import utils.CompareResult;
 import utils.Constants;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class EdgeNodeNetwork {
     public static HashMap<Integer, Device> deviceHashMap = new HashMap<>();
     public static HashMap<Integer, EdgeNode> nodeHashMap = new HashMap<>();
+    public static Set<? extends Vector> outliers; //only used to print out outlier
+    public static BufferedWriter outlierFw;
+
+    static {
+        try {
+            outlierFw = new BufferedWriter(
+                    new FileWriter("src\\Result\\" +new Random().nextInt(100)+"_Result_"+Constants.methodToGenerateFingerprint+"_"+ Constants.dataset + "_outliers.txt"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static EdgeNode createEdgeNode() {
         EdgeNode edgeNode = new EdgeNode();
@@ -78,11 +93,11 @@ public class EdgeNodeNetwork {
                 Thread t = new Thread(() -> {
                     try {
                         if (Constants.methodToGenerateFingerprint.contains("CENTRALIZE")){
-                            Set<? extends Vector> outlier = device.handler.detectOutlier_Centralize(finalItr);
+                            outliers = device.handler.detectOutlier_Centralize(finalItr);
                         }else if (Constants.methodToGenerateFingerprint.contains("P2P")){
-                            Set<? extends Vector> outlier = device.handler.detectOutlier_P2P(finalItr);
+                            outliers = device.handler.detectOutlier_P2P(finalItr);
                         }else {
-                            Set<? extends Vector> outlier = device.handler.detectOutlier(finalItr);
+                            outliers = device.handler.detectOutlier(finalItr);
                         }
                     } catch (Throwable e) {
                         e.printStackTrace();
@@ -97,11 +112,27 @@ public class EdgeNodeNetwork {
             time += System.currentTimeMillis() - start;
             System.out.println("Time cost for this slide is : " + (System.currentTimeMillis() - start));
             itr++;
+            printOutliers();
+
+            //========================== NAIVE ================================
+            List<Vector> allData = new ArrayList<>();
+            for (Device device : deviceHashMap.values()) {
+                allData.addAll(device.handler.rawData);
+            }
+            CompareResult.detectOutliersNaive(allData, itr);
+
         }
         stopNetwork();
         System.out.println("Average time cost is: " + time * 1.0 / (Constants.nS + Constants.nW - 1));
+        outlierFw.close();
     }
 
+    public static void printOutliers() throws IOException {
+        for (Vector outlier : outliers) {
+            outlierFw.write(outlier.toString() + "\n");
+        }
+        outlierFw.flush();
+    }
     public static void stopNetwork() {
         for (EdgeNode node : nodeHashMap.values()) {
             node.stop();

@@ -519,37 +519,7 @@ public class NewNETS extends Detector {
                 it.remove();
             }
         }
-
-        if (Objects.equals(type, "NAIVE"))
-            this.findOutlierNaive();
-        else if (Objects.equals(type, "NETS"))
             this.findOutlierNETS(itr);
-    }
-
-    //TODO: baseline to find outliers
-    public void findOutlierNaive() {
-        HashSet<Tuple> allTuples = new HashSet<Tuple>();
-        for (HashMap<Integer, Cell> slide : slides) {
-            for (Cell cell : slide.values()) {
-                allTuples.addAll(cell.tuples);
-            }
-        }
-        outliers.clear();
-
-        for (Tuple candTuple : allTuples) {
-            boolean outlierFlag = true;
-            candTuple.nn = 0;
-            for (Tuple otherTuple : allTuples) {
-                if ((candTuple.id != otherTuple.id) && (neighboringTuple(candTuple, otherTuple, Constants.R))) {
-                    candTuple.nn += 1;
-                }
-                if (candTuple.nn >= Constants.K) {
-                    outlierFlag = false;
-                    break;
-                }
-            }
-            if (outlierFlag) outliers.add(candTuple);
-        }
     }
 
     public void findOutlierNETS(int itr) {
