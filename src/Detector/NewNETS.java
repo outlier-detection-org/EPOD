@@ -108,10 +108,6 @@ public class NewNETS extends Detector {
 
     @Override
     public void detectOutlier(List<Vector> data) {
-        Optional<Vector> optional = data.stream().filter(x->x.values.get(0)==-0.07 && x.values.get(1) == 91.81).findAny();
-        if (optional.isPresent()){
-            System.out.println("find");
-        }
         if (data.isEmpty()) return;
         ArrayList<Tuple> newSlide = preprocessData(data); //vector to tuple
         calcNetChange(newSlide, Constants.currentSlideID);
@@ -123,11 +119,11 @@ public class NewNETS extends Detector {
         ArrayList<Tuple> newSlide = new ArrayList<Tuple>();
         for (Vector datum : data) {
             List<Double> value = new ArrayList<>();
-            int j = 0;
+//            int j = 0;
             //ά������
             for (int i : priorityList) {
                 value.add(datum.values.get(i));
-                j++;
+//                j++;
             }
             Tuple tuple = new Tuple(datum.arrivalTime, Constants.currentSlideID, value);
             newSlide.add(tuple);
@@ -404,6 +400,32 @@ public class NewNETS extends Detector {
                         continue OutlierLoop;
                     }
                 }
+            }
+        }
+        this.outlierVector = outliers;
+    }
+
+    public void processOutliers1() {
+        System.out.printf("Thead %d processOutliers1. \n", Thread.currentThread().getId());
+        // after receive external data, we need to process outliers once again
+        Iterator<Tuple> it = outliers.iterator();
+        while(it.hasNext()){
+            Tuple t = it.next();
+            int num = t.getNN();
+            //Map<Integer, Map<List<Double>, List<Vector>>>
+            List<Vector> allData = new ArrayList<>();
+            for (Map<List<Double>, List<Vector>> x : externalData.values()) {
+                for (List<Vector> y : x.values()) {
+                    allData.addAll(y);
+                }
+            }
+            for (Vector v : allData) {
+                if (neighboringTupleSet(v.values, t.values, Constants.R)) {
+                    num++;
+                }
+            }
+            if (num >= Constants.K) {
+                it.remove();
             }
         }
         this.outlierVector = outliers;

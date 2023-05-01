@@ -90,7 +90,6 @@ public class DeviceImpl implements DeviceService.Iface {
 
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         System.out.printf("Thead %d sendData. \n", Thread.currentThread().getId());
-        //������ʷ��¼����������
         int lastSent = Math.max(this.historyRecord.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
         this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
         return this.detector.sendData(bucketIds, lastSent);

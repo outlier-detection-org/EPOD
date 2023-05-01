@@ -19,6 +19,8 @@ public abstract class Detector {
     //pruning + 后续处理
     public abstract void processOutliers();
 
+    public abstract void processOutliers1();
+
     public void clearFingerprints() {
         this.fullCellDelta = new HashMap<>();
     }

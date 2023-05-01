@@ -2,6 +2,7 @@ package Framework;
 
 import RPC.DeviceService;
 import RPC.EdgeNodeService;
+import RPC.RPCFrame;
 import RPC.Vector;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -19,12 +20,13 @@ import java.util.*;
 public class EdgeNodeNetwork {
     public static HashMap<Integer, Device> deviceHashMap = new HashMap<>();
     public static HashMap<Integer, EdgeNode> nodeHashMap = new HashMap<>();
-    public static Set<? extends Vector> outliers; //only used to print out outlier
+    public static Set<Vector> outliers; //only used to print out outlier
     public static BufferedWriter outlierFw;
     public static BufferedWriter outlierNaiveFw;
 
     static {
         try {
+            outliers = Collections.synchronizedSet(new HashSet<>());
             outlierFw = new BufferedWriter(new FileWriter(
                     "src\\Result\\" +
                             "_Result_"+Constants.methodToGenerateFingerprint+"_"+ Constants.dataset + "_outliers.txt"));
@@ -99,11 +101,11 @@ public class EdgeNodeNetwork {
                 Thread t = new Thread(() -> {
                     try {
                         if (Constants.methodToGenerateFingerprint.contains("CENTRALIZE")){
-                            outliers = device.handler.detectOutlier_Centralize(finalItr);
+                            outliers.addAll(device.handler.detectOutlier_Centralize(finalItr));
                         }else if (Constants.methodToGenerateFingerprint.contains("P2P")){
-                            outliers = device.handler.detectOutlier_P2P(finalItr);
+                            outliers.addAll(device.handler.detectOutlier_P2P(finalItr));
                         }else {
-                            outliers = device.handler.detectOutlier(finalItr);
+                            outliers.addAll(device.handler.detectOutlier(finalItr));
                         }
                     } catch (Throwable e) {
                         e.printStackTrace();

@@ -434,7 +434,42 @@ public class MCOD extends Detector {
         check_local_outliers();
         this.outlierVector = outliers;
     }
+    public void processOutliers1() {
+        System.out.printf("Thead %d processOutliers1. \n", Thread.currentThread().getId());
+        // after receive external data, we need to process outliers once again
+        Iterator<MCO> it = outliers.iterator();
+        while(it.hasNext()){
+            MCO t = it.next();
+            int num = t.numberOfSucceeding + t.exps.size();
+            //Map<Integer, Map<List<Double>, List<Vector>>>
+            List<Vector> allData = new ArrayList<>();
+            for (Map<List<Double>, List<Vector>> x : externalData.values()) {
+                for (List<Vector> y : x.values()) {
+                    allData.addAll(y);
+                }
+            }
+            for (Vector v : allData) {
+                if (neighboringTupleSet(v.values, t.values, Constants.R)) {
+                    num++;
+                }
+            }
+            if (num >= Constants.K) {
+                it.remove();
+            }
+        }
+        this.outlierVector = outliers;
+    }
 
+    public boolean neighboringTupleSet(List<Double> v1, List<Double> v2, double threshold) {
+
+        double ss = 0;
+        threshold *= threshold;
+        for (int i = 0; i < v2.size(); i++) {
+            ss += Math.pow((v1.get(i) - v2.get(i)), 2);
+            if (ss > threshold) return false;
+        }
+        return true;
+    }
     public void clean_expired_externalData() {
         //Map<Integer, Map<ArrayList<?>, List<Vector>>> externalData;
         // 去除上个过期时间的所有点
