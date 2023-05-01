@@ -49,8 +49,7 @@ public class PrepareDatasets {
         String line;
         int deviceId = 0;
         while ((line = bufferedReader.readLine()) != null) {
-            String[] s = line.split(",");
-            bfws[deviceId].write(s[0] + ","+deviceId+line.substring(line.indexOf(",")));
+            bfws[deviceId].write(deviceId+","+line);
             bfws[deviceId].write("\n");
             bfws[deviceId].flush();
             deviceId = (deviceId+1)%deviceNum;

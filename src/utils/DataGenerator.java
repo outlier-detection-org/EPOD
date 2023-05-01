@@ -47,7 +47,7 @@ public class DataGenerator {
                 while (line != null) {
                     String[] atts = line.split(",");
                     ArrayList<Double> d = new ArrayList<>();
-                    for (int i = 1; i < atts.length; i++) {
+                    for (int i = 2; i < atts.length; i++) {
                         d.add(Double.parseDouble(atts[i]) + (new Random()).nextDouble() / 10000000);
                     }
                     Vector data = new Vector(d);

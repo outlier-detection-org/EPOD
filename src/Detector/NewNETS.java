@@ -430,12 +430,12 @@ public class NewNETS extends Detector {
     @Override
     //TODO: need to check whether transferFullIdToSubId() is right
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int lastSent) {
-        System.out.printf("Thead %d sendData. \n", Thread.currentThread().getId());
         Map<List<Double>, List<Vector>> data = new HashMap<>();
         for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
             int index = time - Constants.currentSlideID + Constants.nS - 1;
             for (List<Double> id : bucketIds) {
                 int n = idxEncoder.get(transferFullIdToSubId(id));
+                if (!slides.get(index).containsKey(n)) continue;
                 Cell fullCell = slides.get(index).get(n).fullCells.get(convertDoubleToShort(id));
                 if (fullCell == null) continue;
                 ArrayList<Vector> tuples = new ArrayList<>(fullCell.tuples);
