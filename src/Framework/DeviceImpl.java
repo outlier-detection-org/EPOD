@@ -46,7 +46,7 @@ public class DeviceImpl implements DeviceService.Iface {
     public void setHistoryRecord() {
         this.historyRecord = new HashMap<>();
         for (int deviceHashCode : EdgeNodeNetwork.deviceHashMap.keySet()) {
-            this.historyRecord.put(deviceHashCode, 0);
+            this.historyRecord.put(deviceHashCode, -1);
         }
     }
 
@@ -82,14 +82,13 @@ public class DeviceImpl implements DeviceService.Iface {
         //���ػ�ȡ���� + ����outliers
         while (!this.ready) {
         }
-        this.detector.processOutliers1();
+        this.detector.processOutliers();
         System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
         return this.detector.outlierVector;
     }
 
 
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
-        System.out.printf("Thead %d sendData. \n", Thread.currentThread().getId());
         int lastSent = Math.max(this.historyRecord.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
         this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
         return this.detector.sendData(bucketIds, lastSent);
