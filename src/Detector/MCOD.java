@@ -450,9 +450,17 @@ public class MCOD extends Detector {
             }
             for (Vector v : allData) {
                 if (neighboringTupleSet(v.values, t.values, Constants.R)) {
+                    if (t.values.get(0)==-0.1 && t.values.get(1)==80.83 && t.values.get(2)==23.178){
+                        System.out.println("MCOD: "+ v.values);
+                    }
                     num++;
                 }
+                else System.out.println("MCOD: 距离大");
             }
+            if (t.values.get(0)==-0.1 && t.values.get(1)==80.83 && t.values.get(2)==23.178){
+                System.out.println("MCOD total neighbor: "+ num);
+            }
+
             if (num >= Constants.K) {
                 it.remove();
             }

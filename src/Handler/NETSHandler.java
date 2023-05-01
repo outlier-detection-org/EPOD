@@ -21,7 +21,7 @@ public class NETSHandler extends Handler{
             short x1 = (short) (double)c1.get(k);
             short x2 = (short) (double)c2.get(k);
             ss += Math.pow(x1-x2,2);
-            if (ss >= threshold) return false;
+            if (ss > threshold) return false;
         }
         return true;
     }

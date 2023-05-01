@@ -95,7 +95,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 unitInNodeList.forEach(
                         x -> {
                             for (UnitInNode unitInNode : unitResultInfo.get(unsafeUnit)) {
-                                if (unitInNode.equals(x)) {
+                                if (unitInNode.unitID.equals(x.unitID)) {
                                     unitInNode.updateCount(x.deltaCnt);
                                     unitInNode.belongedDevices.addAll(x.belongedDevices);
                                     return;
@@ -106,7 +106,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                         }
                 );
             }
-            needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0)); //改成在这里一次性更新 @shimin
+            needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
             pruning(1);
             unSafeUnits = unitsStatusMap.keySet().stream().filter(key -> unitsStatusMap.get(key).isSafe != 2).toList();
             System.out.printf("Thead %d: Node has finished local pruning, enter into N-N phase.\n", Thread.currentThread().getId());
@@ -172,12 +172,13 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         System.out.printf("Thead %d provideNeighborsResult. \n", Thread.currentThread().getId());
         ArrayList<Thread> threads = new ArrayList<>();
         //对于每个unsafeUnit,计算完后马上发还消息，以达到pipeline的目标
+        HashSet<UnitInNode> needUpdate = new HashSet<>();
         for (List<Double> unit : unSateUnits) {
             Thread t = new Thread(() -> {
                 List<UnitInNode> unitInNodeList = unitsStatusMap.values().stream()
                         .filter(x -> x.isUpdated.get(edgeNodeHash) == 1)
                         .filter(x -> this.handler.neighboringSet(unit, x.unitID)).toList();
-                unitInNodeList.forEach(x -> x.isUpdated.put(edgeNodeHash, 0));
+                needUpdate.addAll(unitInNodeList);
                 try {
                     this.clientsForEdgeNodes.get(edgeNodeHash).processResult(unit, unitInNodeList);
                 } catch (Throwable e) {
@@ -194,6 +195,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 e.printStackTrace();
             }
         }
+        needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
     }
 
     public Set<Vector> result;
@@ -215,7 +217,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         }
         while (!this.flag){
         }
-        allData.clear(); //这里感觉每次都是要清除的 因为具体的数据结构维护在NEWNETS和MCOD里面 @shimin
+        allData.clear();
         this.flag = false;
         return result;
     }
@@ -229,7 +231,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         unitInNodeList.forEach(
                 x -> {
                     for (UnitInNode unitInNode : unitResultInfo.get(unitID)) {
-                        if (unitInNode.equals(x)) {
+                        if (unitInNode.unitID.equals(x.unitID)) {
                             unitInNode.updateCount(x.deltaCnt);
                             unitInNode.belongedDevices.addAll(x.belongedDevices);
                             return;
