@@ -22,8 +22,8 @@ public class Tuple extends Vector {
 
 		public int last_calculate_time;
 		
-		public Tuple(int id, int slideID, List<Double> value) {
-			this.id = id;
+		public Tuple(int arrivalTime, int slideID, List<Double> value) {
+			this.arrivalTime = arrivalTime;
 			this.slideID = slideID;
 			this.values = value;
 			this.unSafeOutNeighbors = new HashMap<Integer, Integer>();

@@ -24,7 +24,7 @@ public class DeviceImpl implements DeviceService.Iface {
 
     //=============================EPOD===============================
 //    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
-    public HashMap<Integer, Integer> historyRecord; //??????????device????��????????????deviceID->slideID
+    public HashMap<Integer, Integer> historyRecord; //������¼ÿ��device���ϴη��͵���ʷ��¼��deviceID->slideID
     public Map<Integer, DeviceService.Client> clientsForDevices; //And for P2P
     public EdgeNodeService.Client clientsForNearestNode;
 
@@ -45,7 +45,6 @@ public class DeviceImpl implements DeviceService.Iface {
 
     public void setHistoryRecord() {
         this.historyRecord = new HashMap<>();
-        System.out.println(EdgeNodeNetwork.deviceHashMap.size());
         for (int deviceHashCode : EdgeNodeNetwork.deviceHashMap.keySet()) {
             this.historyRecord.put(deviceHashCode, 0);
         }
@@ -69,18 +68,18 @@ public class DeviceImpl implements DeviceService.Iface {
         Constants.currentSlideID = itr;
         getRawData(itr);
 
-        //step1: ??????? + ?????????outliers
+        //step1: ����ָ�� + �����ȼ���outliers
         if (itr > Constants.nS - 1) {
             this.detector.clearFingerprints();
         }
         this.detector.detectOutlier(this.rawData);
 
-        //step2: ??????
+        //step2: �ϴ�ָ��
         if (itr >= Constants.nS - 1) {
             this.clientsForNearestNode.receiveAndProcessFP(this.detector.fullCellDelta, this.belongedDevice.hashCode());
         } else return new HashSet<>();
 
-        //?????????? + ????outliers
+        //���ػ�ȡ���� + ����outliers
         while (!this.ready) {
         }
         this.detector.processOutliers();
@@ -91,7 +90,7 @@ public class DeviceImpl implements DeviceService.Iface {
 
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         System.out.printf("Thead %d sendData. \n", Thread.currentThread().getId());
-        //????????????????????
+        //������ʷ��¼����������
         int lastSent = Math.max(this.historyRecord.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
         this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
         return this.detector.sendData(bucketIds, lastSent);
@@ -99,7 +98,7 @@ public class DeviceImpl implements DeviceService.Iface {
 
     public void getExternalData(Map<List<Double>, Integer> status, Map<Integer, Set<List<Double>>> result) {
         System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
-        this.detector.status = status; //?????��?outliers?????????????????processOutliers()??
+        this.detector.status = status; //�����ж�outliers�Ƿ���Ҫ���¼��㣬����processOutliers()��
         ArrayList<Thread> threads = new ArrayList<>();
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode == this.belongedDevice.hashCode()) continue;
@@ -110,7 +109,7 @@ public class DeviceImpl implements DeviceService.Iface {
                     if (!this.detector.externalData.containsKey(Constants.currentSlideID)) {
                         this.detector.externalData.put(Constants.currentSlideID, Collections.synchronizedMap(new HashMap<>()));
                     }
-                    Map<List<Double>, List<Vector>> map = this.detector.externalData.get(Constants.currentSlideID);//TODO: Check ??????????
+                    Map<List<Double>, List<Vector>> map = this.detector.externalData.get(Constants.currentSlideID);//TODO: Check ����������
                     data.keySet().forEach(
                             x -> {
                                 if (!map.containsKey(x)) {
@@ -145,7 +144,7 @@ public class DeviceImpl implements DeviceService.Iface {
         allData.clear();
         allData.addAll(rawData);
 
-        //step2: ???????device??data
+        //step2: �ռ�����device��data
         ArrayList<Thread> threads = new ArrayList<>();
         for (DeviceService.Client client : clientsForDevices.values()) {
             Thread t = new Thread(() -> {
@@ -166,7 +165,7 @@ public class DeviceImpl implements DeviceService.Iface {
                 e.printStackTrace();
             }
         }
-//        this.ready = true; //����о�ûɶ�ð�
+//        this.ready = true; //����о�ûɶ�ð�
 
         //step3: detectOutlier
 //        while (!this.ready) {
@@ -189,7 +188,7 @@ public class DeviceImpl implements DeviceService.Iface {
         return result;
     }
 
-    //????slide???
+    //����slide�ĵ�
     @Override
     public List<Vector> sendAllLocalData() {
         System.out.printf("Thead %d sendAllLocalData. \n", Thread.currentThread().getId());

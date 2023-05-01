@@ -11,7 +11,7 @@ public class CompareResult {
     public static BufferedWriter outlierFw;
     public static HashMap<Integer,List<Vector>> allDataByTime = new HashMap<>();
 
-    public static void detectOutliersNaive(List<Vector> data, int itr) throws IOException {
+    public static HashSet<Vector> detectOutliersNaive(List<Vector> data, int itr) throws IOException {
         System.out.println("Detecting outliers using Naive method..");
         allDataByTime.put(itr,data);
         if (itr >= Constants.nS - 1){
@@ -31,14 +31,9 @@ public class CompareResult {
                     outliers.add(v);
                 }
             }
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(
-                    "src\\Result\\"+new Random().nextInt(100)+"_Result_Naive_" + dataset + "_outliers.txt"));
-            for (Vector v : outliers) {
-                bufferedWriter.write(v.toString() + "\n");
-            }
-            bufferedWriter.flush();
-            bufferedWriter.close();
+            return outliers;
         }
+        return new HashSet<>();
     }
 
     public static double distance(Vector v1, Vector v2){

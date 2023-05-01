@@ -659,7 +659,7 @@ public class NewNETS extends Detector {
         double threshold = cellIdxDist * cellIdxDist;
         for (int k = 0; k < c1.size(); k++) {
             ss += Math.pow((c1.get(k) - c2.get(k)), 2);
-            if (ss >= threshold) return Double.MAX_VALUE;
+            if (ss > threshold) return Double.MAX_VALUE;
         }
         return Math.sqrt(ss);
     }
@@ -673,7 +673,7 @@ public class NewNETS extends Detector {
         double threshold = cellIdxDist * cellIdxDist;
         for (int k = 0; k < c1.size(); k++) {
             ss += Math.pow((c1.get(k) - c2.get(k)), 2);
-            if (ss >= threshold) return false;
+            if (ss > threshold) return false;
         }
         return true;
     }

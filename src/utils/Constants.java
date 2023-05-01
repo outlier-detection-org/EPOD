@@ -44,7 +44,7 @@ public class Constants {
     static {
         if (dataset.contains("TAO") || dataset.contains("FC") || dataset.contains("RC")) {
             S = 500;
-            W = 10000;
+            W = 500 * 2;
         } else {
             S = 5000;
             W = 100000;

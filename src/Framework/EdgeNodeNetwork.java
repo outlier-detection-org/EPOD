@@ -21,11 +21,17 @@ public class EdgeNodeNetwork {
     public static HashMap<Integer, EdgeNode> nodeHashMap = new HashMap<>();
     public static Set<? extends Vector> outliers; //only used to print out outlier
     public static BufferedWriter outlierFw;
+    public static BufferedWriter outlierNaiveFw;
 
     static {
         try {
-            outlierFw = new BufferedWriter(
-                    new FileWriter("src\\Result\\" +new Random().nextInt(100)+"_Result_"+Constants.methodToGenerateFingerprint+"_"+ Constants.dataset + "_outliers.txt"));
+            outlierFw = new BufferedWriter(new FileWriter(
+                    "src\\Result\\" +
+                            "_Result_"+Constants.methodToGenerateFingerprint+"_"+ Constants.dataset + "_outliers.txt"));
+
+            outlierNaiveFw = new BufferedWriter(new FileWriter(
+                    "src\\Result\\"+
+                            "_Result_Naive_" + Constants.dataset + "_outliers.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -111,7 +117,9 @@ public class EdgeNodeNetwork {
             }
             time += System.currentTimeMillis() - start;
             System.out.println("Time cost for this slide is : " + (System.currentTimeMillis() - start));
-            itr++;
+            if (itr == Constants.nS -1){
+                int a =1;
+            }
             printOutliers();
 
             //========================== NAIVE ================================
@@ -119,17 +127,37 @@ public class EdgeNodeNetwork {
             for (Device device : deviceHashMap.values()) {
                 allData.addAll(device.handler.rawData);
             }
-            CompareResult.detectOutliersNaive(allData, itr);
+            HashSet<Vector> outliers = CompareResult.detectOutliersNaive(allData, itr);
 
+            HashSet<Vector> tmpList = new HashSet<>();
+            for (Vector v : outliers) {
+                Vector tmp = new Vector(v);
+                tmp.values.sort(Double::compareTo);
+                tmpList.add(tmp);
+            }
+            List<Vector> list = tmpList.stream().sorted(Vector::compareTo).toList();
+            for (Vector v : list) {
+                outlierNaiveFw.write(v + "\n");
+            }
+            outlierNaiveFw.flush();
+            itr++;
         }
         stopNetwork();
         System.out.println("Average time cost is: " + time * 1.0 / (Constants.nS + Constants.nW - 1));
         outlierFw.close();
+        outlierNaiveFw.close();
     }
 
     public static void printOutliers() throws IOException {
-        for (Vector outlier : outliers) {
-            outlierFw.write(outlier.toString() + "\n");
+        HashSet<Vector> tmpList = new HashSet<>();
+        for (Vector v : outliers) {
+            Vector tmp = new Vector(v);
+            tmp.values.sort(Double::compareTo);
+            tmpList.add(tmp);
+        }
+        List<? extends Vector> list = tmpList.stream().sorted(Vector::compareTo).toList();
+        for (Vector v : list) {
+            outlierFw.write(v + "\n");
         }
         outlierFw.flush();
     }
