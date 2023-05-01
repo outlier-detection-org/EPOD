@@ -142,7 +142,7 @@ public class DeviceImpl implements DeviceService.Iface {
         Constants.currentSlideID = itr;
         getRawData(itr);
         //step1: ????data
-        allData.clear(); //allData ?????????? ?????????NETS ?? MCOD????? @shimin
+        allData.clear();
         allData.addAll(rawData);
 
         //step2: ???????device??data
@@ -166,16 +166,18 @@ public class DeviceImpl implements DeviceService.Iface {
                 e.printStackTrace();
             }
         }
-        this.ready = true;
+//        this.ready = true; //这个感觉没啥用啊
 
         //step3: detectOutlier
-        while (!this.ready) {
-        }
-        if (itr >= Constants.nS - 1) {
+//        while (!this.ready) {
+//        }
+//        if (itr >= Constants.nS - 1) {
             this.detector.detectOutlier(allData);
-        }
+//        }
         System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
-        return this.detector.outlierVector;
+        if (itr >= Constants.nS - 1) {
+            return this.detector.outlierVector;
+        } else return new HashSet<>();
     }
 
     public Set<? extends Vector> detectOutlier_Centralize(int itr) throws Throwable {
