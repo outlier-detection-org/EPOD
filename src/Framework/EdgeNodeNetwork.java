@@ -120,6 +120,7 @@ public class EdgeNodeNetwork {
             time += System.currentTimeMillis() - start;
             System.out.println("Time cost for this slide is : " + (System.currentTimeMillis() - start));
             printOutliers();
+            outliers.clear();
 
             //========================== NAIVE ================================
             List<Vector> allData = new ArrayList<>();
