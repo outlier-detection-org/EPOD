@@ -9,8 +9,8 @@ public class Constants {
     public static int currentSlideID = -1;
     public static int nn = 1;
     public static int dn = 2;
-    public static int nW = 2;
-    public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
+    public static int nW = 1;
+    public static String methodToGenerateFingerprint = "MCOD"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
     public static String dataset = "TAO";
 
 
@@ -44,7 +44,7 @@ public class Constants {
     static {
         if (dataset.contains("TAO") || dataset.contains("FC") || dataset.contains("RC")) {
             S = 500;
-            W = 500 * 1;
+            W = 500 * 20;
         } else {
             S = 5000;
             W = 100000;

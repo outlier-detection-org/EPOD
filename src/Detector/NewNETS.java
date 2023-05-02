@@ -375,7 +375,7 @@ public class NewNETS extends Detector {
                     }
                     candNeighborByTime.put(time, candNeighbor);
                 }
-                if (sumOfNeighbor < Constants.K) {
+                if (sumOfNeighbor + outlier.getNN() < Constants.K) {
                     continue OutlierLoop;
                 }
 
@@ -405,6 +405,7 @@ public class NewNETS extends Detector {
                     }
                     outlier.last_calculate_time++;
                     if (need <= 0) {
+                        it.remove();
                         continue OutlierLoop;
                     }
                 }
