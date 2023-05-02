@@ -1,5 +1,6 @@
 package Detector;
 
+import DataStructure.MCO;
 import RPC.Vector;
 import DataStructure.Cell;
 import DataStructure.Tuple;
@@ -33,8 +34,8 @@ public class NewNETS extends Detector {
     public HashMap<Integer, Integer> fullDimCellSlideOutCnt;
     public Queue<HashMap<Integer, Integer>> fullDimCellSlidesCnt;
     public HashSet<Integer> influencedCells;
-
     public int candidateCellsTupleCnt = 0;
+    public Map<Integer, HashMap<ArrayList<Short>, ArrayList<Tuple>>> internal_dataList; //only used for sending data
 
     public NewNETS(int random) {
         super();
@@ -52,6 +53,7 @@ public class NewNETS extends Detector {
         this.outliers = new HashSet<>();
         this.neighCellIdxDist = Math.sqrt(Constants.subDim) * 2;
         this.neighCellFullDimIdxDist = Math.sqrt(Constants.dim) * 2;
+        this.internal_dataList = new HashMap<>();
 
         //TODO: all dimension weigh equal
         /* Cell size calculation for all dim*/
@@ -111,7 +113,7 @@ public class NewNETS extends Detector {
         if (data.isEmpty()) return;
         ArrayList<Tuple> newSlide = preprocessData(data); //vector to tuple
         calcNetChange(newSlide, Constants.currentSlideID);
-        findOutlier("NETS", Constants.currentSlideID);
+        findOutlier(Constants.currentSlideID);
         this.outlierVector = outliers;
     }
 
@@ -119,11 +121,8 @@ public class NewNETS extends Detector {
         ArrayList<Tuple> newSlide = new ArrayList<Tuple>();
         for (Vector datum : data) {
             List<Double> value = new ArrayList<>();
-//            int j = 0;
-            //ά������
             for (int i : priorityList) {
                 value.add(datum.values.get(i));
-//                j++;
             }
             Tuple tuple = new Tuple(datum.arrivalTime, Constants.currentSlideID, value);
             newSlide.add(tuple);
@@ -195,6 +194,7 @@ public class NewNETS extends Detector {
     public void indexingSlide(ArrayList<Tuple> slideTuples) {
         slideIn = new HashMap<>();
         fullDimCellSlideInCnt = new HashMap<>();
+        internal_dataList.put(Constants.currentSlideID,new HashMap<>());
         for (Tuple t : slideTuples) {
             ArrayList<Short> fullDimCellIdx = new ArrayList<>();
             ArrayList<Short> subDimCellIdx = new ArrayList<>();
@@ -213,7 +213,14 @@ public class NewNETS extends Detector {
 
             t.fullDimCellIdx = fullDimCellIdx;
             t.subDimCellIdx = subDimCellIdx;
+            if (!internal_dataList.get(Constants.currentSlideID).containsKey(fullDimCellIdx)) {
+                internal_dataList.get(Constants.currentSlideID).put(fullDimCellIdx, new ArrayList<>());
+            }
+            internal_dataList.get(Constants.currentSlideID).get(fullDimCellIdx).add(t);
 
+            if (fullDimCellIdx.get(0)==79 && fullDimCellIdx.get(1)==31 && fullDimCellIdx.get(2)==9) {
+                System.out.println(t.subDimCellIdx);
+            }
             if (!idxEncoder.containsKey(fullDimCellIdx)) {
                 int id = idxEncoder.size();
                 idxEncoder.put(fullDimCellIdx, id);
@@ -261,6 +268,7 @@ public class NewNETS extends Detector {
         this.indexingSlide(slideTuples);
 
         removeExpiredExternalData();
+        internal_dataList.remove(Constants.currentSlideID - Constants.nS);
         /* Slide out */
         if (itr > Constants.nS - 1) {
             slideOut = slides.poll();
@@ -459,13 +467,19 @@ public class NewNETS extends Detector {
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int lastSent) {
         Map<List<Double>, List<Vector>> data = new HashMap<>();
         for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
-            int index = time - Constants.currentSlideID + Constants.nS - 1;
+//            int index = time - Constants.currentSlideID + Constants.nS - 1;
             for (List<Double> id : bucketIds) {
-                int n = idxEncoder.get(transferFullIdToSubId(id));
-                if (!slides.get(index).containsKey(n)) continue;
-                Cell fullCell = slides.get(index).get(n).fullCells.get(convertDoubleToShort(id));
-                if (fullCell == null) continue;
-                ArrayList<Vector> tuples = new ArrayList<>(fullCell.tuples);
+//                if (id.get(0) == 79 && id.get(1) == 31 && id.get(2) == 9) {
+//                    System.out.println("sendData: " + id);
+//                }
+//                // HashMap<ArrayList<Short>, Integer> idxEncoder
+//                // HashMap<Integer, ArrayList<Short>> idxDecoder;
+//                int n = idxEncoder.get(transferFullIdToSubId(id));
+//                if (!slides.get(index).containsKey(n)) continue;
+//                Cell fullCell = slides.get(index).get(n).fullCells.get(convertDoubleToShort(id));
+//                if (fullCell == null) continue;
+                if (!internal_dataList.get(time).containsKey(convertDoubleToShort(id))) continue;
+                ArrayList<Tuple> tuples = internal_dataList.get(time).get(convertDoubleToShort(id));
                 if (!data.containsKey(id)) {
                     data.put(id, new ArrayList<>());
                 }
@@ -534,7 +548,7 @@ public class NewNETS extends Detector {
         return candidateCellIndices;
     }
 
-    public void findOutlier(String type, int itr) {
+    public void findOutlier(int itr) {
         // Remove expired or outdated outliers
         Iterator<Tuple> it = outliers.iterator();
         while (it.hasNext()) {
@@ -560,13 +574,16 @@ public class NewNETS extends Detector {
             candidateCellsTupleCnt = 0;
             ArrayList<Integer> candCellIndices = getSortedCandidateCellIndices(infCellIdx);
             //verify if outlier cell
-            if (candidateCellsTupleCnt < Constants.K + 1) {
-                for (HashMap<Integer, Cell> slide : slides) {
-                    if (!slide.containsKey(infCellIdx)) continue;
-                    outliers.addAll(slide.get(infCellIdx).tuples);
-                }
-                continue InfCellLoop;
-            }
+//            if (candidateCellsTupleCnt < Constants.K + 1) {
+//                for (HashMap<Integer, Cell> slide : slides) {
+//                    if (!slide.containsKey(infCellIdx)) continue;
+//                    outliers.addAll(slide.get(infCellIdx).tuples);
+//                    slide.get(infCellIdx).tuples.stream().filter(x->x.getNN()!=0).forEach(
+//                            x-> System.out.println("nononononono!")
+//                    );
+//                }
+//                continue InfCellLoop;
+//            }
 
             //For each non-determined influenced cells, we check tuples one by one
             HashSet<Tuple> candOutlierTuples = new HashSet<Tuple>();

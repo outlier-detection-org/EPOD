@@ -24,14 +24,14 @@ public class CompareResult {
                 for (Vector v2 : allData) {
                     if (v.equals(v2)) continue;
                     if (distance(v, v2) <= Constants.R * Constants.R) {
-//                        if (v.values.get(0)==-0.1 && v.values.get(1)==80.83 && v.values.get(2)==23.178){
-//                            System.out.println("Naive: "+v2.values);//ok
-//                        }
+                        if (v.values.get(0)==-0.05 && v.values.get(1)==76.87 && v.values.get(2)==24.198){
+                            System.out.println("Naive: "+v2);//ok
+                        }
                         numOfNeighbors++;
                     }
                 }
                 if (v.values.get(0)==-0.05 && v.values.get(1)==76.87 && v.values.get(2)==24.198){
-                    System.out.println("Naive total neighbor: "+ numOfNeighbors);
+                    System.out.println("Naive total neighbor: "+ numOfNeighbors+" "+ v.arrivalTime);
                 }
                 if (numOfNeighbors < Constants.K) {
                     outliers.add(v);
@@ -112,10 +112,10 @@ public class CompareResult {
             }
 
             //print confusion matrix
-            double cf2 = precision/exactValues.size(); //ÕæÊµÕýÈ·ÖÐ±»Ô¤²âÕýÈ·µÄ
-            double cf1 = 1 - cf2;//ÕæÊµÕýÈ·ÖÐ±»Ô¤²â´íÎóµÄ
-            double cf4 = (approxValues.size() - precision) /(W - exactValues.size());//ÕæÊµ´íÎóÖÐ±»Ô¤²âÕýÈ·µÄ
-            double cf3 = 1 - cf4;//ÕæÊµ´íÎó±»Ô¤²â´íÎóµÄ
+            double cf2 = precision/exactValues.size(); //ï¿½ï¿½Êµï¿½ï¿½È·ï¿½Ð±ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½
+            double cf1 = 1 - cf2;//ï¿½ï¿½Êµï¿½ï¿½È·ï¿½Ð±ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            double cf4 = (approxValues.size() - precision) /(W - exactValues.size());//ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½
+            double cf3 = 1 - cf4;//ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             outlierFw.write(String.format( "%.2f ", cf1 ) + " "+ String.format( "%.2f\n", cf2 ) );
             outlierFw.write(String.format( "%.2f ", cf3 ) + " "+ String.format( "%.2f\n", cf4 ) );
             outlierFw.write("===========================\n");
