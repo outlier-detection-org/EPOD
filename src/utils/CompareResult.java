@@ -24,13 +24,13 @@ public class CompareResult {
                 for (Vector v2 : allData) {
                     if (v.equals(v2)) continue;
                     if (distance(v, v2) <= Constants.R * Constants.R) {
-                        if (v.values.get(0)==-0.1 && v.values.get(1)==80.83 && v.values.get(2)==23.178){
-                            System.out.println("Naive: "+v2.values);//ok
-                        }
+//                        if (v.values.get(0)==-0.1 && v.values.get(1)==80.83 && v.values.get(2)==23.178){
+//                            System.out.println("Naive: "+v2.values);//ok
+//                        }
                         numOfNeighbors++;
                     }
                 }
-                if (v.values.get(0)==-0.1 && v.values.get(1)==80.83 && v.values.get(2)==23.178){
+                if (v.values.get(0)==-0.05 && v.values.get(1)==76.87 && v.values.get(2)==24.198){
                     System.out.println("Naive total neighbor: "+ numOfNeighbors);
                 }
                 if (numOfNeighbors < Constants.K) {

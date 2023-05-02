@@ -6,11 +6,17 @@ import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DataGenerator {
 
     public PriorityQueue<Vector> dataQueue;
     public Date firstTimeStamp;
+
+    // we use this to uniquely identify each data point
+    // there are cases that two data points have the same arrivalTime in each device
+    // but are different points
+    public static AtomicInteger arrivalTime = new AtomicInteger(-1);
 
     public DataGenerator(int deviceId) {
         this.getData(Constants.timePrefix + deviceId + ".txt");
@@ -27,6 +33,7 @@ public class DataGenerator {
         while (d != null && d.arrivalRealTime.compareTo(currentTime) >= 0
                 && d.arrivalRealTime.compareTo(endTime) < 0) {
             d.slideID = Constants.currentSlideID;
+            d.arrivalTime = arrivalTime.incrementAndGet();
             results.add(d);
             dataQueue.poll();
             d = dataQueue.peek();
@@ -43,7 +50,6 @@ public class DataGenerator {
             BufferedReader bfr = new BufferedReader(new FileReader(filename));
             try {
                 String line = bfr.readLine();
-                int id = 0;
                 while (line != null) {
                     String[] atts = line.split(",");
                     ArrayList<Double> d = new ArrayList<>();
@@ -52,8 +58,6 @@ public class DataGenerator {
                     }
                     Vector data = new Vector(d);
                     data.arrivalRealTime = formatter.parse(atts[0]);
-                    data.arrivalTime = id;
-                    id++;
                     dataQueue.add(data);
                     line = bfr.readLine();
                 }

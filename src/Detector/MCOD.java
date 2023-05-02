@@ -411,7 +411,7 @@ public class MCOD extends Detector {
         MCO x = eventQueue.peek();
         while (x != null && x.ev <= Constants.currentSlideID) {
             x = eventQueue.poll();
-            while (x.exps.get(0) <= Constants.currentSlideID) {
+            while (x.exps.size() != 0 && x.exps.get(0) <= Constants.currentSlideID) { //@shimin
                 x.exps.remove(0);
                 if (x.exps.isEmpty()) {
                     x.ev = 0;
@@ -450,17 +450,12 @@ public class MCOD extends Detector {
             }
             for (Vector v : allData) {
                 if (neighboringTupleSet(v.values, t.values, Constants.R)) {
-                    if (t.values.get(0)==-0.1 && t.values.get(1)==80.83 && t.values.get(2)==23.178){
-                        System.out.println("MCOD: "+ v.values);
-                    }
+//                    if (t.values.get(0)==-0.05 && t.values.get(1)==76.87 && t.values.get(2)==24.198){
+//                        System.out.println("MCOD: "+ v.values);
+//                    }
                     num++;
                 }
-                else System.out.println("MCOD: 距离大");
             }
-            if (t.values.get(0)==-0.1 && t.values.get(1)==80.83 && t.values.get(2)==23.178){
-                System.out.println("MCOD total neighbor: "+ num);
-            }
-
             if (num >= Constants.K) {
                 it.remove();
             }
@@ -550,7 +545,7 @@ public class MCOD extends Detector {
             // 如果不大于K，从离他3/2R中的cluster的点之和是否小于K，如果小于，则就是outlier
             // 如果大于K，就进行具体的距离计算，更新pre，succeeding,last_calculated_time
             else if (reply == 1) {
-                int sumOfNeighbor = 0;
+                int sumOfNeighbor = o.numberOfSucceeding + o.exps.size();
                 ArrayList<List<Double>> cluster3R_2 = new ArrayList<>();
                 for (Map.Entry<List<Double>, Integer> entry : external_info.entrySet()) {
                     List<Double> key = entry.getKey();
@@ -558,6 +553,7 @@ public class MCOD extends Detector {
                     double distance = distance(key, o.center.values);
                     if (distance <= Constants.R / 2) {
                         sumOfNeighbor += value;
+                        cluster3R_2.add(key); //@shimin
                         // 只是先对外部的点进行pruning,未加上内部数据
                         if (sumOfNeighbor >= Constants.K) {
                             iterator.remove();
@@ -602,7 +598,6 @@ public class MCOD extends Detector {
                             }
                         }
                         o.last_calculate_time++;
-//                        checkInlier(o); //TODO: bug is caused here!!!!!!! @shimin
                         checkInlier(o, iterator);
                         if (o.numberOfSucceeding + o.exps.size() >= Constants.K) {
                             continue outlierLoop;

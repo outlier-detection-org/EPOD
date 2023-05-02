@@ -82,7 +82,7 @@ public class DeviceImpl implements DeviceService.Iface {
         //���ػ�ȡ���� + ����outliers
         while (!this.ready) {
         }
-        this.detector.processOutliers1();
+        this.detector.processOutliers();
         System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
         return this.detector.outlierVector;
     }
