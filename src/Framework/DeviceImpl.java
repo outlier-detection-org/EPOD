@@ -116,6 +116,9 @@ public class DeviceImpl implements DeviceService.Iface {
                                 map.get(x).addAll(data.get(x));
                             }
                     );
+                    if (this.detector.externalData.size()==0){
+                        System.out.println(1);
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

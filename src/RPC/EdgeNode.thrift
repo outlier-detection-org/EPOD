@@ -10,7 +10,6 @@ service EdgeNodeService {
    * field lists in struct or exception definitions.
    */
    void receiveAndProcessFP(1: map<list<double>, i32> fingerprints, 2: i32 edgeDeviceHashCode) throws (1: Device.InvalidException invalid),
-   void processResult(1:list<double> unitID, 2:list<Device.UnitInNode> unitInNodeList) throws (1: Device.InvalidException invalid),
-   void provideNeighborsResult(1:list<list<double>> unSateUnits, 2: i32 edgeNodeHash) throws (1: Device.InvalidException invalid),
+   map<list<double>, list<Device.UnitInNode>> provideNeighborsResult(1:list<list<double>> unSateUnits, 2: i32 edgeNodeHash) throws (1: Device.InvalidException invalid),
    set<Device.Vector> uploadAndDetectOutlier(1:list<Device.Vector> data) throws (1: Device.InvalidException invalid),
 }

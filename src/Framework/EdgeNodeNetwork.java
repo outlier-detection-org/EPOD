@@ -2,7 +2,6 @@ package Framework;
 
 import RPC.DeviceService;
 import RPC.EdgeNodeService;
-import RPC.RPCFrame;
 import RPC.Vector;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;

@@ -5,10 +5,8 @@ import Handler.*;
 import RPC.*;
 import RPC.Vector;
 import org.apache.thrift.TException;
-import utils.CompareResult;
 import utils.Constants;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -118,7 +116,28 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 List<List<Double>> finalUnSafeUnits = unSafeUnits;
                 Thread t = new Thread(() -> {
                     try {
-                        this.clientsForEdgeNodes.get(edgeNodeCode).provideNeighborsResult(finalUnSafeUnits, this.hashCode());
+                        Map<List<Double>, List<UnitInNode>> result = this.clientsForEdgeNodes.get(edgeNodeCode).provideNeighborsResult(finalUnSafeUnits, this.belongedNode.hashCode());
+                        System.out.printf("Thead %d processResult. \n", Thread.currentThread().getId());
+                        for (List<Double> unitID : result.keySet()) {
+                            List<UnitInNode> unitInNodeList = result.get(unitID);
+                            if (!unitResultInfo.containsKey(unitID)) {
+                                unitResultInfo.put(unitID, unitInNodeList);
+                                return;
+                            }
+                            unitInNodeList.forEach(
+                                    x -> {
+                                        for (UnitInNode unitInNode : unitResultInfo.get(unitID)) {
+                                            if (unitInNode.unitID.equals(x.unitID)) {
+                                                unitInNode.updateCount(x.deltaCnt);
+                                                unitInNode.belongedDevices.addAll(x.belongedDevices);
+                                                return;
+                                            }
+                                        }
+                                        UnitInNode unitInNode = new UnitInNode(x);
+                                        unitResultInfo.get(unitID).add(unitInNode);
+                                    }
+                            );
+                        }
                     } catch (Throwable e) {
                         e.printStackTrace();
                         throw new RuntimeException(e);
@@ -168,34 +187,25 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
      * @param edgeNodeHash: from which node
      * @description find whether there are neighbor unit in local node
      */
-    public void provideNeighborsResult(List<List<Double>> unSateUnits, int edgeNodeHash) {
+    @Override
+    public Map<List<Double>, List<UnitInNode>> provideNeighborsResult(List<List<Double>> unSateUnits, int edgeNodeHash) {
         System.out.printf("Thead %d provideNeighborsResult. \n", Thread.currentThread().getId());
-        ArrayList<Thread> threads = new ArrayList<>();
-        //����ÿ��unsafeUnit,����������Ϸ�����Ϣ���Դﵽpipeline��Ŀ��
+        Map<List<Double>, List<UnitInNode>> result = new HashMap<>();
         HashSet<UnitInNode> needUpdate = new HashSet<>();
         for (List<Double> unit : unSateUnits) {
-            Thread t = new Thread(() -> {
-                List<UnitInNode> unitInNodeList = unitsStatusMap.values().stream()
-                        .filter(x -> x.isUpdated.get(edgeNodeHash) == 1)
-                        .filter(x -> this.handler.neighboringSet(unit, x.unitID)).toList();
-                needUpdate.addAll(unitInNodeList);
-                try {
-                    this.clientsForEdgeNodes.get(edgeNodeHash).processResult(unit, unitInNodeList);
-                } catch (Throwable e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            threads.add(t);
-        }
-
-        for (Thread t : threads) {
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            List<UnitInNode> unitInNodeList = unitsStatusMap.values().stream()
+                    .filter(x -> x.isUpdated.get(edgeNodeHash) == 1)
+                    .filter(x -> this.handler.neighboringSet(unit, x.unitID)).toList();
+            needUpdate.addAll(unitInNodeList);
+            result.put(unit, unitInNodeList);
+//            try {
+//                this.clientsForEdgeNodes.get(edgeNodeHash).processResult(unit, unitInNodeList);
+//            } catch (Throwable e) {
+//                throw new RuntimeException(e);
+//            }
         }
         needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
+        return result;
     }
 
     public Set<Vector> result;
@@ -222,26 +232,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         return result;
     }
 
-    public void processResult(List<Double> unitID, List<UnitInNode> unitInNodeList) {
-        System.out.printf("Thead %d processResult. \n", Thread.currentThread().getId());
-        if (!unitResultInfo.containsKey(unitID)) {
-            unitResultInfo.put(unitID, unitInNodeList); // rpc streaming��������һ���µ�list�����Բ��õ�����ǳ����������
-            return;
-        }
-        unitInNodeList.forEach(
-                x -> {
-                    for (UnitInNode unitInNode : unitResultInfo.get(unitID)) {
-                        if (unitInNode.unitID.equals(x.unitID)) {
-                            unitInNode.updateCount(x.deltaCnt);
-                            unitInNode.belongedDevices.addAll(x.belongedDevices);
-                            return;
-                        }
-                    }
-                    UnitInNode unitInNode = new UnitInNode(x);
-                    unitResultInfo.get(unitID).add(unitInNode);
-                }
-        );
-    }
 
 
     public void sendDeviceResult() {

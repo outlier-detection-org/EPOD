@@ -515,6 +515,9 @@ public class MCOD extends Detector {
     public void update_external_info() {
         // Map<Integer, Map<ArrayList<?>, List<Vector>>> externalData;
         Map<List<Double>, List<Vector>> current_arrive_data = externalData.get(Constants.currentSlideID);
+        if (current_arrive_data == null) {
+            return;
+        }
         for (List<Double> key : current_arrive_data.keySet()) {
             if (!external_info.containsKey(key)) {
                 external_info.put(key, 0);
