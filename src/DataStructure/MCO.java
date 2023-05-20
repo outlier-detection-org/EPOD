@@ -22,9 +22,6 @@ public class MCO extends Vector {
 
 
     public void updateSucceeding(Vector mco){
-        if (mco.values.equals(this.values)){
-            int a =1;
-        }
         numberOfSucceeding++;
         succeeding.add(mco);
     }

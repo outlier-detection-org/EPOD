@@ -9,6 +9,8 @@ import RPC.Vector;
 import mtree.utils.MTreeClass;
 import utils.Constants;
 
+import javax.swing.event.DocumentListener;
+
 public class MCOD extends Detector {
     public HashMap<List<Double>, MCO> map_to_MCO;
     public Map<Integer, ArrayList<MCO>> internal_dataList; // {slideId, MCO}
@@ -127,10 +129,10 @@ public class MCOD extends Detector {
     }
 
     // 对于Unfilled cluster里的一个点d，更新它自己的前继后继和unfilled clusters里的前后继
-    private void update_info_unfilled(MCO d, boolean fromShrinkCluster) {
+    private void update_info_unfilled(MCO d, boolean fromShrinkCluster, boolean firstForm) {
         for (MCO center : unfilled_clusters.keySet()) {
             // 当fromFulledCluster并且遍历到这个shrink的cluster时，不需要重复计算
-            if (center.equals(d.center)) continue;
+            if ((fromShrinkCluster||firstForm)&&center.equals(d.center)) continue;
 
             // 如果center中心离d 3R/2以内，检查这个unfilled cluster里的所有点
             if (mtree.getDistanceFunction().calculate(center, d) <= 3 * Constants.R / 2) {
@@ -209,7 +211,7 @@ public class MCOD extends Detector {
 
         //这两步顺序不能换，因为是在update_info_filled里checkInlier(d)
         //update self and others succeeding and preceding in unfilled_cluster
-        update_info_unfilled(d, false);
+        update_info_unfilled(d, false, false);
         //find neighbors in filled clusters (3R/2)
         update_info_filled(d);
 
@@ -228,7 +230,7 @@ public class MCOD extends Detector {
 
         this.fullCellDelta.put(d.center.values, 1);
 
-        update_info_unfilled(d, false);
+        update_info_unfilled(d, false,true);
         update_info_filled(d);
     }
 
@@ -264,7 +266,7 @@ public class MCOD extends Detector {
                 }
                 o.numberOfSucceeding = cluster.size() - 1 - i;
 
-                update_info_unfilled(o, true);
+                update_info_unfilled(o, true,false);
                 update_info_filled(o);
             }
         }
@@ -357,13 +359,22 @@ public class MCOD extends Detector {
                 formUnfilledCluster(d);
             }
         }
+        if (d.values.get(0) == -0.01 && d.values.get(1) == 73.15 && d.values.get(2) == 25.644){
+            System.out.println("MCOD point1 center" + d.center);
+        }
+        if (d.values.get(0) == -0.01 && d.values.get(1) == 70.7 && d.values.get(2) == 25.698){
+            System.out.println("MCOD point2 center" + d.center);
+        }
+        if(d.values.get(0) == 0.01 && d.values.get(1) == 71.27 && d.values.get(2) == 25.708){
+            System.out.println("MCOD point3 center" + d.center);
+        }
     }
 
     // 保留最少数目proceeding
     // 检查是否为safe | 剩余inlier（queue） | outlier
     private void checkInlier(MCO inPD, Iterator<MCO> iterator) {
         if(inPD.values.get(0) == 0.01 && inPD.values.get(1) == 71.27 && inPD.values.get(2) == 25.708){
-            if (inPD.numberOfSucceeding+inPD.exps.size() == 48){
+            if (inPD.numberOfSucceeding+inPD.exps.size() == 49){
                 System.out.println("MCOD pre: " + inPD.exps.size());
                 System.out.println("MCOD sud: " + inPD.numberOfSucceeding);
                 inPD.succeeding.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).forEachOrdered(System.out::println);
@@ -525,6 +536,10 @@ public class MCOD extends Detector {
             return;
         }
         for (List<Double> key : current_arrive_data.keySet()) {
+            //0.0, 73.92, 25.604
+            if (key.get(0)==0.0 && key.get(1) ==73.92 && key.get(2)==25.604){
+                List<Vector> v = current_arrive_data.get(key);
+            }
             if (!external_info.containsKey(key)) {
                 external_info.put(key, 0);
             }
@@ -540,7 +555,14 @@ public class MCOD extends Detector {
         while (iterator.hasNext()) {
             MCO o = iterator.next();//读取当前集合数据元素
             if(o.values.get(0) == 0.01 && o.values.get(1) == 71.27 && o.values.get(2) == 25.708){
-                System.out.println("debug");
+                List<Double> link =new LinkedList<>();
+                //0.0, 73.92, 25.604
+                link.add(0.0);
+                link.add(73.92);
+                link.add(25.604);
+                if (this.external_info.containsKey(link)){
+                    int a= 1;
+                };
             }
             // HashMap<ArrayList<?>, Integer> status;
             int reply = this.status.get(o.center.values);
@@ -560,7 +582,10 @@ public class MCOD extends Detector {
                 ArrayList<List<Double>> cluster3R_2 = new ArrayList<>();
                 for (Map.Entry<List<Double>, Integer> entry : external_info.entrySet()) {
                     List<Double> key = entry.getKey();
-                    double distance = distance(key, o.center.values);
+                    if (key.get(0)==0.0&&key.get(1)==73.92){
+                        int  a =1;
+                    }
+                    double distance = distance(key, o.values);
                     if (distance <= Constants.R * 3 / 2) {
                         cluster3R_2.add(key);
                     }

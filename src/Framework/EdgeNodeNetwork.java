@@ -123,21 +123,10 @@ public class EdgeNodeNetwork {
 
             //========================== NAIVE ================================
             List<Vector> allData = new ArrayList<>();
-            Device a = null;
-            Device b = null;
             for (Device device : deviceHashMap.values()) {
-                for (Vector v: device.handler.rawData){
-                   if (v.values.get(0) == -0.01 && v.values.get(1) == 73.15 && v.values.get(2) == 25.644){
-                       a = device;
-                   }
-                   if (v.values.get(0) == -0.01 && v.values.get(1) == 70.7 && v.values.get(2) == 25.698){
-                       b = device;
-                   }
-                }
                 allData.addAll(device.handler.rawData);
             }
-            System.out.println("a: " + a.hashCode());
-            System.out.println("b: " + b.hashCode());
+
             HashSet<Vector> outliers = CompareResult.detectOutliersNaive(allData, itr);
 
             HashSet<Vector> tmpList = new HashSet<>();
