@@ -48,7 +48,7 @@ public class MCOD extends Detector {
                         } else {
                             removeFromUnfilledCluster(d);
                         }
-                        process_event_queue();
+                        process_event_queue(); //为什么不放在最后
                     }
                 }
             }
@@ -82,7 +82,6 @@ public class MCOD extends Detector {
             filled_clusters.put(d.center, cluster);
             check_shrink(d.center);
         }
-//        unfilled_clusters.put(d.center, cluster);//todo:没懂之前为什么要加这一句 不加就过了！
 
         List<Double> key = d.center.values;
         update_fingerprint(key, false);
@@ -95,7 +94,8 @@ public class MCOD extends Detector {
             List<Double> key = d.center.values;
             if (cluster.size() == 0) {
                 unfilled_clusters.remove(d.center);
-                this.fullCellDelta.put(key, Integer.MIN_VALUE); //不管有没有这个key，都可以实现覆盖效果
+                update_fingerprint(key, false);
+                this.fullCellDelta.put(key, Constants.threadhold + this.fullCellDelta.get(key)); //不管有没有这个key，都可以实现覆盖效果
             } else {
                 unfilled_clusters.put(d.center, cluster);
                 update_fingerprint(key, false);
@@ -130,7 +130,7 @@ public class MCOD extends Detector {
     private void update_info_unfilled(MCO d, boolean fromShrinkCluster) {
         for (MCO center : unfilled_clusters.keySet()) {
             // 当fromFulledCluster并且遍历到这个shrink的cluster时，不需要重复计算
-            if (fromShrinkCluster && center == d.center) continue;
+            if (center.equals(d.center)) continue;
 
             // 如果center中心离d 3R/2以内，检查这个unfilled cluster里的所有点
             if (mtree.getDistanceFunction().calculate(center, d) <= 3 * Constants.R / 2) {
@@ -142,18 +142,18 @@ public class MCOD extends Detector {
                             d.exps.add(point.slideID + Constants.nS);
                             if (!fromShrinkCluster) {
                                 // 如果是旧的点，那么point.numberOfSucceeding已经包含了这个d
-                                point.numberOfSucceeding++;
+                                point.updateSucceeding(d);
                             }
                         } else if (isSameSlide(point, d) == 0) {
                             //p和d在同一个slide
-                            d.numberOfSucceeding++;
+                            d.updateSucceeding(point);
                             if (!fromShrinkCluster) {
-                                point.numberOfSucceeding++;
+                                point.updateSucceeding(d);
                             }
                         } else {
                             //p在d后面
                             //对应一个filled_cluster变unfilled而言
-                            d.numberOfSucceeding++;
+                            d.updateSucceeding(point);
                             if (!fromShrinkCluster) {
                                 point.exps.add(d.slideID + Constants.nS);
                             }
@@ -180,7 +180,7 @@ public class MCOD extends Detector {
                     if (mtree.getDistanceFunction().calculate(point, d) <= Constants.R) {
                         if (isSameSlide(d, point) <= 0) {
                             //p is succeeding neighbor
-                            d.numberOfSucceeding++;
+                            d.updateSucceeding(point);
                         } else {
                             //p is preceding neighbor
                             d.exps.add(point.slideID + Constants.nS);
@@ -298,7 +298,7 @@ public class MCOD extends Detector {
                             //TODO： 看看这里究竟能不能进来
                             point.exps.add(d.slideID + Constants.nS);
                         } else {
-                            point.numberOfSucceeding++;
+                            point.updateSucceeding(d);
                         }
                         //check if point become inlier
                         checkInlier(point);
@@ -362,6 +362,14 @@ public class MCOD extends Detector {
     // 保留最少数目proceeding
     // 检查是否为safe | 剩余inlier（queue） | outlier
     private void checkInlier(MCO inPD, Iterator<MCO> iterator) {
+        if(inPD.values.get(0) == 0.01 && inPD.values.get(1) == 71.27 && inPD.values.get(2) == 25.708){
+            if (inPD.numberOfSucceeding+inPD.exps.size() == 48){
+                System.out.println("MCOD pre: " + inPD.exps.size());
+                System.out.println("MCOD sud: " + inPD.numberOfSucceeding);
+                inPD.succeeding.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).forEachOrdered(System.out::println);
+            }
+            System.out.println("number of neighbor in MCOD: " + (inPD.numberOfSucceeding+inPD.exps.size()));
+        }
         Collections.sort(inPD.exps);
 
         while (inPD.exps.size() > Constants.K - inPD.numberOfSucceeding && inPD.exps.size() > 0) {
@@ -429,13 +437,14 @@ public class MCOD extends Detector {
     }
 
     public void processOutliers() {
-        System.out.printf("Thead %d processOutliers. \n", Thread.currentThread().getId());
+//        System.out.printf("Thead %d processOutliers. \n", Thread.currentThread().getId());
         update_external_info();
         check_local_outliers();
         this.outlierVector = outliers;
     }
     public void processOutliers1() {
-        System.out.printf("Thead %d processOutliers1. \n", Thread.currentThread().getId());
+        update_external_info();
+//        System.out.printf("Thead %d processOutliers1. \n", Thread.currentThread().getId());
         // after receive external data, we need to process outliers once again
         Iterator<MCO> it = outliers.iterator();
         while(it.hasNext()){
@@ -450,9 +459,6 @@ public class MCOD extends Detector {
             }
             for (Vector v : allData) {
                 if (neighboringTupleSet(v.values, t.values, Constants.R)) {
-//                    if (t.values.get(0)==-0.05 && t.values.get(1)==76.87 && t.values.get(2)==24.198){
-//                        System.out.println("MCOD: "+ v.values);
-//                    }
                     num++;
                 }
             }
@@ -528,11 +534,14 @@ public class MCOD extends Detector {
     }
 
     public void check_local_outliers() {
-        System.out.printf("Thead %d check_local_outliers. \n", Thread.currentThread().getId());
+//        System.out.printf("Thead %d check_local_outliers. \n", Thread.currentThread().getId());
         Iterator<MCO> iterator = outliers.iterator();//实例化迭代器
         outlierLoop:
         while (iterator.hasNext()) {
             MCO o = iterator.next();//读取当前集合数据元素
+            if(o.values.get(0) == 0.01 && o.values.get(1) == 71.27 && o.values.get(2) == 25.708){
+                System.out.println("debug");
+            }
             // HashMap<ArrayList<?>, Integer> status;
             int reply = this.status.get(o.center.values);
             //首先我们需要pruning掉被判断为安全的以及被判断成outlier的点，加入event queue，event time 设为下一个时间点
@@ -548,68 +557,50 @@ public class MCOD extends Detector {
             // 如果不大于K，从离他3/2R中的cluster的点之和是否小于K，如果小于，则就是outlier
             // 如果大于K，就进行具体的距离计算，更新pre，succeeding,last_calculated_time
             else if (reply == 1) {
-                int sumOfNeighbor = o.numberOfSucceeding + o.exps.size();
                 ArrayList<List<Double>> cluster3R_2 = new ArrayList<>();
                 for (Map.Entry<List<Double>, Integer> entry : external_info.entrySet()) {
                     List<Double> key = entry.getKey();
-                    Integer value = entry.getValue();
                     double distance = distance(key, o.center.values);
-                    if (distance <= Constants.R / 2) {
-                        sumOfNeighbor += value;
-                        cluster3R_2.add(key); //@shimin
-                        // 只是先对外部的点进行pruning,未加上内部数据
-                        if (sumOfNeighbor >= Constants.K) {
-                            iterator.remove();
-                            o.ev = Constants.currentSlideID + 1;
-                            eventQueue.add(o);
-                            continue outlierLoop;
-                        }
-                    } else if (distance <= Constants.R * 3 / 2) {
+                    if (distance <= Constants.R * 3 / 2) {
                         cluster3R_2.add(key);
                     }
                 }
 
-                for (List<Double> c : cluster3R_2) {
-                    sumOfNeighbor += external_info.get(c);
+                if (o.last_calculate_time == -1 || o.last_calculate_time <= Constants.currentSlideID - Constants.nS) {
+                    o.last_calculate_time = Constants.currentSlideID - Constants.nS + 1;
                 }
-                //在所有3R/2内cluster（外部）的点，若和本地相加小于k，则判断成为Outlier,不做任何操作
-                //否则
-                if (sumOfNeighbor >= Constants.K) {
-                    if (o.last_calculate_time == -1 || o.last_calculate_time <= Constants.currentSlideID - Constants.nS) {
-                        o.last_calculate_time = Constants.currentSlideID - Constants.nS + 1;
-                    }
-                    while (o.last_calculate_time <= Constants.currentSlideID) {
-                        Map<List<Double>, List<Vector>> cur_data = externalData.get(o.last_calculate_time);
-                        if (cur_data != null) {
-                            // 对每一个3R/2内的邻居
-                            for (List<Double> c : cluster3R_2) {
-                                // 在当前的时间点看是否有此cluster
-                                List<Vector> cur_cluster_data = cur_data.get(c);
-                                // 如果有
-                                if (cur_cluster_data != null) {
-                                    for (Vector v : cur_cluster_data) {
-                                        if (distance(v.values, o.values) <= Constants.R) {
-                                            if (isSameSlide(o, v) <= 0) {
-                                                o.numberOfSucceeding++;
-                                            } else {
-                                                //p is preceding neighbor
-                                                o.exps.add(v.slideID + Constants.nS);
-                                            }
+                while (o.last_calculate_time <= Constants.currentSlideID) {
+                    Map<List<Double>, List<Vector>> cur_data = externalData.get(o.last_calculate_time);
+                    if (cur_data != null) {
+                        // 对每一个3R/2内的邻居
+                        for (List<Double> c : cluster3R_2) {
+                            // 在当前的时间点看是否有此cluster
+                            List<Vector> cur_cluster_data = cur_data.get(c);
+                            // 如果有
+                            if (cur_cluster_data != null) {
+                                for (Vector v : cur_cluster_data) {
+                                    if (distance(v.values, o.values) <= Constants.R) {
+                                        if (isSameSlide(o, v) <= 0) {
+                                            o.updateSucceeding(v);
+                                        } else {
+                                            //p is preceding neighbor
+                                            o.exps.add(v.slideID + Constants.nS);
                                         }
                                     }
                                 }
                             }
                         }
-                        o.last_calculate_time++;
-                        checkInlier(o, iterator);
-                        if (o.numberOfSucceeding + o.exps.size() >= Constants.K) {
-                            continue outlierLoop;
-                        }
+                    }
+                    o.last_calculate_time++;
+                    checkInlier(o, iterator);
+                    if (o.numberOfSucceeding + o.exps.size() >= Constants.K) {
+                        continue outlierLoop;
                     }
                 }
             }
         }
     }
+
 
 
     @Override

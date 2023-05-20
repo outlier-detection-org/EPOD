@@ -79,11 +79,11 @@ public class DeviceImpl implements DeviceService.Iface {
             this.clientsForNearestNode.receiveAndProcessFP(this.detector.fullCellDelta, this.belongedDevice.hashCode());
         } else return new HashSet<>();
 
-        //���ػ�ȡ���� + ����outliers
+        //Wait until all external data is got
         while (!this.ready) {
         }
         this.detector.processOutliers();
-        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
+//        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
         return this.detector.outlierVector;
     }
 
@@ -95,11 +95,11 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public void getExternalData(Map<List<Double>, Integer> status, Map<Integer, Set<List<Double>>> result) {
-        System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
-        this.detector.status = status; //�����ж�outliers�Ƿ���Ҫ���¼��㣬����processOutliers()��
+//        System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
+        this.detector.status = status;
         ArrayList<Thread> threads = new ArrayList<>();
         for (Integer deviceCode : result.keySet()) {
-            if (deviceCode == this.belongedDevice.hashCode()) continue;
+            if (deviceCode.equals(this.belongedDevice.hashCode())) continue;
             //HashMap<Integer,HashSet<ArrayList<?>>>
             Thread t = new Thread(() -> {
                 try {
@@ -116,9 +116,6 @@ public class DeviceImpl implements DeviceService.Iface {
                                 map.get(x).addAll(data.get(x));
                             }
                     );
-                    if (this.detector.externalData.size()==0){
-                        System.out.println(1);
-                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -137,7 +134,7 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public Set<? extends Vector> detectOutlier_P2P(int itr) throws Throwable {
-        System.out.println("Thead " + Thread.currentThread().getId() + " detectOutlier_P2P");
+//        System.out.println("Thead " + Thread.currentThread().getId() + " detectOutlier_P2P");
         this.ready = false;
         Constants.currentSlideID = itr;
         getRawData(itr);
@@ -166,33 +163,26 @@ public class DeviceImpl implements DeviceService.Iface {
                 e.printStackTrace();
             }
         }
-//        this.ready = true; //����о�ûɶ�ð�
-
-        //step3: detectOutlier
-//        while (!this.ready) {
-//        }
-//        if (itr >= Constants.nS - 1) {
-            this.detector.detectOutlier(allData);
-//        }
-        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
+        this.detector.detectOutlier(allData);
+//        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
         if (itr >= Constants.nS - 1) {
             return this.detector.outlierVector;
         } else return new HashSet<>();
     }
 
     public Set<? extends Vector> detectOutlier_Centralize(int itr) throws Throwable {
-        System.out.println("Thead " + Thread.currentThread().getId() + " detectOutlier_Centralize");
+//        System.out.println("Thead " + Thread.currentThread().getId() + " detectOutlier_Centralize");
         Constants.currentSlideID = itr;
         getRawData(itr);
         Set<? extends Vector> result = clientsForNearestNode.uploadAndDetectOutlier(this.rawData);
-        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
+//        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
         return result;
     }
 
     //����slide�ĵ�
     @Override
     public List<Vector> sendAllLocalData() {
-        System.out.printf("Thead %d sendAllLocalData. \n", Thread.currentThread().getId());
+//        System.out.printf("Thead %d sendAllLocalData. \n", Thread.currentThread().getId());
         return this.rawData;
     }
 }

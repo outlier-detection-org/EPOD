@@ -21,15 +21,28 @@ public class CompareResult {
             HashSet<Vector> outliers = new HashSet<Vector>();
             for (Vector v : allData) {
                 int numOfNeighbors = 0;
+                int pre = 0;
+                int succeed = 0;
+                LinkedList<Vector> vs = new LinkedList<>();
                 for (Vector v2 : allData) {
                     if (v.equals(v2)) continue;
                     if (distance(v, v2) <= Constants.R * Constants.R) {
-                        //-0.1, 23.178, 80.83
                         numOfNeighbors++;
+                        if(v.values.get(0) == 0.01 && v.values.get(1) == 71.27 && v.values.get(2) == 25.708){
+                            if (v2.slideID>=v.slideID){
+                                vs.add(v2);
+                            }else pre++;
+                        }
                     }
                 }
-                if (v.values.get(0)==-0.1 && v.values.get(1)==80.83 && v.values.get(2)==23.178){
-                    System.out.println("Naive: "+numOfNeighbors);//ok
+                //0.02, 23.883, 71.3
+                //1.88, 23.305, 89.21
+                //-9.99, -9.99, 24.183
+                //[0.01, 25.708, 71.27]
+                if(v.values.get(0) == 0.01 && v.values.get(1) == 71.27 && v.values.get(2) == 25.708){
+                    System.out.println("MCOD pre: " + pre);
+                    System.out.println("MCOD sud: " + succeed);
+                    vs.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).forEachOrdered(System.out::println);
                 }
                 if (numOfNeighbors < Constants.K) {
                     outliers.add(v);

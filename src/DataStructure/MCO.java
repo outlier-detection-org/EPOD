@@ -4,6 +4,8 @@ import RPC.Vector;
 import utils.Constants;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 public class MCO extends Vector {
     //全部点
@@ -15,9 +17,17 @@ public class MCO extends Vector {
 
     public ArrayList<Integer> exps;
     public int numberOfSucceeding;
-//        public ArrayList<Integer> Rmc;
+
+    public LinkedList<Vector> succeeding =new LinkedList<>();
 
 
+    public void updateSucceeding(Vector mco){
+        if (mco.values.equals(this.values)){
+            int a =1;
+        }
+        numberOfSucceeding++;
+        succeeding.add(mco);
+    }
     public MCO(Vector d) {
         super();
         this.slideID = Constants.currentSlideID;

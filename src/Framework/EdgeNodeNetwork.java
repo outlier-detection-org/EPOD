@@ -134,10 +134,11 @@ public class EdgeNodeNetwork {
                 tmp.values.sort(Double::compareTo);
                 tmpList.add(tmp);
             }
-            List<Vector> list = tmpList.stream().sorted(Vector::compareTo).toList();
+            List<Vector> list = tmpList.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).toList();
             for (Vector v : list) {
                 outlierNaiveFw.write(v + "\n");
             }
+            outlierNaiveFw.write("====================================\n");
             outlierNaiveFw.flush();
             itr++;
         }
@@ -150,14 +151,19 @@ public class EdgeNodeNetwork {
     public static void printOutliers() throws IOException {
         HashSet<Vector> tmpList = new HashSet<>();
         for (Vector v : outliers) {
+            if(v.values.get(0) == -9.99 && v.values.get(1) == 24.183 && v.values.get(2) == -9.99)
+            {
+                System.out.println("find neighbor");
+            }
             Vector tmp = new Vector(v);
             tmp.values.sort(Double::compareTo);
             tmpList.add(tmp);
         }
-        List<? extends Vector> list = tmpList.stream().sorted(Vector::compareTo).toList();
+        List<Vector> list = tmpList.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).toList();
         for (Vector v : list) {
             outlierFw.write(v + "\n");
         }
+        outlierFw.write("====================================\n");
         outlierFw.flush();
     }
     public static void stopNetwork() {
@@ -175,7 +181,7 @@ public class EdgeNodeNetwork {
         Map<Integer, DeviceService.Client> clientsForDevices = new HashMap<>();
 
         for (Integer nodeHashCode : nodeHashMap.keySet()) {
-            if (nodeHashCode == node.hashCode()) continue;
+            if (nodeHashCode.equals(node.hashCode())) continue;
             TTransport transport = new TSocket("127.0.0.1", nodeHashMap.get(nodeHashCode).port);
             transport.open();
             node.transports.add(transport);
@@ -205,7 +211,7 @@ public class EdgeNodeNetwork {
 
         Map<Integer, DeviceService.Client> clientsForDevices = new HashMap<>();
         for (Integer deviceHashCode : deviceHashMap.keySet()) {
-            if (deviceHashCode == device.hashCode()) continue;
+            if (deviceHashCode.equals(device.hashCode())) continue;
             TTransport transport1 = new TSocket("127.0.0.1", deviceHashMap.get(deviceHashCode).port);
             transport1.open();
             device.transports.add(transport1);

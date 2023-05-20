@@ -7,11 +7,11 @@ import numpy as np
 
 # Configuration file
 n_clusters = 4
-mix_rate = 10
-data = pd.read_table('C:\\Users\\14198\\Desktop\\outlier_detection\\NETS\\Datasets\\tao.txt', sep=',', header=None)
+mix_rate = 20
+data = pd.read_table('C:\\Users\\Lenovo\\Desktop\\outlier_detection\\EPOD\\Datasets\\fc.txt', sep=',', header=None)
 prefix = \
-    "C:\\Users\\14198\\Desktop\\outlier_detection\\NETS\\Datasets\\DeviceId_data\\Device_" + \
-    str(n_clusters) + "_TAO_K_" + str(mix_rate) + "\\"
+    "C:\\Users\\Lenovo\\Desktop\\outlier_detection\\EPOD\\Datasets\\DeviceId_data\\Device_" + \
+    str(n_clusters) + "_FC_K_" + str(mix_rate) + "\\"
 
 
 df = pd.DataFrame(data)
@@ -46,6 +46,7 @@ for i in range(n_clusters):
 
 for i in range(len(clusters)):
     for j in range(len(clusters[i])):
+        files[i].write(str(i)+",")
         for k in range(len(clusters[i][j])):
             if k == len(clusters[i][j]) - 1:
                 files[i].write(str(clusters[i][j][k]))

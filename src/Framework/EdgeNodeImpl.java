@@ -49,31 +49,46 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         this.clientsForEdgeNodes = clientsForEdgeNodes;
     }
 
+    //该接口，多传 Map<List<Double>, List<Integer,Integer>>
+    //500/5000  threadhold  threadhold + delta
+
     public void receiveAndProcessFP(Map<List<Double>, Integer> fingerprints, int edgeDeviceHashCode) {
-        System.out.printf("Thead %d receiveAndProcessFP. \n", Thread.currentThread().getId());
+//        System.out.printf("Thead %d receiveAndProcessFP. \n", Thread.currentThread().getId());
         for (List<Double> id : fingerprints.keySet()) {
-            if (fingerprints.get(id) == Integer.MIN_VALUE) {
+            int delta;
+            if (id.get(0) == 0.0 && id.get(1) ==31.0 && id.get(2)==0.0 && Constants.currentSlideID == 20){
+                int a=1;
+            }
+//            System.out.printf("Thead %d receiveAndProcessFP1. \n", Thread.currentThread().getId());
+            if (fingerprints.get(id) < Constants.threadhold) {
+//                System.out.printf("Thead %d receiveAndProcessFP2. \n", Thread.currentThread().getId());
+                delta = fingerprints.get(id) - Constants.threadhold;
+                unitsStatusMap.get(id).updateCount(delta);
+                unitsStatusMap.get(id).updateDeltaCount(delta);
+                unitsStatusMap.get(id).update();
                 unitsStatusMap.get(id).belongedDevices.remove(edgeDeviceHashCode);
                 if (unitsStatusMap.get(id).belongedDevices.isEmpty()) {
                     unitsStatusMap.remove(id);
+                    unitResultInfo.remove(id);
                 }
+            }else {
+                delta = fingerprints.get(id);
+                if (!unitsStatusMap.containsKey(id)) {
+                    unitsStatusMap.put(id, new UnitInNode(id, 0));
+                }
+                unitsStatusMap.get(id).updateCount(delta);
+                unitsStatusMap.get(id).updateDeltaCount(delta);
+                unitsStatusMap.get(id).update();
+                unitsStatusMap.get(id).belongedDevices.add(edgeDeviceHashCode);
             }
-            if (!unitsStatusMap.containsKey(id)) {
-                unitsStatusMap.put(id, new UnitInNode(id, 0));
-            }
-            unitsStatusMap.get(id).updateCount(fingerprints.get(id));
-            unitsStatusMap.get(id).updateDeltaCount(fingerprints.get(id));
-            unitsStatusMap.get(id).update();
-            unitsStatusMap.get(id).belongedDevices.add(edgeDeviceHashCode);
         }
         ArrayList<Thread> threads = new ArrayList<>();
         count.incrementAndGet();
         boolean flag = count.compareAndSet(this.clientsForDevices.size(), 0);
         if (flag) {
-            System.out.printf("Thead %d: Node has finished collecting data, enter into N-N phase.\n",Thread.currentThread().getId());
+//            System.out.printf("Thead %d: Node has finished collecting data, enter into N-N phase.\n",Thread.currentThread().getId());
             // node has finished collecting data, entering into the N-N phase, only one thread go into this loop
             this.flag = true; //indicate to other nodes I am ready
-            System.out.printf("Thead %d: Node is ready.\n",Thread.currentThread().getId());
             for (UnitInNode unitInNode : unitsStatusMap.values()) {
                 unitInNode.updateSafeness();
             }
@@ -87,9 +102,14 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                         .filter(x -> this.handler.neighboringSet(unsafeUnit, x.unitID)).toList();
 //                unitInNodeList.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));//�����в�ͬ��unsafeUnit, Ҫһ���Ը��� @shimin
                 needUpdate.addAll(unitInNodeList);
+                if(unsafeUnit.get(0) == 0.0 && unsafeUnit.get(1) == 31.0 && unsafeUnit.get(2) == 0.0 && Constants.currentSlideID == 20)
+                {
+                    System.out.println("aaaa");
+                }
                 if (!unitResultInfo.containsKey(unsafeUnit)) {
                     unitResultInfo.put(unsafeUnit, new ArrayList<>());
                 }
+//                System.out.printf("Thead %d: Node is ready4.\n",Thread.currentThread().getId());
                 unitInNodeList.forEach(
                         x -> {
                             for (UnitInNode unitInNode : unitResultInfo.get(unsafeUnit)) {
@@ -103,12 +123,16 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                             unitResultInfo.get(unsafeUnit).add(unitInNode);//TODO: check��ǳ����������
                         }
                 );
+//                System.out.printf("Thead %d: Node is ready5.\n",Thread.currentThread().getId());
             }
+//            System.out.printf("Thead %d: Node is ready6.\n",Thread.currentThread().getId());
             needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
             pruning(1);
+//            System.out.printf("Thead %d: Node is ready7.\n",Thread.currentThread().getId());
             unSafeUnits = unitsStatusMap.keySet().stream().filter(key -> unitsStatusMap.get(key).isSafe != 2).toList();
-            System.out.printf("Thead %d: Node has finished local pruning, enter into N-N phase.\n", Thread.currentThread().getId());
+//            System.out.printf("Thead %d: Node has finished local pruning, enter into N-N phase.\n", Thread.currentThread().getId());
             //��ʼnode - node ͨ��
+//            System.out.printf("Thead %d: Node is ready8.\n",Thread.currentThread().getId());
             for (int edgeNodeCode : this.clientsForEdgeNodes.keySet()) {
 
                 while (!EdgeNodeNetwork.nodeHashMap.get(edgeNodeCode).handler.flag) {
@@ -117,8 +141,12 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 Thread t = new Thread(() -> {
                     try {
                         Map<List<Double>, List<UnitInNode>> result = this.clientsForEdgeNodes.get(edgeNodeCode).provideNeighborsResult(finalUnSafeUnits, this.belongedNode.hashCode());
-                        System.out.printf("Thead %d processResult. \n", Thread.currentThread().getId());
+//                        System.out.printf("Thead %d processResult. \n", Thread.currentThread().getId());
                         for (List<Double> unitID : result.keySet()) {
+                            if(unitID.get(0) == 0.0 && unitID.get(1) == 31.0 && unitID.get(2) == 0.0 && Constants.currentSlideID == 20)
+                            {
+                                System.out.println("debug");
+                            }
                             List<UnitInNode> unitInNodeList = result.get(unitID);
                             if (!unitResultInfo.containsKey(unitID)) {
                                 unitResultInfo.put(unitID, unitInNodeList);
@@ -159,17 +187,25 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             //send result back to the belonged device;
             sendDeviceResult();
             this.flag = false;
+//            for (UnitInNode unitInNode: unitsStatusMap.values()){
+//                unitInNode.deltaCnt = 0;
+//            }
         }
     }
 
     public void pruning(int stage) {
         //update UnitInNode update
+//        System.out.printf("Thead %d: pruning.\n",Thread.currentThread().getId());
         for (List<Double> UnitID : unitResultInfo.keySet()) {
             //add up all point count
             List<UnitInNode> list = unitResultInfo.get(UnitID);
             //ͬһ��cell�ĵ�������k����ô���cell����safe��
             Optional<UnitInNode> exist = list.stream().filter(x -> x.unitID.equals(UnitID) && (x.pointCnt > Constants.K)).findAny();
             if (exist.isPresent()) {
+                if(UnitID.get(0) == 0.0 && UnitID.get(1) == 31.0 && UnitID.get(2) == 0.0 && Constants.currentSlideID == 20)
+                {
+                    System.out.println("NETS2 safe status is " + UnitID + "\n");
+                }
                 unitsStatusMap.get(UnitID).isSafe = 2;
             }
             if (stage == 2) {
@@ -189,35 +225,34 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
      */
     @Override
     public Map<List<Double>, List<UnitInNode>> provideNeighborsResult(List<List<Double>> unSateUnits, int edgeNodeHash) {
-        System.out.printf("Thead %d provideNeighborsResult. \n", Thread.currentThread().getId());
+//        System.out.printf("Thead %d provideNeighborsResult. \n", Thread.currentThread().getId());
         Map<List<Double>, List<UnitInNode>> result = new HashMap<>();
         HashSet<UnitInNode> needUpdate = new HashSet<>();
         for (List<Double> unit : unSateUnits) {
+            if(unit.get(0) == 0.0 && unit.get(1) == 31.0 && unit.get(2) == 0.0 && Constants.currentSlideID == 19)
+            {
+                int a=1;
+            }
             List<UnitInNode> unitInNodeList = unitsStatusMap.values().stream()
                     .filter(x -> x.isUpdated.get(edgeNodeHash) == 1)
                     .filter(x -> this.handler.neighboringSet(unit, x.unitID)).toList();
             needUpdate.addAll(unitInNodeList);
             result.put(unit, unitInNodeList);
-//            try {
-//                this.clientsForEdgeNodes.get(edgeNodeHash).processResult(unit, unitInNodeList);
-//            } catch (Throwable e) {
-//                throw new RuntimeException(e);
-//            }
         }
-        needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
+        needUpdate.forEach(x -> x.isUpdated.put(edgeNodeHash, 0));
         return result;
     }
 
     public Set<Vector> result;
     @Override
     public Set<Vector> uploadAndDetectOutlier(List<Vector> data) throws InvalidException, TException {
-        System.out.printf("Thead %d uploadAndDetectOutlier.\n", Thread.currentThread().getId() );
+//        System.out.printf("Thead %d uploadAndDetectOutlier.\n", Thread.currentThread().getId() );
         allData.addAll(data);
         count.incrementAndGet();
         boolean flag = count.compareAndSet(Constants.dn * Constants.nn, 0);
         // wait for all nodes to finish uploading && current slide after first window
         if (flag) {
-            System.out.printf("Thead %d all nodes have finished uploading data.\n", Thread.currentThread().getId() );
+//            System.out.printf("Thead %d all nodes have finished uploading data.\n", Thread.currentThread().getId() );
             this.detector.detectOutlier(allData);
             if (Constants.currentSlideID >= Constants.nS - 1){
                 result = new HashSet<>(this.detector.outlierVector);
@@ -243,6 +278,10 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                         x -> x.belongedDevices.contains(edgeDeviceCode)).toList(); // ���device��ǰ�е�����unit
                 HashMap<List<Double>, Integer> status = new HashMap<>();
                 for (UnitInNode i : list) {
+                    if(i.unitID.get(0) == 0.0 && i.unitID.get(1) == 31.0 && i.unitID.get(2) == 0.0 && Constants.currentSlideID == 20)
+                    {
+                        System.out.println("NETS2 safe status is " + i.isSafe + "\n");
+                    }
                     status.put(i.unitID, i.isSafe);
                 }
 

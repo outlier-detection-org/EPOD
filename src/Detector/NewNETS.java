@@ -7,6 +7,7 @@ import DataStructure.Tuple;
 import Framework.DeviceImpl;
 import utils.Constants;
 
+import java.io.OutputStream;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
@@ -196,6 +197,9 @@ public class NewNETS extends Detector {
         fullDimCellSlideInCnt = new HashMap<>();
         internal_dataList.put(Constants.currentSlideID,new HashMap<>());
         for (Tuple t : slideTuples) {
+            if (t.values.get(0) ==-9.99 &&t.values.get(1) ==24.345&&t.values.get(2) ==-9.99 ){
+                int a=1;
+            }
             ArrayList<Short> fullDimCellIdx = new ArrayList<>();
             ArrayList<Short> subDimCellIdx = new ArrayList<>();
             for (int j = 0; j < Constants.dim; j++) {
@@ -217,10 +221,6 @@ public class NewNETS extends Detector {
                 internal_dataList.get(Constants.currentSlideID).put(fullDimCellIdx, new ArrayList<>());
             }
             internal_dataList.get(Constants.currentSlideID).get(fullDimCellIdx).add(t);
-
-            if (fullDimCellIdx.get(0)==79 && fullDimCellIdx.get(1)==31 && fullDimCellIdx.get(2)==9) {
-                System.out.println(t.subDimCellIdx);
-            }
             if (!idxEncoder.containsKey(fullDimCellIdx)) {
                 int id = idxEncoder.size();
                 idxEncoder.put(fullDimCellIdx, id);
@@ -266,11 +266,10 @@ public class NewNETS extends Detector {
      */
     public void calcNetChange(ArrayList<Tuple> slideTuples, int itr) {
         this.indexingSlide(slideTuples);
-
-        removeExpiredExternalData();
-        internal_dataList.remove(Constants.currentSlideID - Constants.nS);
         /* Slide out */
         if (itr > Constants.nS - 1) {
+            removeExpiredExternalData();
+            internal_dataList.remove(Constants.currentSlideID - Constants.nS);
             slideOut = slides.poll();
             fullDimCellSlideOutCnt = fullDimCellSlidesCnt.poll();
         }
@@ -305,7 +304,10 @@ public class NewNETS extends Detector {
                 fullDimCellWindowCnt.put(key, 0);
             }
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) + fullDimCellSlideInCnt.get(key));
-
+            ArrayList<Short> full =idxDecoder.get(key);
+            if (full.get(0) == 0 && full.get(1) ==31 && full.get(2)==0){
+                int a=1;
+            }
             List<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
             if (!this.fullCellDelta.containsKey(fingerprint)) {
                 this.fullCellDelta.put(fingerprint, 0);
@@ -325,24 +327,31 @@ public class NewNETS extends Detector {
                     this.fullCellDelta.get(fingerprint) - fullDimCellSlideOutCnt.get(key));
             if (fullDimCellWindowCnt.get(key) < 1) {
                 fullDimCellWindowCnt.remove(key);
-                this.fullCellDelta.put(fingerprint, Integer.MIN_VALUE);
+                this.fullCellDelta.put(fingerprint, Constants.threadhold + this.fullCellDelta.get(fingerprint));
             }
         }
     }
 
     public void processOutliers() {
-        System.out.printf("Thead %d processOutliers. \n", Thread.currentThread().getId());
+//        System.out.printf("Thead %d processOutliers. \n", Thread.currentThread().getId());
         // after receive external data, we need to process outliers once again
         Iterator<Tuple> it = outliers.iterator();
         OutlierLoop:
         while (it.hasNext()) {
             Tuple outlier = it.next();
+            if(outlier.values.get(0) == -9.99 && outlier.values.get(1) == 24.183 && outlier.values.get(2) == -9.99)
+            {
+                System.out.println("NETS0 NEIGHBOR IS " + outlier.getNN() + "\n");
+            }
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
             if (status.get(tmp) == 2) {
+                if(outlier.values.get(0) == -9.99 && outlier.values.get(1) == 24.183 && outlier.values.get(2) == -9.99)
+                {
+                    System.out.println("NETS2 NEIGHBOR IS " + outlier.getNN() + "\n");
+                }
                 it.remove();
                 continue OutlierLoop;
             }
-
             HashMap<Integer, HashMap<List<Double>, List<Vector>>> candNeighborByTime = new HashMap<>();
             if (status.get(tmp) == 1) {
                 // undetermined point:
@@ -405,6 +414,10 @@ public class NewNETS extends Detector {
                     }
                     outlier.last_calculate_time++;
                     if (need <= 0) {
+                        if(outlier.values.get(0) == -9.99 && outlier.values.get(1) == 24.183 && outlier.values.get(2) == -9.99)
+                        {
+                            System.out.println("NETS3 NEIGHBOR IS " + outlier.getNN() + "\n");
+                        }
                         it.remove();
                         continue OutlierLoop;
                     }
@@ -415,7 +428,7 @@ public class NewNETS extends Detector {
     }
 
     public void processOutliers1() {
-        System.out.printf("Thead %d processOutliers1. \n", Thread.currentThread().getId());
+//        System.out.printf("Thead %d processOutliers1. \n", Thread.currentThread().getId());
         // after receive external data, we need to process outliers once again
         Iterator<Tuple> it = outliers.iterator();
         while(it.hasNext()){
@@ -468,17 +481,7 @@ public class NewNETS extends Detector {
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int lastSent) {
         Map<List<Double>, List<Vector>> data = new HashMap<>();
         for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
-//            int index = time - Constants.currentSlideID + Constants.nS - 1;
             for (List<Double> id : bucketIds) {
-//                if (id.get(0) == 79 && id.get(1) == 31 && id.get(2) == 9) {
-//                    System.out.println("sendData: " + id);
-//                }
-//                // HashMap<ArrayList<Short>, Integer> idxEncoder
-//                // HashMap<Integer, ArrayList<Short>> idxDecoder;
-//                int n = idxEncoder.get(transferFullIdToSubId(id));
-//                if (!slides.get(index).containsKey(n)) continue;
-//                Cell fullCell = slides.get(index).get(n).fullCells.get(convertDoubleToShort(id));
-//                if (fullCell == null) continue;
                 if (!internal_dataList.get(time).containsKey(convertDoubleToShort(id))) continue;
                 ArrayList<Tuple> tuples = internal_dataList.get(time).get(convertDoubleToShort(id));
                 if (!data.containsKey(id)) {
