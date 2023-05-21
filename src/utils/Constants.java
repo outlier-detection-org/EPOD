@@ -12,8 +12,8 @@ public class Constants {
     public static int nn = 2;
     public static int dn = 2;
     public static int nW = 5;
-    public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "STK"; //"FC" "TAO" "GAS" "STK" "GAU" "EM" "HPC
+    public static String methodToGenerateFingerprint = "MCOD_CENTRALIZE"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
+    public static String dataset = "GAU"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
 
     //calculated automatically
@@ -57,19 +57,19 @@ public class Constants {
             R = 525;
             dim = 55;
             if (methodToGenerateFingerprint.contains("NETS")){
-                subDim = 1;
+                subDim = 3;
             }
         } else if (dataset.contains("TAO")) {
             R = 1.9;
             dim = 3;
             if (methodToGenerateFingerprint.contains("NETS")){
-                subDim = 1;
+                subDim = 3;
             }
         } else if (dataset.contains("EM")) {
             R = 115;
             dim = 16;
             if (methodToGenerateFingerprint.contains("NETS")){
-                subDim = 1;
+                subDim = 4;
             }
         } else if (dataset.contains("STK")) {
             R = 0.45;
@@ -87,13 +87,13 @@ public class Constants {
             R = 6.5;
             dim = 7;
             if (methodToGenerateFingerprint.contains("NETS")){
-                subDim = 1;
+                subDim = 7;
             }
         } else if (dataset.contains("GAS")) {
             R = 2.75;
             dim = 10;
             if (methodToGenerateFingerprint.contains("NETS")){
-                subDim = 1;
+                subDim = 10;
             }
         } else if (dataset.contains("RC")){
             R = 4;
