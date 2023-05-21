@@ -197,7 +197,7 @@ public class NewNETS extends Detector {
         fullDimCellSlideInCnt = new HashMap<>();
         internal_dataList.put(Constants.currentSlideID,new HashMap<>());
         for (Tuple t : slideTuples) {
-            if (t.values.get(0) ==-9.99 &&t.values.get(1) ==24.345&&t.values.get(2) ==-9.99 ){
+            if (t.values.get(0) == 118.53){
                 int a=1;
             }
             ArrayList<Short> fullDimCellIdx = new ArrayList<>();
@@ -339,16 +339,8 @@ public class NewNETS extends Detector {
         OutlierLoop:
         while (it.hasNext()) {
             Tuple outlier = it.next();
-            if(outlier.values.get(0) == -9.99 && outlier.values.get(1) == 24.183 && outlier.values.get(2) == -9.99)
-            {
-                System.out.println("NETS0 NEIGHBOR IS " + outlier.getNN() + "\n");
-            }
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
             if (status.get(tmp) == 2) {
-                if(outlier.values.get(0) == -9.99 && outlier.values.get(1) == 24.183 && outlier.values.get(2) == -9.99)
-                {
-                    System.out.println("NETS2 NEIGHBOR IS " + outlier.getNN() + "\n");
-                }
                 it.remove();
                 continue OutlierLoop;
             }
@@ -414,9 +406,9 @@ public class NewNETS extends Detector {
                     }
                     outlier.last_calculate_time++;
                     if (need <= 0) {
-                        if(outlier.values.get(0) == -9.99 && outlier.values.get(1) == 24.183 && outlier.values.get(2) == -9.99)
+                        if(outlier.values.get(0) == 118.53)
                         {
-                            System.out.println("NETS3 NEIGHBOR IS " + outlier.getNN() + "\n");
+                            System.out.println("NETS1 NEIGHBOR IS " + (outlier.getNN() + sumOfNN) + "\n");
                         }
                         it.remove();
                         continue OutlierLoop;
@@ -531,6 +523,9 @@ public class NewNETS extends Detector {
         HashMap<Double, HashSet<Integer>> candidateCellIndicesMap = new HashMap<Double, HashSet<Integer>>();
         //key: distance between cell and neighbor, value: cell indices
         for (Integer cellIdxWin : windowCnt.keySet()) {
+            if (cellIdxWin.equals(cellIdxInf)) {
+                continue;
+            }
             double dist = neighboringSetDist(idxDecoder.get(cellIdxInf), idxDecoder.get(cellIdxWin));
 
             if (dist < neighCellIdxDist) {
@@ -575,6 +570,10 @@ public class NewNETS extends Detector {
         InfCellLoop:
         for (Integer infCellIdx : influencedCells) {
             //find neighbor cells
+            ArrayList<Short> d = idxDecoder.get(infCellIdx);
+            if (d.get(0) == 263 && Constants.currentSlideID == 19){
+                int a =1;
+            }
             candidateCellsTupleCnt = 0;
             ArrayList<Integer> candCellIndices = getSortedCandidateCellIndices(infCellIdx);
             //verify if outlier cell
@@ -647,6 +646,9 @@ public class NewNETS extends Detector {
                             if (neighboringTuple(tCand, tOther, Constants.R)) {
                                 if (tCand.slideID <= tOther.slideID) {
                                     tCand.nnSafeOut += 1;
+                                    if (tCand.values.get(0) == 118.53) {
+                                        System.out.println("NETS safeout neighbor: " + tOther);
+                                    }
                                 } else {
                                     tCand.nnUnSafeOut += 1;
                                     tCand.unSafeOutNeighbors.put(currentSlideID, tCand.unSafeOutNeighbors.get(currentSlideID) + 1);
@@ -663,6 +665,11 @@ public class NewNETS extends Detector {
                         if (outliers.contains(tCand)) outliers.remove(tCand);
                         continue TupleLoop;
                     }
+                }
+                if (tCand.values.get(0) == 118.53) {
+                    System.out.println("NETS nn: " + tCand.nnIn);
+                    System.out.println("NETS SafeOut: " + tCand.nnSafeOut);
+                    System.out.println("NETS UnSafeOut: " + tCand.nnUnSafeOut);
                 }
                 outliers.add(tCand);
             }

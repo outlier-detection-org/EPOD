@@ -11,7 +11,7 @@ public class Constants {
     public static int threadhold = -10000;
     public static int nn = 2;
     public static int dn = 2;
-    public static int nW = 4;
+    public static int nW = 5;
     public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
     public static String dataset = "STK"; //"FC" "TAO" "GAS" "STK" "GAU" "EM" "HPC
 
@@ -48,8 +48,8 @@ public class Constants {
             S = 500;
             W = 10000;
         } else {
-            S = 5000;
-            W = 100000;
+            S = 500;
+            W = 10000;
         }
         nS = W / S;
 

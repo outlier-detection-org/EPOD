@@ -1,5 +1,6 @@
 package utils;
 
+import Detector.NewNETS;
 import RPC.Vector;
 import java.io.*;
 import java.util.*;
@@ -21,29 +22,53 @@ public class CompareResult {
             HashSet<Vector> outliers = new HashSet<Vector>();
             for (Vector v : allData) {
                 int numOfNeighbors = 0;
-                int pre = 0;
-                int succeed = 0;
-                LinkedList<Vector> vs = new LinkedList<>();
+                NewNETS newNETS = new NewNETS(0);
+                int nn = 0;
+                int outSafe = 0;
+                int outUnsafe = 0;
+                ArrayList<Short> fullDimCellIdx0 = new ArrayList<>();
+                for (int j = 0; j < Constants.dim; j++) {
+                    short dimIdx = (short) ((v.values.get(j) - newNETS.minValues[j]) / newNETS.dimLength[j]);
+                    fullDimCellIdx0.add(dimIdx);
+                }
                 for (Vector v2 : allData) {
+                    if (v.values.get(0) == 118.53) {
+                        if (v2.values.get(0) == 118.56){
+                        int a =1;
+                        }
+                    }
                     if (v.equals(v2)) continue;
                     if (distance(v, v2) <= Constants.R * Constants.R) {
                         numOfNeighbors++;
-//                        if(v.values.get(0) == 0.01 && v.values.get(1) == 71.27 && v.values.get(2) == 25.708){
-//                            if (v2.slideID>=v.slideID){
-//                                vs.add(v2);
-//                            }else pre++;
-//                        }
+                        ArrayList<Short> fullDimCellIdx = new ArrayList<>();
+                        for (int j = 0; j < Constants.dim; j++) {
+                            short dimIdx = (short) ((v2.values.get(j) - newNETS.minValues[j]) / newNETS.dimLength[j]);
+                            fullDimCellIdx.add(dimIdx);
+                        }
+                        if (fullDimCellIdx.equals(fullDimCellIdx0)){
+                            nn++;
+                        }else {
+                            if (v.slideID>v2.slideID){
+                                outUnsafe++;
+                            }
+                            else {
+                                if (v.values.get(0) == 118.53) {
+                                    if (v2.values.get(0) == 118.56){
+                                        System.out.println("!!!!!!!!!!!!!!!!!!"+ v2);
+                                    }
+                                    System.out.println("NAIVE safeout neighbor: " + v2);
+                                }
+                                outSafe++;
+                            }
+                        }
                     }
                 }
-                //0.02, 23.883, 71.3
-                //1.88, 23.305, 89.21
-                //-9.99, -9.99, 24.183
-                //[0.01, 25.708, 71.27]
-//                if(v.values.get(0) == 0.01 && v.values.get(1) == 71.27 && v.values.get(2) == 25.708){
-//                    System.out.println("MCOD pre: " + pre);
-//                    System.out.println("MCOD sud: " + succeed);
-//                    vs.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).forEachOrdered(System.out::println);
-//                }
+                if(v.values.get(0) == 118.53){
+                    System.out.println("NAIVE neighbor: " + numOfNeighbors);
+                    System.out.println("NETS nn: " + nn);
+                    System.out.println("NETS SafeOut: " + outSafe);
+                    System.out.println("NETS UnSafeOut: " + outUnsafe);
+                }
                 if (numOfNeighbors < Constants.K) {
                     outliers.add(v);
                 }
