@@ -10,6 +10,7 @@ import utils.Constants;
 import utils.DataGenerator;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("unchecked")
 public class DeviceImpl implements DeviceService.Iface {
@@ -93,11 +94,12 @@ public class DeviceImpl implements DeviceService.Iface {
         this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
         return this.detector.sendData(bucketIds, lastSent);
     }
-
+    AtomicInteger dataSize = new AtomicInteger(0);
     public void getExternalData(Map<List<Double>, Integer> status, Map<Integer, Set<List<Double>>> result) {
 //        System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
         this.detector.status = status;
         ArrayList<Thread> threads = new ArrayList<>();
+        System.out.println("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet());
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode.equals(this.belongedDevice.hashCode())) continue;
             //HashMap<Integer,HashSet<ArrayList<?>>>
@@ -107,7 +109,8 @@ public class DeviceImpl implements DeviceService.Iface {
                     if (!this.detector.externalData.containsKey(Constants.currentSlideID)) {
                         this.detector.externalData.put(Constants.currentSlideID, Collections.synchronizedMap(new HashMap<>()));
                     }
-                    Map<List<Double>, List<Vector>> map = this.detector.externalData.get(Constants.currentSlideID);//TODO: Check ����������
+                    data.values().forEach(x -> dataSize.addAndGet(x.size()));
+                    Map<List<Double>, List<Vector>> map = this.detector.externalData.get(Constants.currentSlideID);
                     data.keySet().forEach(
                             x -> {
                                 if (!map.containsKey(x)) {
@@ -130,24 +133,28 @@ public class DeviceImpl implements DeviceService.Iface {
                 e.printStackTrace();
             }
         }
+        if (Constants.currentSlideID >= Constants.nS - 1) {
+            System.out.println("Device " + this.belongedDevice.hashCode() + " get data size is " + dataSize);
+            EdgeNodeNetwork.dataTransfered += dataSize.get();
+        }
+        dataSize.set(0);
         this.ready = true;
     }
 
     public Set<? extends Vector> detectOutlier_P2P(int itr) throws Throwable {
-//        System.out.println("Thead " + Thread.currentThread().getId() + " detectOutlier_P2P");
-        this.ready = false;
+        //step1: get data
         Constants.currentSlideID = itr;
         getRawData(itr);
-        //step1: ????data
+        this.ready = true;
         allData.clear();
         allData.addAll(rawData);
-
-        //step2: �ռ�����device��data
+        //step2: ask other device for data
         ArrayList<Thread> threads = new ArrayList<>();
         for (DeviceService.Client client : clientsForDevices.values()) {
             Thread t = new Thread(() -> {
                 try {
                     List<Vector> data = client.sendAllLocalData();
+                    dataSize.addAndGet(data.size());
                     allData.addAll(data);
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -163,26 +170,27 @@ public class DeviceImpl implements DeviceService.Iface {
                 e.printStackTrace();
             }
         }
+        if (Constants.currentSlideID >= Constants.nS - 1) {
+            System.out.println("Each device get data size is " + dataSize);
+            dataSize.set(0);
+        }
         this.detector.detectOutlier(allData);
-//        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
         if (itr >= Constants.nS - 1) {
             return this.detector.outlierVector;
         } else return new HashSet<>();
     }
 
     public Set<? extends Vector> detectOutlier_Centralize(int itr) throws Throwable {
-//        System.out.println("Thead " + Thread.currentThread().getId() + " detectOutlier_Centralize");
         Constants.currentSlideID = itr;
         getRawData(itr);
         Set<? extends Vector> result = clientsForNearestNode.uploadAndDetectOutlier(this.rawData);
-//        System.out.printf("Thead %d finished. \n", Thread.currentThread().getId());
         return result;
     }
 
-    //����slide�ĵ�
     @Override
     public List<Vector> sendAllLocalData() {
-//        System.out.printf("Thead %d sendAllLocalData. \n", Thread.currentThread().getId());
+        while (!this.ready){
+        }
         return this.rawData;
     }
 }

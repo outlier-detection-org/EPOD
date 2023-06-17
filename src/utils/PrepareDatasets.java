@@ -30,7 +30,7 @@ public class PrepareDatasets {
     
     public static void main(String[] args) throws Throwable {
         //Step1 : Generate deviceID;
-        generateDeviceId();
+//        generateDeviceId();
         //Step2 : Generate timestamp
         generateTimestamp();
     }
@@ -87,6 +87,10 @@ public class PrepareDatasets {
                 count = 490 + random.nextInt(10) + 1;
             } else if (s == 5000) {
                 count = 4900 + random.nextInt(100) + 1;
+            } else if (s == 1000) {
+                count = 990 + random.nextInt(10) + 1;
+            } else {
+                count = s -10 + random.nextInt(10) + 1;
             }
             metaBfw.write("device " + i + " " + count + "\n");
             int unit = s * 10 / count;
@@ -102,6 +106,10 @@ public class PrepareDatasets {
                         count = 490 + random.nextInt(10) + 1;
                     } else if (s == 5000) {
                         count = 4900 + random.nextInt(100) + 1;
+                    } else if (s == 1000) {
+                        count = 990 + random.nextInt(10) + 1;
+                    } else {
+                        count = s -10 + random.nextInt(10) + 1;
                     }
                     metaBfw.write("device " + i + " " + count + "\n");
                     unit = s * 10 / count;

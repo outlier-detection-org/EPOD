@@ -3,15 +3,16 @@ import os
 from sklearn.cluster import KMeans
 import pandas as pd
 import numpy as np
+import random
 
 
 # Configuration file
 n_clusters = 4
-mix_rate = 20
-data = pd.read_table('C:\\Users\\Lenovo\\Desktop\\outlier_detection\\EPOD\\Datasets\\fc.txt', sep=',', header=None)
+mix_rate = 5
+data = pd.read_table('C:\\Users\\Lenovo\\Desktop\\outlier_detection\\EPOD\\Datasets\\tao.txt', sep=',', header=None)
 prefix = \
     "C:\\Users\\Lenovo\\Desktop\\outlier_detection\\EPOD\\Datasets\\DeviceId_data\\Device_" + \
-    str(n_clusters) + "_FC_K_" + str(mix_rate) + "\\"
+    str(n_clusters) + "_TAO_K_" + str(mix_rate) + "\\"
 
 
 df = pd.DataFrame(data)
@@ -25,17 +26,40 @@ for i in range(kmeans.labels_.size):
 for i in range(n_clusters):
     print(len(clusters[i]))
 
-# Todo
+#TAO: cluster 2(0123) is too small
+tmp = []
+for k in range(clusters[2].__len__()):
+    p = clusters[2][k]
+    for i in range(100):
+        p[0] = p[0]
+        tmp.append(p.copy())
+clusters[2] = tmp
+
+for i in range(n_clusters):
+    clusters.append([])
+for i in range(kmeans.labels_.size):
+    clusters[kmeans.labels_[i]].append(X[i])
+for i in range(n_clusters):
+    print(len(clusters[i]))
+
+# find the smallest cluster
+smallIndex=0
+smallSize=0
+for cluster in clusters:
+    if cluster.__len__()<smallSize:
+        smallIndex=clusters.index(cluster)
+        smallSize=cluster.__len__()
+
 # mix 10% 0->1 1->2 2->3 3->0
-# count = int(len(clusters[0]) * mix_rate / 100)
-# before = clusters[0][0:count]
-# for i in range(n_clusters):
-#     j = (i + 1) % n_clusters
-#     after = clusters[j][0:count]
-#     clusters[j][0:count] = before
-#     before = after
-# for i in range(n_clusters):
-#     random.shuffle(clusters[i])
+count = int(len(clusters[smallIndex]) * mix_rate / 100)
+before = clusters[0][0:count]
+for i in range(n_clusters):
+    j = (i + 1) % n_clusters
+    after = clusters[j][0:count]
+    clusters[j][0:count] = before
+    before = after
+for i in range(n_clusters):
+    random.shuffle(clusters[i])
 
 
 os.mkdir(prefix, 0o0755)

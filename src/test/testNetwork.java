@@ -12,7 +12,7 @@ public class testNetwork {
         PrintStream ps;
         DeviceFactory edgeDeviceFactory;
         ps = new PrintStream(new FileOutputStream("src/Result/" + Constants.dataset + "_" +
-                Constants.methodToGenerateFingerprint + ".txt"));
+                Constants.methodToGenerateFingerprint +" " + Constants.nS + ".txt"));
         edgeDeviceFactory = new DeviceFactory();
 
         System.setOut(ps);

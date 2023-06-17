@@ -340,9 +340,13 @@ public class NewNETS extends Detector {
         while (it.hasNext()) {
             Tuple outlier = it.next();
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
-            if (status.get(tmp) == 2) {
-                it.remove();
-                continue OutlierLoop;
+            try{
+                if (status.get(tmp) == 2) {
+                    it.remove();
+                    continue OutlierLoop;
+                }
+            } catch (Exception e){
+                System.out.println(this.hashCode() + " error" + tmp.get(0));
             }
             HashMap<Integer, HashMap<List<Double>, List<Vector>>> candNeighborByTime = new HashMap<>();
             if (status.get(tmp) == 1) {
@@ -405,6 +409,11 @@ public class NewNETS extends Detector {
                         }
                     }
                     outlier.last_calculate_time++;
+                    if (outlier.values.get(0) == 11.751) {
+                        System.out.println("NETS nn: " + (outlier.nnIn + sumOfNN));
+                        System.out.println("NETS SafeOut: " + outlier.nnSafeOut);
+                        System.out.println("NETS UnSafeOut: " + outlier.nnUnSafeOut);
+                    }
                     if (need <= 0) {
                         if(outlier.values.get(0) == 118.53)
                         {
@@ -646,9 +655,6 @@ public class NewNETS extends Detector {
                             if (neighboringTuple(tCand, tOther, Constants.R)) {
                                 if (tCand.slideID <= tOther.slideID) {
                                     tCand.nnSafeOut += 1;
-                                    if (tCand.values.get(0) == 118.53) {
-                                        System.out.println("NETS safeout neighbor: " + tOther);
-                                    }
                                 } else {
                                     tCand.nnUnSafeOut += 1;
                                     tCand.unSafeOutNeighbors.put(currentSlideID, tCand.unSafeOutNeighbors.get(currentSlideID) + 1);
@@ -666,11 +672,11 @@ public class NewNETS extends Detector {
                         continue TupleLoop;
                     }
                 }
-                if (tCand.values.get(0) == 118.53) {
-                    System.out.println("NETS nn: " + tCand.nnIn);
-                    System.out.println("NETS SafeOut: " + tCand.nnSafeOut);
-                    System.out.println("NETS UnSafeOut: " + tCand.nnUnSafeOut);
-                }
+//                if (tCand.values.get(0) == 11.751) {
+//                    System.out.println("NETS nn: " + tCand.nnIn);
+//                    System.out.println("NETS SafeOut: " + tCand.nnSafeOut);
+//                    System.out.println("NETS UnSafeOut: " + tCand.nnUnSafeOut);
+//                }
                 outliers.add(tCand);
             }
         }

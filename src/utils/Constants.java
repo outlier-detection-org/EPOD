@@ -11,10 +11,9 @@ public class Constants {
     public static int threadhold = -10000;
     public static int nn = 2;
     public static int dn = 2;
-    public static int nW = 5;
-    public static String methodToGenerateFingerprint = "MCOD_CENTRALIZE"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "GAU"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
-
+    public static int nW = 1;
+    public static String methodToGenerateFingerprint = "NETS_CENTRALIZE"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
+    public static String dataset = "TAO_K_0"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
 
@@ -46,7 +45,7 @@ public class Constants {
     static {
         if (dataset.contains("TAO") || dataset.contains("FC") || dataset.contains("RC")) {
             S = 500;
-            W = 10000;
+            W = S * 50;
         } else {
             S = 500;
             W = 10000;
