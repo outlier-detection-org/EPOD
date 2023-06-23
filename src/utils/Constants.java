@@ -13,7 +13,7 @@ public class Constants {
     public static int dn = 2;
     public static int nW = 1;
     public static String methodToGenerateFingerprint = "NETS_CENTRALIZE"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "TAO"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
+    public static String dataset = "GAU"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
 
@@ -45,7 +45,7 @@ public class Constants {
     static {
         if (dataset.contains("TAO") || dataset.contains("FC") || dataset.contains("RC")) {
             S = 500;
-            W = S * 50;
+            W = S * 20;
         } else {
             S = 500;
             W = 10000;
