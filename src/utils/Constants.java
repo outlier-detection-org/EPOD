@@ -13,7 +13,7 @@ public class Constants {
     public static int dn = 2;
     public static int nW = 1;
     public static String methodToGenerateFingerprint = "NETS_CENTRALIZE"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "TAO_K_0"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
+    public static String dataset = "TAO"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
 
