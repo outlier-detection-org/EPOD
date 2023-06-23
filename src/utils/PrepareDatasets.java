@@ -30,7 +30,7 @@ public class PrepareDatasets {
     
     public static void main(String[] args) throws Throwable {
         //Step1 : Generate deviceID;
-//        generateDeviceId();
+        generateDeviceId();
         //Step2 : Generate timestamp
         generateTimestamp();
     }
