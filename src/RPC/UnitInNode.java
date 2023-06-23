@@ -236,6 +236,7 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
   public synchronized void updateDeltaCount(int cnt) {
     if (this.n == Constants.dn) {
       this.n = 0;
+      this.deltaCnt = 0;
     }
     this.deltaCnt += cnt;
     this.n++;

@@ -47,20 +47,14 @@ public class CompareResult {
                                 outUnsafe++;
                             }
                             else {
-                                if (v.values.get(0) == 118.53) {
-                                    if (v2.values.get(0) == 118.56){
-                                        System.out.println("!!!!!!!!!!!!!!!!!!"+ v2);
-                                    }
-                                    System.out.println("NAIVE safeout neighbor: " + v2);
-                                }
                                 outSafe++;
                             }
                         }
                     }
                 }
-                if(v.values.get(0) == 11.751){
+                if(v.values.get(0) == 5.7907){
                     System.out.println("NAIVE neighbor: " + numOfNeighbors);
-                    System.out.println("NETS nn: " + nn);
+                    System.out.println("NETS nn: " + (nn));
                     System.out.println("NETS SafeOut: " + outSafe);
                     System.out.println("NETS UnSafeOut: " + outUnsafe);
                 }

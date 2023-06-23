@@ -304,10 +304,6 @@ public class NewNETS extends Detector {
                 fullDimCellWindowCnt.put(key, 0);
             }
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) + fullDimCellSlideInCnt.get(key));
-            ArrayList<Short> full =idxDecoder.get(key);
-            if (full.get(0) == 0 && full.get(1) ==31 && full.get(2)==0){
-                int a=1;
-            }
             List<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
             if (!this.fullCellDelta.containsKey(fingerprint)) {
                 this.fullCellDelta.put(fingerprint, 0);
@@ -339,6 +335,9 @@ public class NewNETS extends Detector {
         OutlierLoop:
         while (it.hasNext()) {
             Tuple outlier = it.next();
+            if (outlier.get(0) == 5.7907 && Constants.currentSlideID == 20) {
+                System.out.println("has it!");
+            }
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
             try{
                 if (status.get(tmp) == 2) {
@@ -380,9 +379,9 @@ public class NewNETS extends Detector {
                     }
                     candNeighborByTime.put(time, candNeighbor);
                 }
-                if (sumOfNeighbor + outlier.getNN() < Constants.K) {
-                    continue OutlierLoop;
-                }
+//                if (sumOfNeighbor + outlier.getNN() < Constants.K) {
+//                    continue OutlierLoop;
+//                }
 
                 //calculate distance concretely
                 int need = Constants.K - outlier.getNN() - sumOfNN;
@@ -409,7 +408,7 @@ public class NewNETS extends Detector {
                         }
                     }
                     outlier.last_calculate_time++;
-                    if (outlier.values.get(0) == 11.751) {
+                    if (outlier.values.get(0) == 5.7907) {
                         System.out.println("NETS nn: " + (outlier.nnIn + sumOfNN));
                         System.out.println("NETS SafeOut: " + outlier.nnSafeOut);
                         System.out.println("NETS UnSafeOut: " + outlier.nnUnSafeOut);
