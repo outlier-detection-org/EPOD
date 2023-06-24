@@ -28,6 +28,7 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
 
   public @org.apache.thrift.annotation.Nullable java.util.List<java.lang.Double> unitID; // required
   public int pointCnt; // required
+  public int allPointCnt;
   public int isSafe; // required // 0-outlier 1-undetermined 2-safe
   public int deltaCnt; // required
   public @org.apache.thrift.annotation.Nullable java.util.Map<java.lang.Integer,java.lang.Integer> isUpdated; // required
@@ -143,6 +144,7 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
   public UnitInNode(List<Double> unitID, int pointCnt) {
     this.unitID = unitID;
     this.pointCnt = pointCnt;
+    this.allPointCnt = pointCnt;
     this.deltaCnt = 0;
     this.isUpdated = new HashMap<>();
     this.isSafe = 1; //initally we should set it to be undetermined
@@ -183,6 +185,7 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
       this.unitID = __this__unitID;
     }
     this.pointCnt = other.pointCnt;
+    this.allPointCnt = other.allPointCnt;
     this.isSafe = other.isSafe;
     this.deltaCnt = other.deltaCnt;
     if (other.isSetIsUpdated()) {
@@ -223,24 +226,28 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
   }
 
 
-  public synchronized void update() {
-    isUpdated.replaceAll((k, v) -> 1);
-  }
+//  public synchronized void update() {
+//    isUpdated.replaceAll((k, v) -> 1);
+//  }
 
   public synchronized void updateCount(int cnt) {
     this.pointCnt += cnt;
+    this.allPointCnt = this.pointCnt;
+  }
+  public synchronized void updateAllCount(int cnt) {
+    this.allPointCnt += cnt;
   }
 
   int n = 0;
 
-  public synchronized void updateDeltaCount(int cnt) {
-    if (this.n == Constants.dn) {
-      this.n = 0;
-      this.deltaCnt = 0;
-    }
-    this.deltaCnt += cnt;
-    this.n++;
-  }
+//  public synchronized void updateDeltaCount(int cnt) {
+//    if (this.n == Constants.dn) {
+//      this.n = 0;
+//      this.deltaCnt = 0;
+//    }
+//    this.deltaCnt += cnt;
+//    this.n++;
+//  }
 
 
   public int getUnitIDSize() {
