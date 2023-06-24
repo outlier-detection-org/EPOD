@@ -554,15 +554,15 @@ public class MCOD extends Detector {
         outlierLoop:
         while (iterator.hasNext()) {
             MCO o = iterator.next();//读取当前集合数据元素
-            if(o.values.get(0) == 0.01 && o.values.get(1) == 71.27 && o.values.get(2) == 25.708){
-                List<Double> link =new LinkedList<>();
-                //0.0, 73.92, 25.604
-                link.add(0.0);
-                link.add(73.92);
-                link.add(25.604);
-                if (this.external_info.containsKey(link)){
+            if(o.values.get(0) == 6.9106 && Constants.currentSlideID == 20){
+//                List<Double> link =new LinkedList<>();
+//                //0.0, 73.92, 25.604
+//                link.add(0.0);
+//                link.add(73.92);
+//                link.add(25.604);
+//                if (this.external_info.containsKey(link)){
                     int a= 1;
-                };
+//                };
             }
             // HashMap<ArrayList<?>, Integer> status;
             int reply = this.status.get(o.center.values);
@@ -617,6 +617,9 @@ public class MCOD extends Detector {
                         }
                     }
                     o.last_calculate_time++;
+//                    if(o.values.get(0) == 6.9106){
+//                        System.out.println("MCOD: " + o.numberOfSucceeding + o.exps.size());
+//                    }
                     checkInlier(o, iterator);
                     if (o.numberOfSucceeding + o.exps.size() >= Constants.K) {
                         continue outlierLoop;

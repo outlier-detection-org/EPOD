@@ -52,12 +52,12 @@ public class CompareResult {
 //                        }
                     }
                 }
-//                if(v.values.get(0) == 7.0578){
-//                    System.out.println("NAIVE neighbor: " + numOfNeighbors);
+                if(v.values.get(0) == 6.9106){
+                    System.out.println("NAIVE neighbor: " + numOfNeighbors);
 //                    System.out.println("NETS nn: " + (nn));
 //                    System.out.println("NETS SafeOut: " + outSafe);
 //                    System.out.println("NETS UnSafeOut: " + outUnsafe);
-//                }
+                }
                 if (numOfNeighbors < Constants.K) {
                     outliers.add(v);
                 }

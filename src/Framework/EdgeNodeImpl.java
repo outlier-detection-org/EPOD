@@ -8,6 +8,7 @@ import org.apache.thrift.TException;
 import utils.Constants;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class EdgeNodeImpl implements EdgeNodeService.Iface {
@@ -29,7 +30,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public EdgeNodeImpl(EdgeNode edgeNode) {
         this.belongedNode = edgeNode;
         this.unitsStatusMap = Collections.synchronizedMap(new HashMap<>());
-        this.unitResultInfo = Collections.synchronizedMap(new HashMap<>());
+        this.unitResultInfo = new ConcurrentHashMap<List<Double>, List<UnitInNode>>();
         this.allData = Collections.synchronizedList(new ArrayList<>());
         this.rawData = Collections.synchronizedList(new ArrayList<>());
         this.count = new AtomicInteger(0);
@@ -154,6 +155,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 //                                return; Todo: 不是continue吗
                                 continue;
                             }
+                            // todo: 并发错误
                             unitInNodeList.forEach(
                                     x -> {
                                         for (UnitInNode unitInNode : unitResultInfo.get(unitID)) {
