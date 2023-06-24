@@ -197,7 +197,7 @@ public class NewNETS extends Detector {
         fullDimCellSlideInCnt = new HashMap<>();
         internal_dataList.put(Constants.currentSlideID,new HashMap<>());
         for (Tuple t : slideTuples) {
-            if (t.values.get(0) == 118.53){
+            if (t.values.get(0) == 7.0578){
                 int a=1;
             }
             ArrayList<Short> fullDimCellIdx = new ArrayList<>();
@@ -335,7 +335,7 @@ public class NewNETS extends Detector {
         OutlierLoop:
         while (it.hasNext()) {
             Tuple outlier = it.next();
-            if (outlier.get(0) == 5.7907 && Constants.currentSlideID == 20) {
+            if (outlier.get(0) == 7.0578) {
                 System.out.println("has it!");
             }
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
@@ -408,13 +408,13 @@ public class NewNETS extends Detector {
                         }
                     }
                     outlier.last_calculate_time++;
-                    if (outlier.values.get(0) == 5.7907) {
+                    if (outlier.values.get(0) == 7.0578) {
                         System.out.println("NETS nn: " + (outlier.nnIn + sumOfNN));
                         System.out.println("NETS SafeOut: " + outlier.nnSafeOut);
                         System.out.println("NETS UnSafeOut: " + outlier.nnUnSafeOut);
                     }
                     if (need <= 0) {
-                        if(outlier.values.get(0) == 118.53)
+                        if(outlier.values.get(0) == 7.0578)
                         {
                             System.out.println("NETS1 NEIGHBOR IS " + (outlier.getNN() + sumOfNN) + "\n");
                         }
@@ -671,11 +671,11 @@ public class NewNETS extends Detector {
                         continue TupleLoop;
                     }
                 }
-//                if (tCand.values.get(0) == 11.751) {
-//                    System.out.println("NETS nn: " + tCand.nnIn);
-//                    System.out.println("NETS SafeOut: " + tCand.nnSafeOut);
-//                    System.out.println("NETS UnSafeOut: " + tCand.nnUnSafeOut);
-//                }
+                if (tCand.values.get(0) == 7.0578) {
+                    System.out.println("NETS nn: " + tCand.nnIn);
+                    System.out.println("NETS SafeOut: " + tCand.nnSafeOut);
+                    System.out.println("NETS UnSafeOut: " + tCand.nnUnSafeOut);
+                }
                 outliers.add(tCand);
             }
         }
