@@ -124,7 +124,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 //                System.out.printf("Thead %d: Node is ready5.\n",Thread.currentThread().getId());
             }
             needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
-            pruning(1);
+//            pruning(1);????
             unSafeUnits = unitsStatusMap.keySet().stream().filter(key -> unitsStatusMap.get(key).isSafe != 2).toList();
             //node - node
             for (int edgeNodeCode : this.clientsForEdgeNodes.keySet()) {
