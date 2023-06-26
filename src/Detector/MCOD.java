@@ -554,7 +554,7 @@ public class MCOD extends Detector {
         outlierLoop:
         while (iterator.hasNext()) {
             MCO o = iterator.next();//读取当前集合数据元素
-            if(o.values.get(0) == 6.9106 && Constants.currentSlideID == 20){
+            if(o.values.get(0) == 6.9106){
 //                List<Double> link =new LinkedList<>();
 //                //0.0, 73.92, 25.604
 //                link.add(0.0);
@@ -617,14 +617,22 @@ public class MCOD extends Detector {
                         }
                     }
                     o.last_calculate_time++;
-//                    if(o.values.get(0) == 6.9106){
-//                        System.out.println("MCOD: " + o.numberOfSucceeding + o.exps.size());
-//                    }
+
                     checkInlier(o, iterator);
                     if (o.numberOfSucceeding + o.exps.size() >= Constants.K) {
+                        if(o.values.get(0) == 6.9106){
+                            System.out.println("MCOD outlier to inlier: " + (o.numberOfSucceeding + o.exps.size()));
+                            System.out.println("MCOD outlier to inlier numberOfSucceeding: " + o.numberOfSucceeding );
+                            System.out.println("MCOD outlier to inlier exps: "  + o.exps.size());
+                        }
                         continue outlierLoop;
                     }
                 }
+            }
+            if(o.values.get(0) == 6.9106){
+                System.out.println("MCOD outlier: " + (o.numberOfSucceeding + o.exps.size()));
+                System.out.println("MCOD outlier numberOfSucceeding: " + o.numberOfSucceeding );
+                System.out.println("MCOD outlier exps: " + o.exps.size());
             }
         }
     }
