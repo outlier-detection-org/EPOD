@@ -481,25 +481,25 @@ public class NewNETS extends Detector {
     //TODO: need to check whether transferFullIdToSubId() is right
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         Map<List<Double>, List<Vector>> data = new HashMap<>();
-//        if (Constants.currentSlideID == 19) {
-//            int a =1;
-//        }
-//        for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
-//            for (List<Double> id : bucketIds) {
-//                if (id.get(0) == 434.0){
-//                    int a =1;
-//                }
-//                if (!internal_dataList.get(time).containsKey(convertDoubleToShort(id))) continue;
-//                ArrayList<Tuple> tuples = internal_dataList.get(time).get(convertDoubleToShort(id));
-//                if (!data.containsKey(id)) {
-//                    data.put(id, new ArrayList<>());
-//                }
-//                data.get(id).addAll(tuples);
-//                if (id.get(0) == 434.0){
-//                    int a =1;
-//                }
-//            }
-//        }
+        if (Constants.currentSlideID == 19) {
+            int a =1;
+        }
+        for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
+            for (List<Double> id : bucketIds) {
+                if (id.get(0) == 434.0){
+                    int a =1;
+                }
+                if (!internal_dataList.get(time).containsKey(convertDoubleToShort(id))) continue;
+                ArrayList<Tuple> tuples = internal_dataList.get(time).get(convertDoubleToShort(id));
+                if (!data.containsKey(id)) {
+                    data.put(id, new ArrayList<>());
+                }
+                data.get(id).addAll(tuples);
+                if (id.get(0) == 434.0){
+                    int a =1;
+                }
+            }
+        }
         return data;
     }
 
