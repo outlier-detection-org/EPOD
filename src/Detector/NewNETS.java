@@ -337,17 +337,16 @@ public class NewNETS extends Detector {
         OutlierLoop:
         while (it.hasNext()) {
             Tuple outlier = it.next();
-            if (outlier.get(0) == 8.6693 && Constants.currentSlideID==20) {
+            if (outlier.get(0) == 8.674 && Constants.currentSlideID==20) {
                 System.out.println("has it!");
             }
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
-            try{
-                if (status.get(tmp) == 2) {
-                    it.remove();
-                    continue OutlierLoop;
+            if (status.get(tmp) == 2) {
+                if (outlier.get(0) == 8.674 && Constants.currentSlideID==20) {
+                    System.out.println("has it1!");
                 }
-            } catch (Exception e){
-                System.out.println(this.hashCode() + " error" + tmp.get(0));
+                it.remove();
+                continue OutlierLoop;
             }
             HashMap<Integer, HashMap<List<Double>, List<Vector>>> candNeighborByTime = new HashMap<>();
             if (status.get(tmp) == 1) {
@@ -381,9 +380,9 @@ public class NewNETS extends Detector {
                     }
                     candNeighborByTime.put(time, candNeighbor);
                 }
-//                if (sumOfNeighbor + outlier.getNN() < Constants.K) {
-//                    continue OutlierLoop;
-//                }
+                if (sumOfNeighbor + outlier.getNN() < Constants.K) {
+                    continue OutlierLoop;
+                }
 
                 //calculate distance concretely
                 int need = Constants.K - outlier.getNN() - sumOfNN;
@@ -410,13 +409,13 @@ public class NewNETS extends Detector {
                         }
                     }
                     outlier.last_calculate_time++;
-                    if (outlier.values.get(0) == 8.6693) {
+                    if (outlier.values.get(0) == 8.674) {
                         System.out.println("NETS nn: " + (outlier.nnIn + sumOfNN));
                         System.out.println("NETS SafeOut: " + outlier.nnSafeOut);
                         System.out.println("NETS UnSafeOut: " + outlier.nnUnSafeOut);
                     }
                     if (need <= 0) {
-                        if(outlier.values.get(0) == 8.6693)
+                        if(outlier.values.get(0) == 8.674)
                         {
                             System.out.println("NETS1 NEIGHBOR IS " + (outlier.getNN() + sumOfNN) + "\n");
                         }
@@ -480,16 +479,25 @@ public class NewNETS extends Detector {
 
     @Override
     //TODO: need to check whether transferFullIdToSubId() is right
-    public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int lastSent) {
+    public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         Map<List<Double>, List<Vector>> data = new HashMap<>();
+        if (Constants.currentSlideID == 19) {
+            int a =1;
+        }
         for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
             for (List<Double> id : bucketIds) {
+                if (id.get(0) == 434.0){
+                    int a =1;
+                }
                 if (!internal_dataList.get(time).containsKey(convertDoubleToShort(id))) continue;
                 ArrayList<Tuple> tuples = internal_dataList.get(time).get(convertDoubleToShort(id));
                 if (!data.containsKey(id)) {
                     data.put(id, new ArrayList<>());
                 }
                 data.get(id).addAll(tuples);
+                if (id.get(0) == 434.0){
+                    int a =1;
+                }
             }
         }
         return data;
