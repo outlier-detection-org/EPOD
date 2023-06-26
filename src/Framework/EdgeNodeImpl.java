@@ -58,9 +58,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public void receiveAndProcessFP(Map<List<Double>, Integer> fingerprints, int edgeDeviceHashCode) {
 //        System.out.printf("Thead %d receiveAndProcessFP. \n", Thread.currentThread().getId());
         for (List<Double> id : fingerprints.keySet()) {
-//            if (id.get(0) ==331.0){
-//                int a = 1;
-//            }
+            if (id.get(0) == 434.0){
+                int a =1;
+            }
             int delta;
 //            System.out.printf("Thead %d receiveAndProcessFP1. \n", Thread.currentThread().getId());
             // cluster remove
@@ -96,6 +96,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             this.flag = true; //indicate to other nodes I am ready
             for (UnitInNode unitInNode : unitsStatusMap.values()) {
                 unitInNode.updateSafeness();
+                if (unitInNode.unitID.get(0) == 434.0 && Constants.currentSlideID == 20){
+                    int a =1;
+                }
             }
 
             //自己有的clients汇总答案信息
@@ -128,8 +131,12 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                             unitResultInfo.get(unsafeUnit).add(unitInNode);
                         }
                 );
+                if (unsafeUnit.get(0) == 434.0){
+                    int a =1;
+                }
 //                System.out.printf("Thead %d: Node is ready5.\n",Thread.currentThread().getId());
             }
+
 //            needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
 
 //            pruning(1); //Todo:确实感觉不用了，再check一下，确实不用就之间把这个方法给也删了
@@ -143,7 +150,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 Thread t = new Thread(() -> {
                     try {
                         Map<List<Double>, List<UnitInNode>> result = this.clientsForEdgeNodes.get(edgeNodeCode).provideNeighborsResult(unSafeUnits, this.belongedNode.hashCode());
-//                        改到这里
 //                        System.out.printf("Thead %d processResult. \n", Thread.currentThread().getId());
                         for (List<Double> unitID : result.keySet()) {
 //                            if (unitID.get(0) ==331.0 && Constants.currentSlideID == 20){
@@ -165,17 +171,17 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 //                                                }
                                                 unitInNode.updateCount(x.pointCnt);
                                                 unitInNode.belongedDevices.addAll(x.belongedDevices);
-//                                                return;
-                                                break;
+                                                return;
+//                                                break;
                                             }
                                         }
                                         UnitInNode unitInNode = new UnitInNode(x);
                                         unitResultInfo.get(unitID).add(unitInNode);
                                     }
                             );
-//                            if (unitID.get(0) ==331.0 && Constants.currentSlideID == 20){
-//                                int a = 1;
-//                            }
+                            if (unitID.get(0) ==434.0){
+                                int a = 1;
+                            }
                         }
                     } catch (Throwable e) {
                         e.printStackTrace();
@@ -230,6 +236,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             List<UnitInNode> list = unitResultInfo.get(UnitID);
             //add up all point count
             Optional<UnitInNode> exist = list.stream().filter(x -> x.unitID.equals(UnitID) && (x.pointCnt > Constants.K)).findAny();
+//            if (UnitID.get(0) == 434.0 && Constants.currentSlideID == 20){
+//                int a =1;
+//            }
             if (exist.isPresent()) {
                 unitsStatusMap.get(UnitID).isSafe = 2;
             }

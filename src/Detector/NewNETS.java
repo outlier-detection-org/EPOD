@@ -197,9 +197,6 @@ public class NewNETS extends Detector {
         fullDimCellSlideInCnt = new HashMap<>();
         internal_dataList.put(Constants.currentSlideID,new HashMap<>());
         for (Tuple t : slideTuples) {
-            if (t.values.get(0) == 7.0578){
-                int a=1;
-            }
             ArrayList<Short> fullDimCellIdx = new ArrayList<>();
             ArrayList<Short> subDimCellIdx = new ArrayList<>();
             for (int j = 0; j < Constants.dim; j++) {
@@ -253,7 +250,12 @@ public class NewNETS extends Detector {
                 fullDimCellSlideInCnt.put(idxEncoder.get(fullDimCellIdx), 0);
             }
             fullDimCellSlideInCnt.put(idxEncoder.get(fullDimCellIdx), fullDimCellSlideInCnt.get(idxEncoder.get(fullDimCellIdx)) + 1);
+
+            if (t.values.get(0) == 8.6693){
+                int a=1;
+            }
         }
+
 
         slides.add(slideIn);
         fullDimCellSlidesCnt.add(fullDimCellSlideInCnt);
@@ -335,7 +337,7 @@ public class NewNETS extends Detector {
         OutlierLoop:
         while (it.hasNext()) {
             Tuple outlier = it.next();
-            if (outlier.get(0) == 7.0578) {
+            if (outlier.get(0) == 8.6693 && Constants.currentSlideID==20) {
                 System.out.println("has it!");
             }
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
@@ -408,13 +410,13 @@ public class NewNETS extends Detector {
                         }
                     }
                     outlier.last_calculate_time++;
-                    if (outlier.values.get(0) == 7.0578) {
+                    if (outlier.values.get(0) == 8.6693) {
                         System.out.println("NETS nn: " + (outlier.nnIn + sumOfNN));
                         System.out.println("NETS SafeOut: " + outlier.nnSafeOut);
                         System.out.println("NETS UnSafeOut: " + outlier.nnUnSafeOut);
                     }
                     if (need <= 0) {
-                        if(outlier.values.get(0) == 7.0578)
+                        if(outlier.values.get(0) == 8.6693)
                         {
                             System.out.println("NETS1 NEIGHBOR IS " + (outlier.getNN() + sumOfNN) + "\n");
                         }
