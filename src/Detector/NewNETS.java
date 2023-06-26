@@ -481,11 +481,18 @@ public class NewNETS extends Detector {
     //TODO: need to check whether transferFullIdToSubId() is right
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         Map<List<Double>, List<Vector>> data = new HashMap<>();
-        if (Constants.currentSlideID == 19) {
-            int a =1;
-        }
-        for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
-            for (List<Double> id : bucketIds) {
+        //HashMap<List<Double>, HashMap<Integer, Integer>>
+        for (List<Double> id : bucketIds){
+            if (!historyRecord.containsKey(id)){
+                historyRecord.put(id, Collections.synchronizedMap(new HashMap<>()));
+            }
+            Map<Integer,Integer> bucketHistory = historyRecord.get(id);
+            if (!bucketHistory.containsKey(deviceHashCode)){
+                bucketHistory.put(deviceHashCode, -1);
+            }
+            int lastSent = Math.max(bucketHistory.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
+            bucketHistory.put(deviceHashCode, Constants.currentSlideID);
+            for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
                 if (id.get(0) == 434.0){
                     int a =1;
                 }
@@ -500,6 +507,7 @@ public class NewNETS extends Detector {
                 }
             }
         }
+
         return data;
     }
 

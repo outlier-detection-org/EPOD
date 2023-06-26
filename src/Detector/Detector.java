@@ -9,13 +9,13 @@ public abstract class Detector {
     public Set<? extends Vector> outlierVector; // This field is only used to return to the global network
     public Map<Integer, Map<List<Double>, List<Vector>>> externalData;
     public Map<List<Double>, Integer> status;
-    public HashMap<List<Double>, HashMap<Integer, Integer>> historyRecord;
+    public Map<List<Double>, Map<Integer, Integer>> historyRecord;
 
     public Map<List<Double>, Integer> fullCellDelta; //fingerprint TODO: 我们计算下生成指纹所需要的时间看看是否需要把这部分加上判断，因为baseline不需要
     public Detector(){
         this.externalData = Collections.synchronizedMap(new HashMap<>());
         this.fullCellDelta = new HashMap<>();
-        this.historyRecord = new HashMap<>();
+        this.historyRecord = Collections.synchronizedMap(new HashMap<>());
     }
     public abstract void detectOutlier(List<Vector> data);
 
