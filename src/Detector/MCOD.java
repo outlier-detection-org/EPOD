@@ -642,20 +642,50 @@ public class MCOD extends Detector {
     @Override
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         Map<List<Double>, List<Vector>> result = new HashMap<>();
-        for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
-            for (MCO dataPoints : internal_dataList.get(time)) {
-                List<Double> d_center = dataPoints.center.values;
-                if (bucketIds.contains(d_center)) {
-                    if (result.containsKey(d_center))
-                        result.get(d_center).add(dataPoints);
-                    else {
-                        List<Vector> vectors = new ArrayList<>();
-                        vectors.add(dataPoints);
-                        result.put(d_center, vectors);
+        for (List<Double> bucketId: bucketIds){
+            if (!historyRecord.containsKey(bucketId)){
+                historyRecord.put(bucketId, new HashMap<>());
+            }
+            if (!historyRecord.get(bucketId).containsKey(deviceHashCode)){
+                historyRecord.get(bucketId).put(deviceHashCode, -1);
+            }
+            int lastSent = Math.max(historyRecord.get(bucketId).get(deviceHashCode), Constants.currentSlideID - Constants.nS);
+
+            for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
+                for (MCO dataPoints : internal_dataList.get(time)) {
+                    List<Double> d_center = dataPoints.center.values;
+                    if (bucketIds.contains(d_center)) {
+                        if (result.containsKey(d_center))
+                            result.get(d_center).add(dataPoints);
+                        else {
+                            List<Vector> vectors = new ArrayList<>();
+                            vectors.add(dataPoints);
+                            result.put(d_center, vectors);
+                        }
                     }
                 }
             }
+
+
+
+            this.historyRecord.get(bucketId).put(deviceHashCode, Constants.currentSlideID);
         }
+
+
+//        for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
+//            for (MCO dataPoints : internal_dataList.get(time)) {
+//                List<Double> d_center = dataPoints.center.values;
+//                if (bucketIds.contains(d_center)) {
+//                    if (result.containsKey(d_center))
+//                        result.get(d_center).add(dataPoints);
+//                    else {
+//                        List<Vector> vectors = new ArrayList<>();
+//                        vectors.add(dataPoints);
+//                        result.put(d_center, vectors);
+//                    }
+//                }
+//            }
+//        }
         return result;
     }
 

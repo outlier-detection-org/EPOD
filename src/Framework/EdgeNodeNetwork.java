@@ -61,9 +61,9 @@ public class EdgeNodeNetwork {
             }
             node.setDevices(devicesCodes);
         }
-        for (Device device : deviceHashMap.values()) {
-            device.handler.setHistoryRecord();
-        }
+//        for (Device device : deviceHashMap.values()) {
+//            device.handler.setHistoryRecord();
+//        }
     }
 
     static long time = 0;
