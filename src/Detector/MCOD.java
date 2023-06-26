@@ -644,17 +644,18 @@ public class MCOD extends Detector {
         Map<List<Double>, List<Vector>> result = new HashMap<>();
         for (List<Double> bucketId: bucketIds){
             if (!historyRecord.containsKey(bucketId)){
-                historyRecord.put(bucketId, new HashMap<>());
+                historyRecord.put(bucketId, Collections.synchronizedMap(new HashMap<>()));
             }
-            if (!historyRecord.get(bucketId).containsKey(deviceHashCode)){
-                historyRecord.get(bucketId).put(deviceHashCode, -1);
+            Map<Integer,Integer> bucketHistory = historyRecord.get(bucketId);
+            if (!bucketHistory.containsKey(deviceHashCode)){
+                bucketHistory.put(deviceHashCode, -1);
             }
-            int lastSent = Math.max(historyRecord.get(bucketId).get(deviceHashCode), Constants.currentSlideID - Constants.nS);
-
+            int lastSent = Math.max(bucketHistory.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
+            bucketHistory.put(deviceHashCode, Constants.currentSlideID);
             for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
                 for (MCO dataPoints : internal_dataList.get(time)) {
                     List<Double> d_center = dataPoints.center.values;
-                    if (bucketIds.contains(d_center)) {
+                    if (d_center.equals(bucketId)) {
                         if (result.containsKey(d_center))
                             result.get(d_center).add(dataPoints);
                         else {
@@ -665,10 +666,6 @@ public class MCOD extends Detector {
                     }
                 }
             }
-
-
-
-            this.historyRecord.get(bucketId).put(deviceHashCode, Constants.currentSlideID);
         }
 
 
