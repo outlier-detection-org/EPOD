@@ -185,7 +185,6 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
       this.unitID = __this__unitID;
     }
     this.pointCnt = other.pointCnt;
-//    this.allPointCnt = other.allPointCnt;
     this.isSafe = other.isSafe;
     this.deltaCnt = other.deltaCnt;
     if (other.isSetIsUpdated()) {
@@ -225,30 +224,11 @@ public class UnitInNode implements org.apache.thrift.TBase<UnitInNode, UnitInNod
     }
   }
 
-
-//  public synchronized void update() {
-//    isUpdated.replaceAll((k, v) -> 1);
-//  }
-
   public synchronized void updateCount(int cnt) {
     this.pointCnt += cnt;
-//    this.allPointCnt = this.pointCnt;
   }
-//  public synchronized void updateAllCount(int cnt) {
-//    this.allPointCnt += cnt;
-//  }
 
   int n = 0;
-
-//  public synchronized void updateDeltaCount(int cnt) {
-//    if (this.n == Constants.dn) {
-//      this.n = 0;
-//      this.deltaCnt = 0;
-//    }
-//    this.deltaCnt += cnt;
-//    this.n++;
-//  }
-
 
   public int getUnitIDSize() {
     return (this.unitID == null) ? 0 : this.unitID.size();

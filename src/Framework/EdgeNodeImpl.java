@@ -30,7 +30,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public EdgeNodeImpl(EdgeNode edgeNode) {
         this.belongedNode = edgeNode;
         this.unitsStatusMap = Collections.synchronizedMap(new HashMap<>());
-        this.unitResultInfo = new ConcurrentHashMap<List<Double>, List<UnitInNode>>();
+        this.unitResultInfo = Collections.synchronizedMap(new HashMap<>());
         this.allData = Collections.synchronizedList(new ArrayList<>());
         this.rawData = Collections.synchronizedList(new ArrayList<>());
         this.count = new AtomicInteger(0);
@@ -68,8 +68,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 //                System.out.printf("Thead %d receiveAndProcessFP2. \n", Thread.currentThread().getId());
                 delta = fingerprints.get(id) - Constants.threadhold;
                 unitsStatusMap.get(id).updateCount(delta);
-//                unitsStatusMap.get(id).updateDeltaCount(delta);
-//                unitsStatusMap.get(id).update();
                 unitsStatusMap.get(id).belongedDevices.remove(edgeDeviceHashCode);
                 if (unitsStatusMap.get(id).belongedDevices.isEmpty()) {
                     unitsStatusMap.remove(id);
@@ -81,8 +79,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                     unitsStatusMap.put(id, new UnitInNode(id, 0));
                 }
                 unitsStatusMap.get(id).updateCount(delta);
-//                unitsStatusMap.get(id).updateDeltaCount(delta);
-//                unitsStatusMap.get(id).update();
                 unitsStatusMap.get(id).belongedDevices.add(edgeDeviceHashCode);
                 System.out.print("1");
             }
@@ -104,12 +100,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             //自己有的clients汇总答案信息
             List<List<Double>> unSafeUnits =
                     unitsStatusMap.keySet().stream().filter(key -> unitsStatusMap.get(key).isSafe != 2).toList();
-//            HashSet<UnitInNode> needUpdate = new HashSet<>();
             for (List<Double> unsafeUnit : unSafeUnits) {
                 List<UnitInNode> unitInNodeList = unitsStatusMap.values().stream()
                         .filter(x -> this.handler.neighboringSet(unsafeUnit, x.unitID)).toList();
-//                unitInNodeList.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));//�����в�ͬ��unsafeUnit, Ҫһ���Ը��� @shimin
-//                needUpdate.addAll(unitInNodeList);
                 if (!unitResultInfo.containsKey(unsafeUnit)) {
                     unitResultInfo.put(unsafeUnit, new ArrayList<>());
                 }
@@ -117,16 +110,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 // Todo: unitResultInfo 没有remove过自己或别的node消失的答案 解决了
                 unitInNodeList.forEach(
                         x -> {
-//                            for (UnitInNode unitInNode : unitResultInfo.get(unsafeUnit)) {
-//                                if (unitInNode.unitID.equals(x.unitID)) {
-////                                    unitInNode.updateCount(x.deltaCnt);//Todo:有问题，看怎么解决 解决了
-////                                    unitInNode.updateAllCount(x.pointCnt);
-//                                    unitInNode.allPointCnt = x.allPointCnt;//Todo:有问题，看怎么解决 解决了
-//                                    unitInNode.belongedDevices.addAll(x.belongedDevices);
-//                                    return; //
-//                                }
-//                            }
-                            // Todo：意思应该是上面的没找到做这个操作，但是这样写对吗 解决了
                             UnitInNode unitInNode = new UnitInNode(x);
                             unitResultInfo.get(unsafeUnit).add(unitInNode);
                         }
@@ -136,11 +119,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 }
 //                System.out.printf("Thead %d: Node is ready5.\n",Thread.currentThread().getId());
             }
-
-//            needUpdate.forEach(x -> x.isUpdated.put(this.belongedNode.hashCode(), 0));
-
-//            pruning(1); //Todo:确实感觉不用了，再check一下，确实不用就之间把这个方法给也删了
-//            unSafeUnits = unitsStatusMap.keySet().stream().filter(key -> unitsStatusMap.get(key).isSafe != 2).toList();
 
             //node - node
             for (int edgeNodeCode : this.clientsForEdgeNodes.keySet()) {
@@ -158,7 +136,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                             List<UnitInNode> unitInNodeList = result.get(unitID);
                             if (!unitResultInfo.containsKey(unitID)) {
                                 unitResultInfo.put(unitID, unitInNodeList);
-//                                return; Todo: 不是continue吗
                                 continue;
                             }
                             // todo: 偶尔有并发错误，但好像换成concurrentMap之后好了
@@ -172,7 +149,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                                                 unitInNode.updateCount(x.pointCnt);
                                                 unitInNode.belongedDevices.addAll(x.belongedDevices);
                                                 return;
-//                                                break;
                                             }
                                         }
                                         UnitInNode unitInNode = new UnitInNode(x);
@@ -199,35 +175,33 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 }
             }
             //Pruning Phase
-//            pruning(2);
             pruning();
             //send result back to the belonged device;
             sendDeviceResult();
         }
     }
 
-    public void pruning(int stage) {
-        //update UnitInNode update
-//        System.out.printf("Thead %d: pruning.\n",Thread.currentThread().getId());
-        for (List<Double> UnitID : unitResultInfo.keySet()) {
-            if (UnitID.get(0) == 331.0 && Constants.currentSlideID == 20){
-                int a =1;
-            }
-            //add up all point count
-            List<UnitInNode> list = unitResultInfo.get(UnitID);
-            Optional<UnitInNode> exist = list.stream().filter(x -> x.unitID.equals(UnitID) && (x.pointCnt > Constants.K)).findAny();
-            if (exist.isPresent()) {
-                unitsStatusMap.get(UnitID).isSafe = 2;
-            }
-            if (stage == 2) {
-                int totalCnt = list.stream().mapToInt(x -> x.pointCnt).sum();
-                if (totalCnt <= Constants.K) {
-                    unitsStatusMap.get(UnitID).isSafe = 0;
-                }
-            }
-
-        }
-    }
+//    public void pruning(int stage) {
+//        //update UnitInNode update
+////        System.out.printf("Thead %d: pruning.\n",Thread.currentThread().getId());
+//        for (List<Double> UnitID : unitResultInfo.keySet()) {
+//            if (UnitID.get(0) == 331.0 && Constants.currentSlideID == 20){
+//                int a =1;
+//            }
+//            //add up all point count
+//            List<UnitInNode> list = unitResultInfo.get(UnitID);
+//            Optional<UnitInNode> exist = list.stream().filter(x -> x.unitID.equals(UnitID) && (x.pointCnt > Constants.K)).findAny();
+//            if (exist.isPresent()) {
+//                unitsStatusMap.get(UnitID).isSafe = 2;
+//            }
+//            if (stage == 2) {
+//                int totalCnt = list.stream().mapToInt(x -> x.pointCnt).sum();
+//                if (totalCnt <= Constants.K) {
+//                    unitsStatusMap.get(UnitID).isSafe = 0;
+//                }
+//            }
+//        }
+//    }
 
     public void pruning() {
         //update UnitInNode update
