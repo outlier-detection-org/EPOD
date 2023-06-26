@@ -640,7 +640,7 @@ public class MCOD extends Detector {
 
 
     @Override
-    public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int lastSent) {
+    public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         Map<List<Double>, List<Vector>> result = new HashMap<>();
         for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
             for (MCO dataPoints : internal_dataList.get(time)) {

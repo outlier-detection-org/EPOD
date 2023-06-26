@@ -25,7 +25,7 @@ public class DeviceImpl implements DeviceService.Iface {
 
     //=============================EPOD===============================
 //    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
-    public HashMap<Integer, Integer> historyRecord; //������¼ÿ��device���ϴη��͵���ʷ��¼��deviceID->slideID
+//    public HashMap<Integer, Integer> historyRecord;
     public Map<Integer, DeviceService.Client> clientsForDevices; //And for P2P
     public EdgeNodeService.Client clientsForNearestNode;
 
@@ -44,12 +44,12 @@ public class DeviceImpl implements DeviceService.Iface {
         }
     }
 
-    public void setHistoryRecord() {
-        this.historyRecord = new HashMap<>();
-        for (int deviceHashCode : EdgeNodeNetwork.deviceHashMap.keySet()) {
-            this.historyRecord.put(deviceHashCode, -1);
-        }
-    }
+//    public void setHistoryRecord() {
+//        this.historyRecord = new HashMap<>();
+//        for (int deviceHashCode : EdgeNodeNetwork.deviceHashMap.keySet()) {
+//            this.historyRecord.put(deviceHashCode, -1);
+//        }
+//    }
 
     public void setClients(EdgeNodeService.Client clientsForNearestNode, Map<Integer, DeviceService.Client> clientsForDevices) {
         this.clientsForDevices = clientsForDevices;
@@ -90,9 +90,9 @@ public class DeviceImpl implements DeviceService.Iface {
 
 
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
-        int lastSent = Math.max(this.historyRecord.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
-        this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
-        return this.detector.sendData(bucketIds, lastSent);
+//        int lastSent = Math.max(this.historyRecord.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
+//        this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
+        return this.detector.sendData(bucketIds, deviceHashCode);
     }
     AtomicInteger dataSize = new AtomicInteger(0);
     public void getExternalData(Map<List<Double>, Integer> status, Map<Integer, Set<List<Double>>> result) {
@@ -113,6 +113,9 @@ public class DeviceImpl implements DeviceService.Iface {
                     Map<List<Double>, List<Vector>> map = this.detector.externalData.get(Constants.currentSlideID);
                     data.keySet().forEach(
                             x -> {
+                                if (x.get(0) == 434.0&& Constants.currentSlideID == 20){
+                                    int a =1;
+                                }
                                 if (!map.containsKey(x)) {
                                     map.put(x, Collections.synchronizedList(new ArrayList<>()));
                                 }
