@@ -50,7 +50,7 @@ public class MCOD extends Detector {
                         } else {
                             removeFromUnfilledCluster(d);
                         }
-                        process_event_queue(); //为什么不放在最后
+                        process_event_queue(); //为什么不放在最后 //todo:checkcheck 怪怪
                     }
                 }
             }
@@ -359,28 +359,20 @@ public class MCOD extends Detector {
                 formUnfilledCluster(d);
             }
         }
-        if (d.values.get(0) == -0.01 && d.values.get(1) == 73.15 && d.values.get(2) == 25.644){
-            System.out.println("MCOD point1 center" + d.center);
-        }
-        if (d.values.get(0) == -0.01 && d.values.get(1) == 70.7 && d.values.get(2) == 25.698){
-            System.out.println("MCOD point2 center" + d.center);
-        }
-        if(d.values.get(0) == 0.01 && d.values.get(1) == 71.27 && d.values.get(2) == 25.708){
-            System.out.println("MCOD point3 center" + d.center);
-        }
+//        if (d.values.get(0) == -0.01 && d.values.get(1) == 73.15 && d.values.get(2) == 25.644){
+//            System.out.println("MCOD point1 center" + d.center);
+//        }
+//        if (d.values.get(0) == -0.01 && d.values.get(1) == 70.7 && d.values.get(2) == 25.698){
+//            System.out.println("MCOD point2 center" + d.center);
+//        }
+//        if(d.values.get(0) == 0.01 && d.values.get(1) == 71.27 && d.values.get(2) == 25.708){
+//            System.out.println("MCOD point3 center" + d.center);
+//        }
     }
 
     // 保留最少数目proceeding
     // 检查是否为safe | 剩余inlier（queue） | outlier
     private void checkInlier(MCO inPD, Iterator<MCO> iterator) {
-        if(inPD.values.get(0) == 0.01 && inPD.values.get(1) == 71.27 && inPD.values.get(2) == 25.708){
-            if (inPD.numberOfSucceeding+inPD.exps.size() == 49){
-                System.out.println("MCOD pre: " + inPD.exps.size());
-                System.out.println("MCOD sud: " + inPD.numberOfSucceeding);
-                inPD.succeeding.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).forEachOrdered(System.out::println);
-            }
-            System.out.println("number of neighbor in MCOD: " + (inPD.numberOfSucceeding+inPD.exps.size()));
-        }
         Collections.sort(inPD.exps);
 
         while (inPD.exps.size() > Constants.K - inPD.numberOfSucceeding && inPD.exps.size() > 0) {
@@ -400,6 +392,14 @@ public class MCOD extends Detector {
         } else {
             eventQueue.remove(inPD);
             outliers.add(inPD);
+        }
+        if(inPD.values.get(0) == 11.757){
+//            if (inPD.numberOfSucceeding+inPD.exps.size() == 49){
+            System.out.println("MCOD pre: " + inPD.exps.size());
+            System.out.println("MCOD sud: " + inPD.numberOfSucceeding);
+//            inPD.succeeding.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).forEachOrdered(System.out::println);
+//            }
+            System.out.println("number of neighbor in MCOD: " + (inPD.numberOfSucceeding+inPD.exps.size()));
         }
     }
 
@@ -430,7 +430,22 @@ public class MCOD extends Detector {
         MCO x = eventQueue.peek();
         while (x != null && x.ev <= Constants.currentSlideID) {
             x = eventQueue.poll();
-            while (x.exps.size() != 0 && x.exps.get(0) <= Constants.currentSlideID) { //@shimin
+
+            if (x.values.get(0) == 11.757){
+                System.out.println("MCOD pre: " + x.exps.size());
+                System.out.println("MCOD sud: " + x.numberOfSucceeding);
+                for (int i = 0; i < x.exps.size(); i++) {
+                    System.out.print(x.exps.get(i) + " ");
+                }
+            }
+
+            // Todo: check x.exps.get(0) 改成 x.ev
+            while (x.exps.size() != 0 && x.ev <= Constants.currentSlideID) { //@shimin
+
+                if (x.values.get(0) == 11.757){
+                    int a = 1;
+                }
+
                 x.exps.remove(0);
                 if (x.exps.isEmpty()) {
                     x.ev = 0;
@@ -537,9 +552,9 @@ public class MCOD extends Detector {
         }
         for (List<Double> key : current_arrive_data.keySet()) {
             //0.0, 73.92, 25.604
-            if (key.get(0)==0.0 && key.get(1) ==73.92 && key.get(2)==25.604){
-                List<Vector> v = current_arrive_data.get(key);
-            }
+//            if (key.get(0)==0.0 && key.get(1) ==73.92 && key.get(2)==25.604){
+//                List<Vector> v = current_arrive_data.get(key);
+//            }
             if (!external_info.containsKey(key)) {
                 external_info.put(key, 0);
             }
@@ -554,23 +569,27 @@ public class MCOD extends Detector {
         outlierLoop:
         while (iterator.hasNext()) {
             MCO o = iterator.next();//读取当前集合数据元素
-            if(o.values.get(0) == 6.9106){
+            if(o.values.get(0) == 11.757){
 //                List<Double> link =new LinkedList<>();
 //                //0.0, 73.92, 25.604
 //                link.add(0.0);
 //                link.add(73.92);
 //                link.add(25.604);
 //                if (this.external_info.containsKey(link)){
-                    int a= 1;
+                System.out.println("outlier has it");
 //                };
             }
             // HashMap<ArrayList<?>, Integer> status;
             int reply = this.status.get(o.center.values);
+            if(o.values.get(0) == 11.757){
+                System.out.println("Slide ID: " + Constants.currentSlideID + ", status: "+ reply);
+            }
             //首先我们需要pruning掉被判断为安全的以及被判断成outlier的点，加入event queue，event time 设为下一个时间点
             if (reply == 2) {
                 iterator.remove();
                 // 是在device端就确定为inlier的情况,没有精确的最早的neighbor过期的时间 更新不了相应proceeding和succeeding
                 o.ev = Constants.currentSlideID + 1;
+                System.out.println("Add to event queue, o.ev =  "+ o.ev);
                 eventQueue.add(o);
             }
             //确定为outlier的点不用做操作
@@ -582,7 +601,7 @@ public class MCOD extends Detector {
                 ArrayList<List<Double>> cluster3R_2 = new ArrayList<>();
                 for (Map.Entry<List<Double>, Integer> entry : external_info.entrySet()) {
                     List<Double> key = entry.getKey();
-                    if (key.get(0)==0.0&&key.get(1)==73.92){
+                    if (key.get(0) == 11.757){
                         int  a =1;
                     }
                     double distance = distance(key, o.values);
@@ -616,20 +635,29 @@ public class MCOD extends Detector {
                             }
                         }
                     }
+                    if(o.values.get(0) == 11.757) {
+                        System.out.println("last calculate: " + o.last_calculate_time);
+                    }
                     o.last_calculate_time++;
 
                     checkInlier(o, iterator);
                     if (o.numberOfSucceeding + o.exps.size() >= Constants.K) {
-                        if(o.values.get(0) == 6.9106){
+                        if(o.values.get(0) == 11.757){
+                            System.out.println("event queue:" + eventQueue.contains(o));
+                            System.out.println("o.ev:  " + o.ev);
                             System.out.println("MCOD outlier to inlier: " + (o.numberOfSucceeding + o.exps.size()));
                             System.out.println("MCOD outlier to inlier numberOfSucceeding: " + o.numberOfSucceeding );
                             System.out.println("MCOD outlier to inlier exps: "  + o.exps.size());
+                            for (int i = 0; i < o.exps.size(); i++) {
+                                System.out.print(o.exps.get(i) + " ");
+                            }
+                            System.out.println();
                         }
                         continue outlierLoop;
                     }
                 }
             }
-            if(o.values.get(0) == 6.9106){
+            if(o.values.get(0) == 11.757){
                 System.out.println("MCOD outlier: " + (o.numberOfSucceeding + o.exps.size()));
                 System.out.println("MCOD outlier numberOfSucceeding: " + o.numberOfSucceeding );
                 System.out.println("MCOD outlier exps: " + o.exps.size());
@@ -667,22 +695,6 @@ public class MCOD extends Detector {
                 }
             }
         }
-
-
-//        for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
-//            for (MCO dataPoints : internal_dataList.get(time)) {
-//                List<Double> d_center = dataPoints.center.values;
-//                if (bucketIds.contains(d_center)) {
-//                    if (result.containsKey(d_center))
-//                        result.get(d_center).add(dataPoints);
-//                    else {
-//                        List<Vector> vectors = new ArrayList<>();
-//                        vectors.add(dataPoints);
-//                        result.put(d_center, vectors);
-//                    }
-//                }
-//            }
-//        }
         return result;
     }
 

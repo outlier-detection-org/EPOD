@@ -59,7 +59,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 //        System.out.printf("Thead %d receiveAndProcessFP. \n", Thread.currentThread().getId());
         for (List<Double> id : fingerprints.keySet()) {
 
-            if (id.get(0) == 6.9106){
+            if (id.get(0) == 11.757){
                 int a =1;
             }
             int delta;
@@ -93,7 +93,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             this.flag = true; //indicate to other nodes I am ready
             for (UnitInNode unitInNode : unitsStatusMap.values()) {
                 unitInNode.updateSafeness();
-                if (unitInNode.unitID.get(0) == 6.9106){
+                if (unitInNode.unitID.get(0) == 11.757){
                     int a =1;
                 }
             }
@@ -114,7 +114,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                             unitResultInfo.get(unsafeUnit).add(unitInNode);
                         }
                 );
-                if (unsafeUnit.get(0) == 6.9106){
+                if (unsafeUnit.get(0) == 11.757){
                     int a =1;
                 }
 //                System.out.printf("Thead %d: Node is ready5.\n",Thread.currentThread().getId());

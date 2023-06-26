@@ -56,7 +56,7 @@ public class CompareResult {
 
                     }
                 }
-                if(v.values.get(0) == 8.674){
+                if(v.values.get(0) == 11.757){
                     System.out.println("NAIVE neighbor: " + numOfNeighbors);
 //
 //                    System.out.println("NETS nn: " + (nn));
