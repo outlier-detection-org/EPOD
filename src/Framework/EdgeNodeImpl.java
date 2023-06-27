@@ -59,9 +59,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 //        System.out.printf("Thead %d receiveAndProcessFP. \n", Thread.currentThread().getId());
         for (List<Double> id : fingerprints.keySet()) {
 
-            if (id.get(0) == 11.757){
-                int a =1;
-            }
+//            if (id.get(0) == 11.757){
+//                int a =1;
+//            }
             int delta;
 //            System.out.printf("Thead %d receiveAndProcessFP1. \n", Thread.currentThread().getId());
             // cluster remove
@@ -93,9 +93,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             this.flag = true; //indicate to other nodes I am ready
             for (UnitInNode unitInNode : unitsStatusMap.values()) {
                 unitInNode.updateSafeness();
-                if (unitInNode.unitID.get(0) == 11.757){
-                    int a =1;
-                }
+//                if (unitInNode.unitID.get(0) == 11.757){
+//                    int a =1;
+//                }
             }
 
             //自己有的clients汇总答案信息
@@ -114,9 +114,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                             unitResultInfo.get(unsafeUnit).add(unitInNode);
                         }
                 );
-                if (unsafeUnit.get(0) == 11.757){
-                    int a =1;
-                }
+//                if (unsafeUnit.get(0) == 11.757){
+//                    int a =1;
+//                }
 //                System.out.printf("Thead %d: Node is ready5.\n",Thread.currentThread().getId());
             }
 
