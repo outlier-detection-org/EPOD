@@ -32,7 +32,12 @@ public class MCOD extends Detector {
         unfilled_clusters = new HashMap<>();
         mtree = new MTreeClass();
         outliers = new HashSet<>();
-        eventQueue = new PriorityQueue<>(new MCComparator());
+        eventQueue = new PriorityQueue<MCO>(new Comparator<MCO>() {
+            @Override
+            public int compare(MCO o1, MCO o2) {
+                return o1.ev - o2.ev;
+            }
+        });
         external_info = new HashMap<>();
     }
 
@@ -50,7 +55,7 @@ public class MCOD extends Detector {
                         } else {
                             removeFromUnfilledCluster(d);
                         }
-                        process_event_queue(); //为什么不放在最后 //todo:checkcheck 怪怪
+//                        process_event_queue(); //为什么不放在最后 //todo:checkcheck 怪怪
                     }
                 }
             }
@@ -73,7 +78,11 @@ public class MCOD extends Detector {
         // 2.process new data
         internal_dataList.put(Constants.currentSlideID, new ArrayList<>());
         data.forEach(this::processNewData);
+
+        process_event_queue(); //todo: check改到这对不对
         this.outlierVector = outliers;
+
+
     }
 
     private void removeFromFilledCluster(MCO d) {
@@ -387,7 +396,12 @@ public class MCOD extends Detector {
                 iterator.remove();
             } else {
                 iterator.remove();
-                if (!eventQueue.contains(inPD)) eventQueue.add(inPD);
+                if (!eventQueue.contains(inPD)) {
+                    if (inPD.values.get(0) == 11.757){
+                        System.out.println("add to event queue");
+                    }
+                    eventQueue.offer(inPD);
+                }
             }
         } else {
             eventQueue.remove(inPD);
@@ -428,8 +442,19 @@ public class MCOD extends Detector {
 
     private void process_event_queue() {
         MCO x = eventQueue.peek();
+        if (Constants.currentSlideID == 20){
+            System.out.println("step into event queue");
+            System.out.println(x.ev);
+        }
+
         while (x != null && x.ev <= Constants.currentSlideID) {
             x = eventQueue.poll();
+
+            if (Constants.currentSlideID == 20){
+                System.out.println("449");
+                System.out.println("ev: " + x.ev + "; value: " + x.values.get(0));
+                System.out.println(x.ev);
+            }
 
             if (x.values.get(0) == 11.757){
                 System.out.println("MCOD pre: " + x.exps.size());
@@ -459,6 +484,11 @@ public class MCOD extends Detector {
                 eventQueue.add(x);
 
             x = eventQueue.peek();
+            if (Constants.currentSlideID == 20){
+                System.out.println("483");
+                System.out.println("ev: " + x.ev + "; value: " + x.values.get(0));
+                System.out.println(x.ev);
+            }
         }
     }
 
@@ -714,12 +744,12 @@ public class MCOD extends Detector {
         return Math.sqrt(sum);
     }
 
-    static class MCComparator implements Comparator<MCO> {
-        @Override
-        public int compare(MCO o1, MCO o2) {
-            return Long.compare(o1.ev, o2.ev);
-        }
-    }
+//    static class MCComparator implements Comparator<MCO> {
+//        @Override
+//        public int compare(MCO o1, MCO o2) {
+//            return o1.ev - o2.ev;
+//        }
+//    }
 
     static class MCComparatorSlideId implements Comparator<MCO> {
         @Override
