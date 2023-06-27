@@ -30,7 +30,8 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public EdgeNodeImpl(EdgeNode edgeNode) {
         this.belongedNode = edgeNode;
         this.unitsStatusMap = Collections.synchronizedMap(new HashMap<>());
-        this.unitResultInfo = Collections.synchronizedMap(new HashMap<>());
+//        this.unitResultInfo = Collections.synchronizedMap(new HashMap<>());
+        this.unitResultInfo = new ConcurrentHashMap<>();
         this.allData = Collections.synchronizedList(new ArrayList<>());
         this.rawData = Collections.synchronizedList(new ArrayList<>());
         this.count = new AtomicInteger(0);
@@ -141,6 +142,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                             // todo: 偶尔有并发错误，但好像换成concurrentMap之后好了
                             unitInNodeList.forEach(
                                     x -> {
+                                        // todo: 再check一下并发错误
                                         for (UnitInNode unitInNode : unitResultInfo.get(unitID)) {
                                             if (unitInNode.unitID.equals(x.unitID)) {
 //                                                if (unitInNode.unitID.get(0) ==331.0 && Constants.currentSlideID == 20){
