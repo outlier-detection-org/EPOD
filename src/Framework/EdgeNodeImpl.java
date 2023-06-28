@@ -121,45 +121,34 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 //                System.out.printf("Thead %d: Node is ready5.\n",Thread.currentThread().getId());
             }
 
-            //node - node
             for (int edgeNodeCode : this.clientsForEdgeNodes.keySet()) {
                 while (!EdgeNodeNetwork.nodeHashMap.get(edgeNodeCode).handler.flag) {
+                    // Waiting for flag to be set
                 }
-//                List<List<Double>> finalUnSafeUnits = unSafeUnits;
+
                 Thread t = new Thread(() -> {
                     try {
                         Map<List<Double>, List<UnitInNode>> result = this.clientsForEdgeNodes.get(edgeNodeCode).provideNeighborsResult(unSafeUnits, this.belongedNode.hashCode());
-//                        System.out.printf("Thead %d processResult. \n", Thread.currentThread().getId());
                         for (List<Double> unitID : result.keySet()) {
-//                            if (unitID.get(0) ==331.0 && Constants.currentSlideID == 20){
-//                                int a = 1;
-//                            }
                             List<UnitInNode> unitInNodeList = result.get(unitID);
-                            if (!unitResultInfo.containsKey(unitID)) {
-                                unitResultInfo.put(unitID, Collections.synchronizedList(unitInNodeList));
-                                continue;
-                            }
-                            // todo: 偶尔有并发错误，但好像换成concurrentMap之后好了
-                            unitInNodeList.forEach(
-                                    x -> {
-                                        // todo: 再check一下并发错误
-                                        for (UnitInNode unitInNode : unitResultInfo.get(unitID)) {
+                            unitResultInfo.compute(unitID, (key, value) -> {
+                                if (value == null) {
+                                    return Collections.synchronizedList(unitInNodeList);
+                                } else {
+                                    unitInNodeList.forEach(x -> {
+                                        for (UnitInNode unitInNode : value) {
                                             if (unitInNode.unitID.equals(x.unitID)) {
-//                                                if (unitInNode.unitID.get(0) ==331.0 && Constants.currentSlideID == 20){
-//                                                    int a = 1;
-//                                                }
                                                 unitInNode.updateCount(x.pointCnt);
                                                 unitInNode.belongedDevices.addAll(x.belongedDevices);
                                                 return;
                                             }
                                         }
                                         UnitInNode unitInNode = new UnitInNode(x);
-                                        unitResultInfo.get(unitID).add(unitInNode);
-                                    }
-                            );
-                            if (unitID.get(0) ==6.9106){
-                                int a = 1;
-                            }
+                                        value.add(unitInNode);
+                                    });
+                                    return value;
+                                }
+                            });
                         }
                     } catch (Throwable e) {
                         e.printStackTrace();
@@ -169,6 +158,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 threads.add(t);
                 t.start();
             }
+
             for (Thread t : threads) {
                 try {
                     t.join();
@@ -176,6 +166,63 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                     e.printStackTrace();
                 }
             }
+
+
+//            //node - node
+//            for (int edgeNodeCode : this.clientsForEdgeNodes.keySet()) {
+//                while (!EdgeNodeNetwork.nodeHashMap.get(edgeNodeCode).handler.flag) {
+//                }
+////                List<List<Double>> finalUnSafeUnits = unSafeUnits;
+//                Thread t = new Thread(() -> {
+//                    try {
+//                        Map<List<Double>, List<UnitInNode>> result = this.clientsForEdgeNodes.get(edgeNodeCode).provideNeighborsResult(unSafeUnits, this.belongedNode.hashCode());
+////                        System.out.printf("Thead %d processResult. \n", Thread.currentThread().getId());
+//                        for (List<Double> unitID : result.keySet()) {
+////                            if (unitID.get(0) ==331.0 && Constants.currentSlideID == 20){
+////                                int a = 1;
+////                            }
+//                            List<UnitInNode> unitInNodeList = result.get(unitID);
+//                            if (!unitResultInfo.containsKey(unitID)) {
+//                                unitResultInfo.put(unitID, Collections.synchronizedList(unitInNodeList));
+//                                continue;
+//                            }
+//                            // todo: 偶尔有并发错误，但好像换成concurrentMap之后好了
+//                            unitInNodeList.forEach(
+//                                    x -> {
+//                                        // todo: 再check一下并发错误
+//                                        for (UnitInNode unitInNode : unitResultInfo.get(unitID)) {
+//                                            if (unitInNode.unitID.equals(x.unitID)) {
+////                                                if (unitInNode.unitID.get(0) ==331.0 && Constants.currentSlideID == 20){
+////                                                    int a = 1;
+////                                                }
+//                                                unitInNode.updateCount(x.pointCnt);
+//                                                unitInNode.belongedDevices.addAll(x.belongedDevices);
+//                                                return;
+//                                            }
+//                                        }
+//                                        UnitInNode unitInNode = new UnitInNode(x);
+//                                        unitResultInfo.get(unitID).add(unitInNode);
+//                                    }
+//                            );
+//                            if (unitID.get(0) ==6.9106){
+//                                int a = 1;
+//                            }
+//                        }
+//                    } catch (Throwable e) {
+//                        e.printStackTrace();
+//                        throw new RuntimeException(e);
+//                    }
+//                });
+//                threads.add(t);
+//                t.start();
+//            }
+//            for (Thread t : threads) {
+//                try {
+//                    t.join();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
             //Pruning Phase
             pruning();
             //send result back to the belonged device;
