@@ -55,6 +55,7 @@ public class MCOD extends Detector {
                         } else {
                             removeFromUnfilledCluster(d);
                         }
+                        eventQueue.remove(d);
 //                        process_event_queue(); //为什么不放在最后 //todo:checkcheck 怪怪
                     }
                 }
@@ -102,6 +103,9 @@ public class MCOD extends Detector {
             cluster.remove(d);
             List<Double> key = d.center.values;
             if (cluster.size() == 0) {
+                if (key.get(0)==12.45 && key.get(1)==9.77962) {
+                    System.out.println("disappear");
+                }
                 unfilled_clusters.remove(d.center);
                 map_to_MCO.remove(key);
                 update_fingerprint(key, false);
@@ -244,6 +248,9 @@ public class MCOD extends Detector {
     private void check_filled(MCO center) {
         ArrayList<MCO> cluster = unfilled_clusters.get(center);
         if (cluster.size() > Constants.K) {
+            if (center.values.get(0)==12.45 && center.values.get(1)==9.77962) {
+                System.out.println("filled");
+            }
             unfilled_clusters.remove(center);
             filled_clusters.put(center, cluster);
             cluster.forEach(p -> {

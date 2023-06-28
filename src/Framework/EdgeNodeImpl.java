@@ -80,6 +80,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 unitsStatusMap.compute(id, (key, value) -> {
                     value.updateCount(delta);
                     value.belongedDevices.remove(edgeDeviceHashCode);
+                    //替换到while flag一开始的地方
 //                    if (value.belongedDevices.isEmpty()) {
 //                        unitsStatusMap.remove(id);
 //                    }
@@ -109,14 +110,14 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         count.incrementAndGet();
         boolean flag = count.compareAndSet(this.clientsForDevices.size(), 0);
         if (flag) {
-//            Iterator<Map.Entry<List<Double>, UnitInNode>> iterator = unitsStatusMap.entrySet().iterator();
-//            while (iterator.hasNext()) {
-//                Map.Entry<List<Double>, UnitInNode> entry = iterator.next();
-//                UnitInNode unitInNode = entry.getValue();
-//                if (unitInNode.belongedDevices.isEmpty()) {
-//                    iterator.remove();
-//                }
-//            }
+            Iterator<Map.Entry<List<Double>, UnitInNode>> iterator = unitsStatusMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<List<Double>, UnitInNode> entry = iterator.next();
+                UnitInNode unitInNode = entry.getValue();
+                if (unitInNode.belongedDevices.isEmpty()) {
+                    iterator.remove();
+                }
+            }
 
             unitResultInfo.clear();
             // node has finished collecting data, entering into the N-N phase, only one thread go into this loop
