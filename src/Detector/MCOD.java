@@ -81,8 +81,6 @@ public class MCOD extends Detector {
 
         process_event_queue(); //todo: check改到这对不对
         this.outlierVector = outliers;
-
-
     }
 
     private void removeFromFilledCluster(MCO d) {
@@ -105,6 +103,7 @@ public class MCOD extends Detector {
             List<Double> key = d.center.values;
             if (cluster.size() == 0) {
                 unfilled_clusters.remove(d.center);
+                map_to_MCO.remove(key);
                 update_fingerprint(key, false);
                 this.fullCellDelta.put(key, Constants.threadhold + this.fullCellDelta.get(key)); //不管有没有这个key，都可以实现覆盖效果
             } else {
@@ -113,9 +112,8 @@ public class MCOD extends Detector {
             }
         }
         // remove outlier中过期的点
-        if (d.numberOfSucceeding + d.exps.size() < Constants.K) {
-            outliers.remove(d);
-        }
+        // todo:  to be checked 6.28
+        outliers.remove(d);
 
         //remove outlier中点的过期的前继
         outliers.forEach((data) -> {
@@ -632,6 +630,9 @@ public class MCOD extends Detector {
 //                };
 //            }
             // HashMap<ArrayList<?>, Integer> status;
+            if (!this.status.containsKey(o.center.values)){
+                System.out.println(o.center.values);
+            }
             int reply = this.status.get(o.center.values);
 //            if(o.values.get(0) == 11.757){
 //                System.out.println("Slide ID: " + Constants.currentSlideID + ", status: "+ reply);

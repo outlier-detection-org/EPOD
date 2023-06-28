@@ -29,7 +29,8 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 
     public EdgeNodeImpl(EdgeNode edgeNode) {
         this.belongedNode = edgeNode;
-        this.unitsStatusMap = Collections.synchronizedMap(new HashMap<>());
+        this.unitsStatusMap = new ConcurrentHashMap<>();
+//        this.unitsStatusMap = Collections.synchronizedMap(new HashMap<>());
 //        this.unitResultInfo = Collections.synchronizedMap(new HashMap<>());
         this.unitResultInfo = new ConcurrentHashMap<>();
         this.allData = Collections.synchronizedList(new ArrayList<>());
@@ -69,34 +70,59 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             if (fingerprints.get(id) < Constants.threadhold) {
 //                System.out.printf("Thead %d receiveAndProcessFP2. \n", Thread.currentThread().getId());
                 delta = fingerprints.get(id) - Constants.threadhold;
-                unitsStatusMap.get(id).updateCount(delta);
-                unitsStatusMap.get(id).belongedDevices.remove(edgeDeviceHashCode);
-                if (unitsStatusMap.get(id).belongedDevices.isEmpty()) {
-                    unitsStatusMap.remove(id);
-//                    unitResultInfo.remove(id);
-                }
+
+//                unitsStatusMap.get(id).updateCount(delta);
+//                unitsStatusMap.get(id).belongedDevices.remove(edgeDeviceHashCode);
+//                if (unitsStatusMap.get(id).belongedDevices.isEmpty()) {
+//                    unitsStatusMap.remove(id);
+//                }
+
+                unitsStatusMap.compute(id, (key, value) -> {
+                    value.updateCount(delta);
+                    value.belongedDevices.remove(edgeDeviceHashCode);
+//                    if (value.belongedDevices.isEmpty()) {
+//                        unitsStatusMap.remove(id);
+//                    }
+                    return value;
+                });
+
             }else {
                 delta = fingerprints.get(id);
-                if (!unitsStatusMap.containsKey(id)) {
-                    unitsStatusMap.put(id, new UnitInNode(id, 0));
-                }
-                unitsStatusMap.get(id).updateCount(delta);
-                unitsStatusMap.get(id).belongedDevices.add(edgeDeviceHashCode);
-                System.out.print("1");
+//                if (!unitsStatusMap.containsKey(id)) {
+//                    unitsStatusMap.put(id, new UnitInNode(id, 0));
+//                }
+//                unitsStatusMap.get(id).updateCount(delta);
+//                unitsStatusMap.get(id).belongedDevices.add(edgeDeviceHashCode);
+//                System.out.print("1");
+
+                unitsStatusMap.compute(id, (key, value) -> {
+                    if (value == null) {
+                        value = new UnitInNode(id, 0);
+                    }
+                    value.updateCount(delta);
+                    value.belongedDevices.add(edgeDeviceHashCode);
+                    return value;
+                });
             }
         }
         ArrayList<Thread> threads = new ArrayList<>();
         count.incrementAndGet();
         boolean flag = count.compareAndSet(this.clientsForDevices.size(), 0);
         if (flag) {
+//            Iterator<Map.Entry<List<Double>, UnitInNode>> iterator = unitsStatusMap.entrySet().iterator();
+//            while (iterator.hasNext()) {
+//                Map.Entry<List<Double>, UnitInNode> entry = iterator.next();
+//                UnitInNode unitInNode = entry.getValue();
+//                if (unitInNode.belongedDevices.isEmpty()) {
+//                    iterator.remove();
+//                }
+//            }
+
             unitResultInfo.clear();
             // node has finished collecting data, entering into the N-N phase, only one thread go into this loop
             this.flag = true; //indicate to other nodes I am ready
             for (UnitInNode unitInNode : unitsStatusMap.values()) {
                 unitInNode.updateSafeness();
-//                if (unitInNode.unitID.get(0) == 11.757){
-//                    int a =1;
-//                }
             }
 
             //自己有的clients汇总答案信息
@@ -387,9 +413,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 HashMap<Integer, Set<List<Double>>> result = new HashMap<>();
                 //deviceHashCode: unitID
                 for (UnitInNode unitInNode : list) {
-                    if (unitInNode.unitID.get(0) == 434.0 && Constants.currentSlideID == 20){
-                        int a =1;
-                    }
+//                    if (unitInNode.unitID.get(0) == 434.0 && Constants.currentSlideID == 20){
+//                        int a =1;
+//                    }
                     unitResultInfo.get(unitInNode.unitID).forEach(
                             x -> {
                                 Set<Integer> deviceList = x.belongedDevices;
@@ -401,7 +427,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                                 }
                             }
                     );
-                    int a = 1;
+//                    int a = 1;
                 }
                 try {
                     this.clientsForDevices.get(edgeDeviceCode).getExternalData(status, result);

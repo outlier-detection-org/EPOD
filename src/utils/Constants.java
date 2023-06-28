@@ -8,12 +8,12 @@ public class Constants {
     // Configuration
     public static int currentSlideID = -1;
 
-    public static int threadhold = -10000;
+    public static int threadhold = -1000000;
     public static int nn = 3;
-    public static int dn = 3;
-    public static int nW = 5;
+    public static int dn = 2;
+    public static int nW = 4;
     public static String methodToGenerateFingerprint = "MCOD"; //"NETS" "MCOD" "NETS_CENTRALIZE" "" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "HPC"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
+    public static String dataset = "GAS"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
 
