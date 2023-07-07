@@ -1,5 +1,6 @@
 package Framework;
 
+import Detector.MCOD;
 import RPC.DeviceService;
 import RPC.EdgeNodeService;
 import RPC.Vector;
@@ -133,6 +134,9 @@ public class EdgeNodeNetwork {
             if (itr >= Constants.nS - 1) {
                 System.out.println("Time cost for this window is : " + time);
                 System.out.println("Average Data transfered is: " + dataTransfered * 1.0 / (Constants.dn * Constants.nn));
+                System.out.println("total cluster: "+ MCOD.total_cluster);
+                System.out.println("same center: " + (MCOD.total_cluster - EdgeNodeImpl.new_center_cnt));
+                System.out.println("same center ratio: " + (MCOD.total_cluster - EdgeNodeImpl.new_center_cnt) * 1.0 / MCOD.total_cluster);
                 time = 0;
             }
             printOutliers();

@@ -27,6 +27,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public List<Vector> allData;
     public List<Vector> rawData;
 
+    //=========================fro testing=========================
+    public static int new_center_cnt = 0;
+
     public EdgeNodeImpl(EdgeNode edgeNode) {
         this.belongedNode = edgeNode;
         this.unitsStatusMap = new ConcurrentHashMap<>();
@@ -42,6 +45,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             this.handler = new MCODHandler(this);
         }
 
+        // for baseline
         if (Objects.equals(Constants.methodToGenerateFingerprint, "NETS_CENTRALIZE")){
             this.detector = new NewNETS(0);
         }else if (Objects.equals(Constants.methodToGenerateFingerprint, "MCOD_CENTRALIZE")){
@@ -98,8 +102,13 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 
                 unitsStatusMap.compute(id, (key, value) -> {
                     if (value == null) {
+                        //for testing
+                        new_center_cnt++;
+
                         value = new UnitInNode(id, 0);
+
                     }
+
                     value.updateCount(delta);
                     value.belongedDevices.add(edgeDeviceHashCode);
                     return value;

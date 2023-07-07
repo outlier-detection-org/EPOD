@@ -24,6 +24,9 @@ public class MCOD extends Detector {
 
     public HashMap<List<Double>, Integer> external_info;
 
+    //=========================for testing=========================
+    public static int total_cluster = 0;
+
     public MCOD() {
         super();
         map_to_MCO = new HashMap<>();
@@ -243,6 +246,9 @@ public class MCOD extends Detector {
 
         update_info_unfilled(d, false,true);
         update_info_filled(d);
+
+        //for testing
+        total_cluster++;
     }
 
     private void check_filled(MCO center) {
