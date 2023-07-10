@@ -58,9 +58,6 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         this.clientsForEdgeNodes = clientsForEdgeNodes;
     }
 
-    //该接口，多传 Map<List<Double>, List<Integer,Integer>>
-    //500/5000  threadhold  threadhold + delta
-
     public void receiveAndProcessFP(Map<List<Double>, Integer> fingerprints, int edgeDeviceHashCode) {
 //        System.out.printf("Thead %d receiveAndProcessFP. \n", Thread.currentThread().getId());
         for (List<Double> id : fingerprints.keySet()) {
@@ -294,9 +291,9 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             List<UnitInNode> list = unitResultInfo.get(UnitID);
             //add up all point count
             Optional<UnitInNode> exist = list.stream().filter(x -> x.unitID.equals(UnitID) && (x.pointCnt > Constants.K)).findAny();
-            if (UnitID.get(0) == 434.0 && Constants.currentSlideID == 20){
-                int a =1;
-            }
+//            if (UnitID.get(0) == 434.0 && Constants.currentSlideID == 20){
+//                int a =1;
+//            }
             if (exist.isPresent()) {
                 unitsStatusMap.get(UnitID).isSafe = 2;
             }

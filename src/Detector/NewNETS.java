@@ -318,6 +318,9 @@ public class NewNETS extends Detector {
         for (Integer key : fullDimCellSlideOutCnt.keySet()) {
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) - fullDimCellSlideOutCnt.get(key));
             List<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
+            if (fingerprint.get(0) == 371.0 && Constants.currentSlideID == 20){
+                int a=1;
+            }
             if (!this.fullCellDelta.containsKey(fingerprint)) {
                 this.fullCellDelta.put(fingerprint, 0);
             }
@@ -333,17 +336,16 @@ public class NewNETS extends Detector {
     public void processOutliers() {
 //        System.out.printf("Thead %d processOutliers. \n", Thread.currentThread().getId());
         // after receive external data, we need to process outliers once again
-        Iterator<Tuple> it = outliers.iterator();
+        HashSet<Tuple> outliers_out = new HashSet<>(outliers);
+        Iterator<Tuple> it = outliers_out.iterator();
         OutlierLoop:
         while (it.hasNext()) {
             Tuple outlier = it.next();
-            if (outlier.get(0) == 8.674 && Constants.currentSlideID==20) {
-                System.out.println("has it!");
-            }
+            outlier.removeOutdatedNNUnsafeOut(Constants.currentSlideID, Constants.nS);
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
             if (status.get(tmp) == 2) {
-                if (outlier.get(0) == 8.674 && Constants.currentSlideID==20) {
-                    System.out.println("has it1!");
+                if (outlier.get(0) == 8.0117 && Constants.currentSlideID==22) {
+                    System.out.println("has it11111!");
                 }
                 it.remove();
                 continue OutlierLoop;
@@ -409,15 +411,15 @@ public class NewNETS extends Detector {
                         }
                     }
                     outlier.last_calculate_time++;
-                    if (outlier.values.get(0) == 8.674) {
+                    if (outlier.values.get(0) == 6.9106) {
                         System.out.println("NETS nn: " + (outlier.nnIn + sumOfNN));
                         System.out.println("NETS SafeOut: " + outlier.nnSafeOut);
                         System.out.println("NETS UnSafeOut: " + outlier.nnUnSafeOut);
                     }
                     if (need <= 0) {
-                        if(outlier.values.get(0) == 8.674)
+                        if(outlier.values.get(0) == 6.9106)
                         {
-                            System.out.println("NETS1 NEIGHBOR IS " + (outlier.getNN() + sumOfNN) + "\n");
+                            System.out.println("NETS1 NEIGHBOR IS " + (outlier.getNN() + sumOfNN));
                         }
                         it.remove();
                         continue OutlierLoop;
@@ -425,7 +427,7 @@ public class NewNETS extends Detector {
                 }
             }
         }
-        this.outlierVector = outliers;
+        this.outlierVector = outliers_out;
     }
 
     public void processOutliers1() {
@@ -585,7 +587,7 @@ public class NewNETS extends Detector {
                 it.remove();
             }
         }
-            this.findOutlierNETS(itr);
+        this.findOutlierNETS(itr);
     }
 
     public void findOutlierNETS(int itr) {
@@ -619,6 +621,9 @@ public class NewNETS extends Detector {
             for (HashMap<Integer, Cell> slide : slides) {
                 if (!slide.containsKey(infCellIdx)) continue;
                 for (Tuple t : slide.get(infCellIdx).tuples) {
+                    if (t.values.get(0) == 6.9106) {
+                        System.out.println("zxyzxy has it!");
+                    }
                     if (t.safeness) {
                         continue;
                     }
@@ -635,6 +640,9 @@ public class NewNETS extends Detector {
             //for each non-determined tuple, we check its neighbors
             TupleLoop:
             for (Tuple tCand : candOutlierTuples) {
+                if (tCand.values.get(0) == 6.9106 && Constants.currentSlideID == 20) {
+                    System.out.println("zxyzxy has it!");
+                }
                 Iterator<HashMap<Integer, Cell>> slideIterator = slides.descendingIterator();//�����µ�slide��ʼ
                 int currentSlideID = itr + 1;
 

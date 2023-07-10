@@ -378,8 +378,8 @@
 //							continue CellLoop;
 //
 //						HashSet<Tuple> otherTuples = new HashSet<Tuple>();
-////						if(subDimFlag) {
-//							reduce search space using sub-dims
+//						if(subDimFlag) {
+////							reduce search space using sub-dims
 //							for(Cell allIdxCell: currentSlide.get(otherCellIdx).fullCells.values()) {
 //								if(!allIdxCell.cellIdx.equals(tCand.fullDimCellIdx)
 //								   && neighboringSet(allIdxCell.cellIdx, tCand.fullDimCellIdx))
