@@ -149,10 +149,17 @@ public class EdgeNodeNetwork {
             }
 
             HashSet<Vector> outliers = CompareResult.detectOutliersNaive(allData, itr);
-            List<Vector> list = outliers.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).toList();
-//            list.forEach(x->x.values.sort(Comparator.comparingDouble(o -> o.doubleValue())));
-            for (Vector v : list) {
-                outlierNaiveFw.write(v.values.get(2) + "\n");
+            //"TAO" "GAS" "STK" "GAU" "EM" "HPC"
+            if (Objects.equals(Constants.dataset, "HPC")) {
+                List<Vector> list = outliers.stream().sorted(Comparator.comparingDouble(o -> o.values.get(2))).toList();
+                for (Vector v : list) {
+                    outlierNaiveFw.write(v.values.get(2) + "\n"); //
+                }
+            }else if (Objects.equals(Constants.dataset, "GAU")) {
+                List<Vector> list = outliers.stream().sorted(Comparator.comparingDouble(o -> o.values.get(0))).toList();
+                for (Vector v : list) {
+                    outlierNaiveFw.write(v.values.get(0) + "\n"); //
+                }
             }
             outlierNaiveFw.write("====================================\n");
             outlierNaiveFw.flush();
@@ -170,10 +177,17 @@ public class EdgeNodeNetwork {
             Vector tmp = new Vector(v);
             tmpList.add(tmp);
         }
-        List<Vector> list = tmpList.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).toList();
-//        list.forEach(x->x.values.sort(Comparator.comparingDouble(o -> o)));
-        for (Vector v : list) {
-            outlierFw.write(v.values.get(0) + "\n");
+
+        if (Objects.equals(Constants.dataset, "HPC")) {
+            List<Vector> list = tmpList.stream().sorted(Comparator.comparingDouble(o -> o.values.get(0))).toList();
+            for (Vector v : list) {
+                outlierFw.write(v.values.get(0) + "\n");
+            }
+        }else if (Objects.equals(Constants.dataset, "GAU")) {
+            List<Vector> list = outliers.stream().sorted(Comparator.comparingDouble(o -> o.values.get(0))).toList();
+            for (Vector v : list) {
+                outlierNaiveFw.write(v.values.get(0) + "\n");
+            }
         }
         outlierFw.write("====================================\n");
         outlierFw.flush();

@@ -9,9 +9,9 @@ public class Constants {
     public static int threadhold = -1000000;
     public static int nn = 2;
     public static int dn = 2;
-    public static int nW = 10;
+    public static int nW = 1;
     public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "HPC"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
+    public static String dataset = "GAU"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
 
