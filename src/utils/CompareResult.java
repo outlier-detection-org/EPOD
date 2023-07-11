@@ -56,14 +56,14 @@ public class CompareResult {
 
                     }
                 }
-                if(v.values.get(0) == 11.757){
-                    System.out.println("NAIVE neighbor: " + numOfNeighbors);
+//                if(v.values.get(0) == 8.0117){
 //
+//                    System.out.println("NAIVE neighbor: " + numOfNeighbors);
 //                    System.out.println("NETS nn: " + (nn));
 //                    System.out.println("NETS SafeOut: " + outSafe);
 //                    System.out.println("NETS UnSafeOut: " + outUnsafe);
-
-                }
+//
+//                }
                 if (numOfNeighbors < Constants.K) {
                     outliers.add(v);
                 }
@@ -90,7 +90,7 @@ public class CompareResult {
         outlierFw.write("F1: "+result[2]/nW);
         outlierFw.close();
     }
-    
+
     public static double[] compare(String filename1) throws IOException{
         int number = 2;
         BufferedReader[] approx = new BufferedReader[number];

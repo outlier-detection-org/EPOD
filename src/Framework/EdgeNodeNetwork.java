@@ -150,9 +150,9 @@ public class EdgeNodeNetwork {
 
             HashSet<Vector> outliers = CompareResult.detectOutliersNaive(allData, itr);
             List<Vector> list = outliers.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).toList();
-            list.forEach(x->x.values.sort(Comparator.comparingDouble(o -> o)));
+//            list.forEach(x->x.values.sort(Comparator.comparingDouble(o -> o.doubleValue())));
             for (Vector v : list) {
-                outlierNaiveFw.write(v + "\n");
+                outlierNaiveFw.write(v.values.get(2) + "\n");
             }
             outlierNaiveFw.write("====================================\n");
             outlierNaiveFw.flush();
@@ -171,9 +171,9 @@ public class EdgeNodeNetwork {
             tmpList.add(tmp);
         }
         List<Vector> list = tmpList.stream().sorted(Comparator.comparingInt(o -> o.arrivalTime)).toList();
-        list.forEach(x->x.values.sort(Comparator.comparingDouble(o -> o)));
+//        list.forEach(x->x.values.sort(Comparator.comparingDouble(o -> o)));
         for (Vector v : list) {
-            outlierFw.write(v + "\n");
+            outlierFw.write(v.values.get(0) + "\n");
         }
         outlierFw.write("====================================\n");
         outlierFw.flush();
