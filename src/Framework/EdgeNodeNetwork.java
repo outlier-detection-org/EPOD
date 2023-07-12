@@ -1,6 +1,5 @@
 package Framework;
 
-import Detector.MCOD;
 import RPC.DeviceService;
 import RPC.EdgeNodeService;
 import RPC.Vector;
@@ -23,6 +22,7 @@ public class EdgeNodeNetwork {
     public static Set<Vector> outliers; //only used to print out outlier
     public static BufferedWriter outlierFw;
     public static BufferedWriter outlierNaiveFw;
+    public static BufferedWriter naiveInfo;
     public static int dataTransfered = 0;
 
     static {
@@ -39,6 +39,14 @@ public class EdgeNodeNetwork {
             outlierNaiveFw = new BufferedWriter(new FileWriter(
                     "src\\Result\\"+
                             "_Result_Naive_" + Constants.dataset + "_outliers.txt"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            naiveInfo = new BufferedWriter(new FileWriter(
+                    "src\\Result\\"+
+                            "_Result_Naive_info" + Constants.dataset + "_outliers.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,9 +70,6 @@ public class EdgeNodeNetwork {
             }
             node.setDevices(devicesCodes);
         }
-//        for (Device device : deviceHashMap.values()) {
-//            device.handler.setHistoryRecord();
-//        }
     }
 
     static long time = 0;
@@ -147,46 +152,50 @@ public class EdgeNodeNetwork {
             for (Device device : deviceHashMap.values()) {
                 allData.addAll(device.handler.rawData);
             }
-
-            HashSet<Vector> outliers = CompareResult.detectOutliersNaive(allData, itr);
-            //"TAO" "GAS" "STK" "GAU" "EM" "HPC"
-            if (Objects.equals(Constants.dataset, "HPC")) {
-                List<Vector> list = outliers.stream().sorted(Comparator.comparingDouble(o -> o.values.get(2))).toList();
-                for (Vector v : list) {
-                    outlierNaiveFw.write(v.values.get(2) + "\n"); //
-                }
-            }else if (Objects.equals(Constants.dataset, "GAU")) {
-                List<Vector> list = outliers.stream().sorted(Comparator.comparingDouble(o -> o.values.get(0))).toList();
-                for (Vector v : list) {
-                    outlierNaiveFw.write(v.values.get(0) + "\n"); //
-                }
-            }
-            outlierNaiveFw.write("====================================\n");
-            outlierNaiveFw.flush();
+//            HashSet<Vector> outliers = CompareResult.detectOutliersNaive(allData, itr);
+//            //"TAO" "GAS" "STK" "GAU" "EM" "HPC"
+//            if (Constants.methodToGenerateFingerprint.equals("NETS")) {
+//                List<Vector> list = outliers.stream().sorted(
+//                        Vector::compareTo).toList();
+//                for (Vector v : list) {
+//                    outlierNaiveFw.write(v + "\n");
+//                }
+//            } else {
+//                List<Vector> list = outliers.stream().sorted(
+//                        Comparator.comparingInt(o -> o.arrivalTime)).toList();
+//                for (Vector v : list) {
+//                    outlierNaiveFw.write(v + "\n");
+//                }
+//            }
+//            outlierNaiveFw.write("====================================\n");
+//            outlierNaiveFw.flush();
             itr++;
         }
         stopNetwork();
         System.out.println("Average time cost is: " + time * 1.0 / (Constants.nS + Constants.nW - 1));
         outlierFw.close();
         outlierNaiveFw.close();
+        naiveInfo.close();
     }
 
     public static void printOutliers() throws IOException {
         HashSet<Vector> tmpList = new HashSet<>();
         for (Vector v : outliers) {
             Vector tmp = new Vector(v);
+            tmp.backup = v.backup;
             tmpList.add(tmp);
         }
 
-        if (Objects.equals(Constants.dataset, "HPC")) {
-            List<Vector> list = tmpList.stream().sorted(Comparator.comparingDouble(o -> o.values.get(0))).toList();
+        if (Constants.methodToGenerateFingerprint.equals("NETS")) {
+            List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.backup)).toList();
             for (Vector v : list) {
-                outlierFw.write(v.values.get(0) + "\n");
+                outlierFw.write(v.backup + "\n");
             }
-        }else if (Objects.equals(Constants.dataset, "GAU")) {
-            List<Vector> list = outliers.stream().sorted(Comparator.comparingDouble(o -> o.values.get(0))).toList();
+        }
+        else {
+            List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.arrivalTime)).toList();
             for (Vector v : list) {
-                outlierNaiveFw.write(v.values.get(0) + "\n");
+                outlierFw.write(v + "\n");
             }
         }
         outlierFw.write("====================================\n");

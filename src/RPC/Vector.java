@@ -28,6 +28,8 @@ public class Vector implements DistanceFunctions.EuclideanCoordinate, org.apache
   public int arrivalTime; // required
   public int slideID; // required
 
+  public Vector backup; // for debug only
+
   public Date arrivalRealTime; // arrival timestamp, used in the time-based window
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */

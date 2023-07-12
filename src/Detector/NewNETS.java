@@ -126,6 +126,7 @@ public class NewNETS extends Detector {
                 value.add(datum.values.get(i));
             }
             Tuple tuple = new Tuple(datum.arrivalTime, Constants.currentSlideID, value);
+            tuple.backup = datum;
             newSlide.add(tuple);
         }
         return newSlide;

@@ -404,11 +404,11 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             }
             else result = new HashSet<>();
             this.flag = true; // 同步device
+            allData.clear();
+            rawData.clear();
         }
         while (!this.flag){
         }
-        allData.clear();
-        rawData.clear();
         return result;
     }
 
@@ -459,5 +459,4 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         }
         return new ArrayList<>(this.rawData);
     }
-
 }
