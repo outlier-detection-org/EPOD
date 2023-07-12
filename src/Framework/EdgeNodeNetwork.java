@@ -152,15 +152,23 @@ public class EdgeNodeNetwork {
             for (Device device : deviceHashMap.values()) {
                 allData.addAll(device.handler.rawData);
             }
-            HashSet<Vector> outliers = CompareResult.detectOutliersNaive(allData, itr);
-            //"TAO" "GAS" "STK" "GAU" "EM" "HPC"
-            List<Vector> list = outliers.stream().sorted(
-                    Vector::compareTo).toList();
-            for (Vector v : list) {
-                outlierNaiveFw.write(v + "\n");
-            }
-            outlierNaiveFw.write("====================================\n");
-            outlierNaiveFw.flush();
+//            HashSet<Vector> outliers = CompareResult.detectOutliersNaive(allData, itr);
+//            //"TAO" "GAS" "STK" "GAU" "EM" "HPC"
+//            if (Constants.methodToGenerateFingerprint.equals("NETS")) {
+//                List<Vector> list = outliers.stream().sorted(
+//                        Vector::compareTo).toList();
+//                for (Vector v : list) {
+//                    outlierNaiveFw.write(v + "\n");
+//                }
+//            } else {
+//                List<Vector> list = outliers.stream().sorted(
+//                        Comparator.comparingInt(o -> o.arrivalTime)).toList();
+//                for (Vector v : list) {
+//                    outlierNaiveFw.write(v + "\n");
+//                }
+//            }
+//            outlierNaiveFw.write("====================================\n");
+//            outlierNaiveFw.flush();
             itr++;
         }
         stopNetwork();
@@ -178,11 +186,18 @@ public class EdgeNodeNetwork {
             tmpList.add(tmp);
         }
 
+        if (Constants.methodToGenerateFingerprint.equals("NETS")) {
             List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.backup)).toList();
             for (Vector v : list) {
                 outlierFw.write(v.backup + "\n");
             }
-
+        }
+        else {
+            List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.arrivalTime)).toList();
+            for (Vector v : list) {
+                outlierFw.write(v + "\n");
+            }
+        }
         outlierFw.write("====================================\n");
         outlierFw.flush();
     }

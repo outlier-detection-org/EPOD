@@ -355,7 +355,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         allData.clear();
         return result;
     }*/
-    public boolean ready = false;
+    public volatile boolean ready = false;
     @Override
     public Set<Vector> uploadAndDetectOutlier(List<Vector> data) throws InvalidException, TException {
         rawData.addAll(data);
@@ -398,11 +398,11 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             }
             else result = new HashSet<>();
             this.flag = true;
+            allData.clear();
+            rawData.clear();
         }
         while (!this.flag){
         }
-        allData.clear();
-        rawData.clear();
         return result;
     }
 
@@ -452,5 +452,4 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         }
         return new ArrayList<>(this.rawData);
     }
-
 }
