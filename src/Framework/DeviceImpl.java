@@ -58,6 +58,7 @@ public class DeviceImpl implements DeviceService.Iface {
 
     public void getRawData(int itr) {
         Date currentRealTime = new Date();
+        // 1000ms  10
         currentRealTime.setTime(dataGenerator.firstTimeStamp.getTime() + (long) Constants.S * 10 * 1000 * itr);
         this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S * 10);
     }
@@ -184,9 +185,12 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public Set<? extends Vector> detectOutlier_Centralize(int itr) throws Throwable {
+//        System.out.println("centralize detectOutlier 187");
         Constants.currentSlideID = itr;
         getRawData(itr);
+//        System.out.println("centralize detectOutlier 190");
         Set<? extends Vector> result = clientsForNearestNode.uploadAndDetectOutlier(this.rawData);
+//        System.out.println("centralize detectOutlier 192");
         return result;
     }
 

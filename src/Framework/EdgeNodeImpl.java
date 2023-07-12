@@ -355,23 +355,28 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         allData.clear();
         return result;
     }*/
-    public boolean ready = false;
+    public volatile boolean ready = false;
     @Override
     public Set<Vector> uploadAndDetectOutlier(List<Vector> data) throws InvalidException, TException {
+//        System.out.println("Thead " + Thread.currentThread().getId() + " uploadAndDetectOutlier 361");
         rawData.addAll(data);
         dataSize.addAndGet(data.size());
         allData.addAll(data);
         count.incrementAndGet();
+//        System.out.println("Thead " + Thread.currentThread().getId() + " uploadAndDetectOutlier 366");
         boolean localFlag = count.compareAndSet(Constants.dn, 0);
         // wait for all nodes to finish uploading && current slide after first window
         if (localFlag) {
+//            System.out.println("Thead " + Thread.currentThread().getId() + " uploadAndDetectOutlier 370");
             this.ready = true;
             ArrayList<Thread> threads = new ArrayList<>();
             for (int edgeNodeCode : EdgeNodeNetwork.nodeHashMap.keySet()) {
                 if (edgeNodeCode == this.belongedNode.hashCode()) continue;
                 Thread thread = new Thread(() -> {
                     try {
+//                        System.out.println("Thead " + Thread.currentThread().getId() + " uploadAndDetectOutlier 377");
                         List<Vector> eachData = clientsForEdgeNodes.get(edgeNodeCode).sendAllNodeData();
+//                        System.out.println("Thead " + Thread.currentThread().getId() + " uploadAndDetectOutlier 379");
                         allData.addAll(eachData);
                         dataSize.addAndGet(eachData.size());
                     } catch (TException e) {
@@ -388,6 +393,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                     e.printStackTrace();
                 }
             }
+//            System.out.println("Thead " + Thread.currentThread().getId() + " uploadAndDetectOutlier 394");
             if (Constants.currentSlideID >= Constants.nS - 1) {
                 System.out.println("Each node get data size is " + (dataSize.get()));
                 dataSize.set(0);
@@ -397,7 +403,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 result = new HashSet<>(this.detector.outlierVector);
             }
             else result = new HashSet<>();
-            this.flag = true;
+            this.flag = true; // 同步device
         }
         while (!this.flag){
         }
@@ -448,6 +454,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
 
     @Override
     public List<Vector> sendAllNodeData() throws InvalidException, TException {
+//        System.out.println("Thead " + Thread.currentThread().getId() + " sendAllNodeData 457");
         while(!this.ready){
         }
         return new ArrayList<>(this.rawData);
