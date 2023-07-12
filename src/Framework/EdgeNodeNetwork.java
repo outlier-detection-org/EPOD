@@ -96,6 +96,11 @@ public class EdgeNodeNetwork {
             setClientsForDevices(device);
         }
 
+        //========================for multiple query========================
+        //synchronize global parameters
+        parametersPreprocessing(Constants.isMultipleQuery);
+
+
         int itr = 0;
         while (itr < Constants.nS + Constants.nW - 1) {
             //per slide
@@ -255,5 +260,14 @@ public class EdgeNodeNetwork {
             clientsForDevices.put(deviceHashCode, client);
         }
         device.handler.setClients(clientForNearestNode, clientsForDevices);
+    }
+
+    public static void parametersPreprocessing(Boolean isMultipleQuery){
+        if (!isMultipleQuery) {
+            // 所有设备的R K minR minK maxR maxK 为Constant.R K
+        }
+        else {
+            // 1. 调用divice的上传R K
+        }
     }
 }

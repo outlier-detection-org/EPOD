@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.Random;
+
 public class Constants {
 //    public static boolean withTime = true;
 
@@ -39,6 +41,14 @@ public class Constants {
     public static String hpcFileName = prefix + "household2.txt";
     public static String gasFileName = prefix + "gas.txt";
     public static String randomClusterFileName = prefix + "RandomCluster.txt";
+
+    //========================for multiple query========================
+    public static double[] Rs = new double[nn*dn];
+    public static int[] Ks = new int[nn*dn];
+    static Random random = new Random();
+    public static boolean isVariousR = false;
+    public static boolean isVariousK = false;
+    public static boolean isMultipleQuery = isVariousR || isVariousK;
 
     static {
         if (dataset.contains("TAO") || dataset.contains("FC") || dataset.contains("RC")) {
@@ -98,6 +108,19 @@ public class Constants {
             if (methodToGenerateFingerprint.contains("NETS")){
                 subDim = 1;
             }
+        }
+
+        //========================for multiple query========================
+        for (int i = 0; i < nn*dn; i++) {
+            if (isVariousR) {
+                Rs[i] = R + random.nextDouble() * R * Math.pow(-1, i);
+            }
+            else Rs[i] = R;
+
+            if (isVariousK) {
+                Ks[i] = K + random.nextInt(10) * (int) Math.pow(-1, i);
+            }
+            else Ks[i] = K;
         }
     }
 }

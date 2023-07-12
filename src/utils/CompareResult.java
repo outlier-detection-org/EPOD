@@ -24,47 +24,47 @@ public class CompareResult {
             for (Vector v : allData) {
                 int numOfNeighbors = 0;
 
-                int nn = 0;
-                int outSafe = 0;
-                int outUnsafe = 0;
-                ArrayList<Short> fullDimCellIdx0 = new ArrayList<>();
-                NewNETS newNETS = new NewNETS(0);
-                if (Constants.methodToGenerateFingerprint.equals("NETS")){
-                    for (int j = 0; j < Constants.dim; j++) {
-                        short dimIdx = (short) ((v.values.get(j) - newNETS.minValues[j]) / newNETS.dimLength[j]);
-                        fullDimCellIdx0.add(dimIdx);
-                    }
-                }
+//                int nn = 0;
+//                int outSafe = 0;
+//                int outUnsafe = 0;
+//                ArrayList<Short> fullDimCellIdx0 = new ArrayList<>();
+//                NewNETS newNETS = new NewNETS(0);
+//                if (Constants.methodToGenerateFingerprint.equals("NETS")){
+//                    for (int j = 0; j < Constants.dim; j++) {
+//                        short dimIdx = (short) ((v.values.get(j) - newNETS.minValues[j]) / newNETS.dimLength[j]);
+//                        fullDimCellIdx0.add(dimIdx);
+//                    }
+//                }
 
 
                 for (Vector v2 : allData) {
                     if (v.equals(v2)) continue;
                     if (distance(v, v2) <= Constants.R * Constants.R) {
                         numOfNeighbors++;
-                        if (Constants.methodToGenerateFingerprint.equals("NETS")) {
-                            ArrayList<Short> fullDimCellIdx = new ArrayList<>();
-                            for (int j = 0; j < Constants.dim; j++) {
-                                short dimIdx = (short) ((v2.values.get(j) - newNETS.minValues[j]) / newNETS.dimLength[j]);
-                                fullDimCellIdx.add(dimIdx);
-                            }
-                            if (fullDimCellIdx.equals(fullDimCellIdx0)) {
-                                nn++;
-                            } else {
-                                if (v.slideID > v2.slideID) {
-                                    outUnsafe++;
-                                } else {
-                                    outSafe++;
-                                }
-                            }
-                        }
+//                        if (Constants.methodToGenerateFingerprint.equals("NETS")) {
+//                            ArrayList<Short> fullDimCellIdx = new ArrayList<>();
+//                            for (int j = 0; j < Constants.dim; j++) {
+//                                short dimIdx = (short) ((v2.values.get(j) - newNETS.minValues[j]) / newNETS.dimLength[j]);
+//                                fullDimCellIdx.add(dimIdx);
+//                            }
+//                            if (fullDimCellIdx.equals(fullDimCellIdx0)) {
+//                                nn++;
+//                            } else {
+//                                if (v.slideID > v2.slideID) {
+//                                    outUnsafe++;
+//                                } else {
+//                                    outSafe++;
+//                                }
+//                            }
+//                        }
                     }
                 }
                 if (Constants.methodToGenerateFingerprint.equals("NETS")) {
                     EdgeNodeNetwork.naiveInfo.write(v + "\n");
                     EdgeNodeNetwork.naiveInfo.write("NAIVE neighbor: " + numOfNeighbors + "\n");
-                    EdgeNodeNetwork.naiveInfo.write("NETS nn: " + (nn) + "\n");
-                    EdgeNodeNetwork.naiveInfo.write("NETS SafeOut: " + outSafe + "\n");
-                    EdgeNodeNetwork.naiveInfo.write("NETS UnSafeOut: " + outUnsafe + "\n");
+//                    EdgeNodeNetwork.naiveInfo.write("NETS nn: " + (nn) + "\n");
+//                    EdgeNodeNetwork.naiveInfo.write("NETS SafeOut: " + outSafe + "\n");
+//                    EdgeNodeNetwork.naiveInfo.write("NETS UnSafeOut: " + outUnsafe + "\n");
                 }
                 if (numOfNeighbors < Constants.K) {
                     outliers.add(v);
