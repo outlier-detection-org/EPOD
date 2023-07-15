@@ -27,8 +27,13 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
     public List<Vector> allData;
     public List<Vector> rawData;
 
-    //=========================fro testing=========================
-    public static int new_center_cnt = 0;
+//    //=========================fro testing=========================
+//    public static int new_center_cnt = 0;
+    //========================for multiple query========================
+    public int minK = Integer.MAX_VALUE;
+    public int maxK = Integer.MIN_VALUE;
+    public double minR = Double.MAX_VALUE;
+    public double maxR = Double.MIN_VALUE;
 
     public EdgeNodeImpl(EdgeNode edgeNode) {
         this.belongedNode = edgeNode;
@@ -100,7 +105,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
                 unitsStatusMap.compute(id, (key, value) -> {
                     if (value == null) {
                         //for testing
-                        new_center_cnt++;
+//                        new_center_cnt++;
 
                         value = new UnitInNode(id, 0);
 
@@ -458,5 +463,17 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
         while(!this.ready){
         }
         return new ArrayList<>(this.rawData);
+    }
+
+    public double synchronizeRK(){
+        // 1.等待所有自己的device上传RK，找到local的 minR minK maxR maxK
+        // 2.调用其他node的sendRK, 找到global的 minR minK maxR maxK
+        // 3.储存并返回minR给自己的各device
+        return 0;
+    }
+
+    public ArrayList<Double> sendRK(){
+        //返回自己的minR minK maxR maxK
+        return null;
     }
 }

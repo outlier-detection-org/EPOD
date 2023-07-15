@@ -32,6 +32,11 @@ public class DeviceImpl implements DeviceService.Iface {
     //=============================P2P===============================
     public List<Vector> allData;
 
+    //========================for multiple query========================
+    public double myR;
+    public int myK;
+    public double minR;
+
     public DeviceImpl(int deviceId, Device belongedDevice) {
         this.belongedDevice = belongedDevice;
         this.deviceId = deviceId;
@@ -42,6 +47,13 @@ public class DeviceImpl implements DeviceService.Iface {
         } else if (Constants.methodToGenerateFingerprint.contains("MCOD")) {
             this.detector = new MCOD();
         }
+
+        //========================for multiple query========================
+        myR = Constants.R;
+        myK = Constants.K;
+//        myR = Constants.Rs[deviceId];
+//        myK = Constants.Ks[deviceId];
+        //记得重置代码中的R和K
     }
 
 //    public void setHistoryRecord() {
@@ -199,5 +211,11 @@ public class DeviceImpl implements DeviceService.Iface {
         while (!this.ready){
         }
         return this.rawData;
+    }
+
+    //==============for multi-query================
+    public double uploadRK(){
+        // 调用node端的synchronizeRK()
+        return -1.0;
     }
 }
