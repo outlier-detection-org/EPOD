@@ -11,6 +11,7 @@ import utils.DataGenerator;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public class DeviceImpl implements DeviceService.Iface {
@@ -36,6 +37,9 @@ public class DeviceImpl implements DeviceService.Iface {
     public double myR;
     public int myK;
     public double minR;
+
+    //==================for measurement==================
+    public double processedExternalPoints = 0.0;
 
     public DeviceImpl(int deviceId, Device belongedDevice) {
         this.belongedDevice = belongedDevice;
@@ -76,6 +80,7 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public Set<? extends Vector> detectOutlier(int itr) throws Throwable {
+        processedExternalPoints = 0.0;
         System.out.println("Thread " + Thread.currentThread().getId() + " detectOutlier");
         this.ready = false;
         //get initial data
@@ -112,7 +117,8 @@ public class DeviceImpl implements DeviceService.Iface {
 //        System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
         this.detector.status = status;
         ArrayList<Thread> threads = new ArrayList<>();
-        System.out.println("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet());
+        System.out.println("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().size());
+        EdgeNodeNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode.equals(this.belongedDevice.hashCode())) continue;
             //HashMap<Integer,HashSet<ArrayList<?>>>
@@ -151,7 +157,7 @@ public class DeviceImpl implements DeviceService.Iface {
         }
         if (Constants.currentSlideID >= Constants.nS - 1) {
             System.out.println("Device " + this.belongedDevice.hashCode() + " get data size is " + dataSize);
-            EdgeNodeNetwork.dataTransfered += dataSize.get();
+            EdgeNodeNetwork.dataTransfered.addAndGet(dataSize.get());
         }
         dataSize.set(0);
         this.ready = true;
