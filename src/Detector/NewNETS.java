@@ -38,6 +38,9 @@ public class NewNETS extends Detector {
     public int candidateCellsTupleCnt = 0;
     public Map<Integer, HashMap<ArrayList<Short>, ArrayList<Tuple>>> internal_dataList; //only used for sending data
 
+    //=========================for measurement=========================
+    public int processExternalPoints = 0;
+
     public NewNETS(int random) {
         super();
         this.subDimFlag = Constants.dim != Constants.subDim;
@@ -337,6 +340,7 @@ public class NewNETS extends Detector {
     public void processOutliers() {
 //        System.out.printf("Thead %d processOutliers. \n", Thread.currentThread().getId());
         // after receive external data, we need to process outliers once again
+        processExternalPoints = 0;
         HashSet<Tuple> outliers_out = new HashSet<>(outliers);
         Iterator<Tuple> it = outliers_out.iterator();
         OutlierLoop:
@@ -396,6 +400,7 @@ public class NewNETS extends Detector {
                     HashMap<List<Double>, List<Vector>> candiNeighbors = candNeighborByTime.get(outlier.last_calculate_time);
                     for (List<Double> cellId : candiNeighbors.keySet()) {
                         List<Vector> cluster = candiNeighbors.get(cellId);
+                        processExternalPoints += cluster.size();
                         for (Vector v : cluster) {
                             if (neighboringTupleSet(v.values, outlier.values, Constants.R)) {
                                 if (v.slideID < outlier.slideID) {
@@ -429,6 +434,7 @@ public class NewNETS extends Detector {
             }
         }
         this.outlierVector = outliers_out;
+        System.out.println("Client #pocess external points / #outliers = " + processExternalPoints * 1.0 / outlierVector.size());
     }
 
     public void processOutliers1() {
