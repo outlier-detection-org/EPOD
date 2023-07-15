@@ -13,7 +13,7 @@ public class Constants {
     public static int dn = 3;
     public static int nW = 1;
     public static String methodToGenerateFingerprint = "MCOD_CENTRALIZE"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "TAO"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
+    public static String dataset = "TAO"; //"FC"(ï¿½ï¿½) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
 
@@ -26,12 +26,12 @@ public class Constants {
 
     //fixed
     public static int K = 50; // neighborhood threshold, default = 50
-    public static String prefix = "Datasets\\";
+    public static String prefix = "Datasets/";
 
     //Paths
     //    public static String prefix = "/home/xinyingzheng/Desktop/outlier_detection";
-    public static String deviceIdPrefix = Constants.prefix + "\\DeviceId_data\\Device_" + nn * dn + "_" + dataset + "\\";
-    public static String timePrefix = Constants.prefix + "\\Timestamp_data\\Device_" + nn * dn + "_" + dataset + "\\";
+    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Device_" + nn * dn + "_" + dataset + "/";
+    public static String timePrefix = Constants.prefix + "/Timestamp_data/Device_" + nn * dn + "_" + dataset + "/";
 
     public static String forestCoverFileName = prefix + "fc.txt";
     public static String taoFileName = prefix + "tao.txt";
@@ -113,7 +113,7 @@ public class Constants {
         //========================for multiple query========================
         for (int i = 0; i < nn*dn; i++) {
             if (isVariousR) {
-                Rs[i] = R + random.nextDouble() * R * Math.pow(-1, i);
+                Rs[i] = R + random.nextDouble() * R * 0.5 * Math.pow(-1, i);
             }
             else Rs[i] = R;
 
