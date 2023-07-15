@@ -1,83 +1,81 @@
 import os
-
 from sklearn.cluster import KMeans
 import pandas as pd
 import numpy as np
 import random
 
+# top-down: first cluster based on node number, and mixture;
+# Then for each mixed cluster, cluster based on client number, and mixture
 
-# Configuration file
-n_clusters = 4
-mix_rate = 5
+# Configuration that need to be changed each time
+n_nodes = 4
+n_clients = 8
+mix_rate = 0.5
 data = pd.read_table('C:\\Users\\Lenovo\\Desktop\\outlier_detection\\EPOD\\Datasets\\tao.txt', sep=',', header=None)
-prefix = \
-    "C:\\Users\\Lenovo\\Desktop\\outlier_detection\\EPOD\\Datasets\\DeviceId_data\\Device_" + \
-    str(n_clusters) + "_TAO_K_" + str(mix_rate) + "\\"
+prefix = "C:\\Users\\Lenovo\\Desktop\\outlier_detection\\EPOD\\Datasets\\DeviceId_data\\Node_" \
+         + str(n_nodes) + "_Device_" + str(n_clients) + "_TAO_K_" + str(mix_rate) + "\\"
 
-
+# read datasets
 df = pd.DataFrame(data)
 X = np.array(df)
-kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(X)
+
+# step 1: cluster based on node number, and mixture;
+kmeans = KMeans(n_clusters=n_nodes, random_state=0).fit(X)
 clusters = []
-for i in range(n_clusters):
+for i in range(n_nodes):
     clusters.append([])
 for i in range(kmeans.labels_.size):
     clusters[kmeans.labels_[i]].append(X[i])
-for i in range(n_clusters):
-    print(len(clusters[i]))
 
-#TAO: cluster 2(0123) is too small
-tmp = []
-for k in range(clusters[2].__len__()):
-    p = clusters[2][k]
-    for i in range(100):
-        p[0] = p[0]
-        tmp.append(p.copy())
-clusters[2] = tmp
+# mixture
+group = []
+for i in range(n_nodes):
+    count = int(len(clusters[i]) * mix_rate)
+    for j in range(count):
+            group.append(clusters[i][j])
+random.shuffle(group)
 
-for i in range(n_clusters):
-    clusters.append([])
-for i in range(kmeans.labels_.size):
-    clusters[kmeans.labels_[i]].append(X[i])
-for i in range(n_clusters):
-    print(len(clusters[i]))
+# reassign
+clusters1 = []
+for i in range(n_nodes):
+    clusters1.append([])
 
-# find the smallest cluster
-smallIndex=0
-smallSize=0
-for cluster in clusters:
-    if cluster.__len__()<smallSize:
-        smallIndex=clusters.index(cluster)
-        smallSize=cluster.__len__()
+left = 0
+right = int(len(group)/n_nodes)
+for i in range(n_nodes):
+    # mixed part
+    for j in range(left,right):
+        clusters1.append(group[j])
+    # original part
+    count = int(len(clusters[i]) * mix_rate)
+    for j in range (count + 1 , len(clusters[i])):
+        clusters1.append(clusters[i][j])
+    left = right
+    right = int(left + len(group)/n_nodes)
+    if(i == n_nodes - 2):
+        right = len(group)
 
-# mix 10% 0->1 1->2 2->3 3->0
-count = int(len(clusters[smallIndex]) * mix_rate / 100)
-before = clusters[0][0:count]
-for i in range(n_clusters):
-    j = (i + 1) % n_clusters
-    after = clusters[j][0:count]
-    clusters[j][0:count] = before
-    before = after
-for i in range(n_clusters):
-    random.shuffle(clusters[i])
+
+for i in range(n_nodes):
+    random.shuffle(clusters1[i])
 
 
 os.mkdir(prefix, 0o0755)
 files = []
-for i in range(n_clusters):
+for i in range(n_nodes):
     file = open(prefix + str(i) + ".txt", "w+")
     files.append(file)
 
-for i in range(len(clusters)):
-    for j in range(len(clusters[i])):
+for i in range(n_nodes):
+    for j in range(len(clusters1[i])):
         files[i].write(str(i)+",")
-        for k in range(len(clusters[i][j])):
-            if k == len(clusters[i][j]) - 1:
-                files[i].write(str(clusters[i][j][k]))
+        for k in range(len(clusters1[i][j])):
+            if k == len(clusters1[i][j]) - 1:
+                files[i].write(str(clusters1[i][j][k]))
             else:
-                files[i].write(str(clusters[i][j][k])+",")
+                files[i].write(str(clusters1[i][j][k])+",")
         files[i].write("\n")
 
-for i in range(n_clusters):
+for i in range(n_nodes):
     files[i].close()
 
