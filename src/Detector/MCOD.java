@@ -23,9 +23,9 @@ public class MCOD extends Detector {
     public PriorityQueue<MCO> eventQueue;
 
     public HashMap<List<Double>, Integer> external_info;
-//
-//    //=========================for testing=========================
-//    public static int total_cluster = 0;
+
+    //=========================for measurement=========================
+    public int processExternalPoints = 0;
 
     public MCOD() {
         super();
@@ -527,6 +527,7 @@ public class MCOD extends Detector {
 
     public void processOutliers() {
 //        System.out.printf("Thead %d processOutliers. \n", Thread.currentThread().getId());
+        processExternalPoints = 0;
         update_external_info();
         check_local_outliers();
         this.outlierVector = outliers;
@@ -632,33 +633,16 @@ public class MCOD extends Detector {
         outlierLoop:
         while (iterator.hasNext()) {
             MCO o = iterator.next();//读取当前集合数据元素
-//            if(o.values.get(0) == 11.757){
-//                List<Double> link =new LinkedList<>();
-//                //0.0, 73.92, 25.604
-//                link.add(0.0);
-//                link.add(73.92);
-//                link.add(25.604);
-//                if (this.external_info.containsKey(link)){
-//                System.out.println("outlier has it");
-//                };
-//            }
             // HashMap<ArrayList<?>, Integer> status;
             if (!this.status.containsKey(o.center.values)){
                 System.out.println(o.center.values);
             }
             int reply = this.status.get(o.center.values);
-//            if(o.values.get(0) == 11.757){
-//                System.out.println("Slide ID: " + Constants.currentSlideID + ", status: "+ reply);
-//            }
             //首先我们需要pruning掉被判断为安全的以及被判断成outlier的点，加入event queue，event time 设为下一个时间点
             if (reply == 2) {
                 iterator.remove();
                 // 是在device端就确定为inlier的情况,没有精确的最早的neighbor过期的时间 更新不了相应proceeding和succeeding
                 o.ev = Constants.currentSlideID + 1;
-//                System.out.println("Add to event queue, o.ev =  "+ o.ev);
-//                if (o.ev > 20){
-//                    int a  = 1;
-//                }
                 eventQueue.add(o);
             }
             //确定为outlier的点不用做操作
@@ -670,9 +654,6 @@ public class MCOD extends Detector {
                 ArrayList<List<Double>> cluster3R_2 = new ArrayList<>();
                 for (Map.Entry<List<Double>, Integer> entry : external_info.entrySet()) {
                     List<Double> key = entry.getKey();
-//                    if (key.get(0) == 11.757){
-//                        int  a =1;
-//                    }
                     double distance = distance(key, o.values);
                     if (distance <= Constants.R * 3 / 2) {
                         cluster3R_2.add(key);
@@ -691,6 +672,7 @@ public class MCOD extends Detector {
                             List<Vector> cur_cluster_data = cur_data.get(c);
                             // 如果有
                             if (cur_cluster_data != null) {
+                                processExternalPoints += cur_cluster_data.size();
                                 for (Vector v : cur_cluster_data) {
                                     if (distance(v.values, o.values) <= Constants.R) {
                                         if (isSameSlide(o, v) <= 0) {
@@ -704,34 +686,16 @@ public class MCOD extends Detector {
                             }
                         }
                     }
-//                    if(o.values.get(0) == 11.757) {
-//                        System.out.println("last calculate: " + o.last_calculate_time);
-//                    }
                     o.last_calculate_time++;
 
                     checkInlier(o, iterator);
                     if (o.numberOfSucceeding + o.exps.size() >= Constants.K) {
-//                        if(o.values.get(0) == 11.757){
-//                            System.out.println("event queue:" + eventQueue.contains(o));
-//                            System.out.println("o.ev:  " + o.ev);
-//                            System.out.println("MCOD outlier to inlier: " + (o.numberOfSucceeding + o.exps.size()));
-//                            System.out.println("MCOD outlier to inlier numberOfSucceeding: " + o.numberOfSucceeding );
-//                            System.out.println("MCOD outlier to inlier exps: "  + o.exps.size());
-//                            for (int i = 0; i < o.exps.size(); i++) {
-//                                System.out.print(o.exps.get(i) + " ");
-//                            }
-//                            System.out.println();
-//                        }
                         continue outlierLoop;
                     }
                 }
             }
-//            if(o.values.get(0) == 11.757){
-//                System.out.println("MCOD outlier: " + (o.numberOfSucceeding + o.exps.size()));
-//                System.out.println("MCOD outlier numberOfSucceeding: " + o.numberOfSucceeding );
-//                System.out.println("MCOD outlier exps: " + o.exps.size());
-//            }
         }
+        System.out.println("Client #pocess external points / #outliers = " + processExternalPoints * 1.0 / outliers.size());
     }
 
 

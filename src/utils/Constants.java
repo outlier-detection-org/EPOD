@@ -11,8 +11,8 @@ public class Constants {
     public static int threadhold = -1000000;
     public static int nn = 3;
     public static int dn = 3;
-    public static int nW = 1;
-    public static String methodToGenerateFingerprint = "MCOD_CENTRALIZE"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
+    public static int nW = 3;
+    public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
     public static String dataset = "TAO"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically

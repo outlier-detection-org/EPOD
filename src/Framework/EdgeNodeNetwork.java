@@ -15,6 +15,14 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
+//Measurement:
+// latency
+// overall data transferred
+// # support devices
+// (# of processed points) / (# of outliers)
 
 public class EdgeNodeNetwork {
     public static HashMap<Integer, Device> deviceHashMap = new HashMap<>();
@@ -23,7 +31,13 @@ public class EdgeNodeNetwork {
     public static BufferedWriter outlierFw;
     public static BufferedWriter outlierNaiveFw;
     public static BufferedWriter naiveInfo;
-    public static int dataTransfered = 0;
+
+    //==================for measurement==================
+    public static AtomicInteger dataTransfered = new AtomicInteger(0);
+    public static AtomicInteger supportDevices = new AtomicInteger(0);
+    static long time = 0;
+    static long totalTime = 0;
+
 
     static {
         outliers = Collections.synchronizedSet(new HashSet<>());
@@ -31,6 +45,9 @@ public class EdgeNodeNetwork {
             outlierFw = new BufferedWriter(new FileWriter(
                     "src\\Result\\" +
                             "_Result_"+Constants.methodToGenerateFingerprint+"_"+ Constants.dataset + "_outliers.txt"));
+//            outlierFw = new BufferedWriter(new FileWriter(
+//                    "src/Result/" +
+//                            "_Result_"+Constants.methodToGenerateFingerprint+"_"+ Constants.dataset + "_outliers.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -39,6 +56,9 @@ public class EdgeNodeNetwork {
             outlierNaiveFw = new BufferedWriter(new FileWriter(
                     "src\\Result\\"+
                             "_Result_Naive_" + Constants.dataset + "_outliers.txt"));
+//            outlierNaiveFw = new BufferedWriter(new FileWriter(
+//                    "src/Result/"+
+//                            "_Result_Naive_" + Constants.dataset + "_outliers.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -47,6 +67,9 @@ public class EdgeNodeNetwork {
             naiveInfo = new BufferedWriter(new FileWriter(
                     "src\\Result\\"+
                             "_Result_Naive_info" + Constants.dataset + "_outliers.txt"));
+//            naiveInfo = new BufferedWriter(new FileWriter(
+//                    "src/Result/"+
+//                            "_Result_Naive_info" + Constants.dataset + "_outliers.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -72,7 +95,6 @@ public class EdgeNodeNetwork {
         }
     }
 
-    static long time = 0;
     public static void startNetwork() throws Throwable {
         //Print Logs
         System.out.println("# Dataset: " + Constants.dataset);
@@ -106,7 +128,7 @@ public class EdgeNodeNetwork {
             //per slide
             System.out.println("===============================");
             System.out.println("This is the " + itr + " slides.");
-            dataTransfered = 0;
+//            dataTransfered.set(0);
             for (EdgeNode node : nodeHashMap.values()) {
                 node.handler.flag = false;
                 node.handler.ready = false;
@@ -141,12 +163,13 @@ public class EdgeNodeNetwork {
                 t.join();
             }
             time += System.currentTimeMillis() - start;
+            totalTime += time;
             if (itr >= Constants.nS - 1) {
                 System.out.println("Time cost for this window is : " + time);
-                System.out.println("Average Data transfered is: " + dataTransfered * 1.0 / (Constants.dn * Constants.nn));
-//                System.out.println("total cluster: "+ MCOD.total_cluster);
-//                System.out.println("same center: " + (MCOD.total_cluster - EdgeNodeImpl.new_center_cnt));
-//                System.out.println("same center ratio: " + (MCOD.total_cluster - EdgeNodeImpl.new_center_cnt) * 1.0 / MCOD.total_cluster);
+//                System.out.println("Average Data transfered is: " + dataTransfered * 1.0 / (Constants.dn * Constants.nn));
+                System.out.println("Data transfered so far is: " + dataTransfered);
+                System.out.println("interacted clients so far is: " + supportDevices);
+                System.out.println("Total time cost is : " + totalTime);
                 time = 0;
             }
             printOutliers();
@@ -177,7 +200,10 @@ public class EdgeNodeNetwork {
             itr++;
         }
         stopNetwork();
-        System.out.println("Average time cost is: " + time * 1.0 / (Constants.nS + Constants.nW - 1));
+//        System.out.println("Average time cost is: " + time * 1.0 / (Constants.nS + Constants.nW - 1)); // todo: 感觉优点问题？
+        System.out.println("Average time cost per slide is: " + totalTime * 1.0 / (Constants.nS + Constants.nW - 1));
+        System.out.println("Total time cost is: " + totalTime);
+        System.out.println("Total interacted clients is: " + supportDevices);
         outlierFw.close();
         outlierNaiveFw.close();
         naiveInfo.close();
