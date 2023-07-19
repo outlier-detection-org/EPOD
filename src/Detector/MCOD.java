@@ -2,9 +2,11 @@ package Detector;
 
 import DataStructure.MCO;
 
+import java.io.IOException;
 import java.util.*;
 
 import Framework.DeviceImpl;
+import Framework.EdgeNodeNetwork;
 import RPC.Vector;
 import mtree.utils.MTreeClass;
 import utils.Constants;
@@ -695,7 +697,12 @@ public class MCOD extends Detector {
                 }
             }
         }
-        System.out.println("Client #pocess external points / #outliers = " + processExternalPoints * 1.0 / outliers.size());
+        try {
+            EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outliers.size()+"\n");
+            EdgeNodeNetwork.ratioInfo.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

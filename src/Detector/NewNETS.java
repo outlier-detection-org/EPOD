@@ -1,12 +1,14 @@
 package Detector;
 
 import DataStructure.MCO;
+import Framework.EdgeNodeNetwork;
 import RPC.Vector;
 import DataStructure.Cell;
 import DataStructure.Tuple;
 import Framework.DeviceImpl;
 import utils.Constants;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 
@@ -434,7 +436,12 @@ public class NewNETS extends Detector {
             }
         }
         this.outlierVector = outliers_out;
-        System.out.println("Client #pocess external points / #outliers = " + processExternalPoints * 1.0 / outlierVector.size());
+        try {
+            EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outlierVector.size()+"\n");
+            EdgeNodeNetwork.ratioInfo.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void processOutliers1() {

@@ -9,6 +9,7 @@ import RPC.Vector;
 import utils.Constants;
 import utils.DataGenerator;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -117,7 +118,12 @@ public class DeviceImpl implements DeviceService.Iface {
 //        System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
         this.detector.status = status;
         ArrayList<Thread> threads = new ArrayList<>();
-        System.out.println("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().size());
+        try {
+            EdgeNodeNetwork.supportDeviceInfo.write("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().size()+"\n");
+            EdgeNodeNetwork.supportDeviceInfo.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         EdgeNodeNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode.equals(this.belongedDevice.hashCode())) continue;
@@ -156,7 +162,12 @@ public class DeviceImpl implements DeviceService.Iface {
             }
         }
         if (Constants.currentSlideID >= Constants.nS - 1) {
-            System.out.println("Device " + this.belongedDevice.hashCode() + " get data size is " + dataSize);
+            try {
+                EdgeNodeNetwork.getDataInfo.write("Device " + this.belongedDevice.hashCode() + " get data size is " + dataSize+"\n");
+                EdgeNodeNetwork.getDataInfo.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             EdgeNodeNetwork.dataTransfered.addAndGet(dataSize.get());
         }
         dataSize.set(0);
