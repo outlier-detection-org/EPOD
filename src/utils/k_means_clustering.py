@@ -21,56 +21,56 @@ prefix = "..\\..\\Datasets\\DeviceId_data\\Node_" \
 df = pd.DataFrame(data)
 X = np.array(df)
 
-# step 1: cluster based on node number, and mixture;
-kmeans = KMeans(n_init='auto', n_clusters=n_nodes).fit(X)
-clusters = []
-for i in range(n_nodes):
-    clusters.append([])
-for i in range(kmeans.labels_.size):
-    clusters[kmeans.labels_[i]].append(X[i])
-
-for i in range(n_nodes):
-    random.shuffle(clusters[i])
-
-# mixture
-group = []
-for i in range(n_nodes):
-    count = int(len(clusters[i]) * mix_rate_node)
-    for j in range(count):
-        group.append(clusters[i][j])
-random.shuffle(group)
-
-# reassign
-clusters1 = []
-for i in range(n_nodes):
-    clusters1.append([])
-
-left = 0
-right = int(len(group) / n_nodes)
-for i in range(n_nodes):
-    # mixed part
-    for j in range(left, right):
-        clusters1[i].append(group[j])
-    # original part
-    count = int(len(clusters[i]) * mix_rate_node)
-    for j in range(count + 1, len(clusters[i])):
-        clusters1[i].append(clusters[i][j])
-    left = right
-    if i == n_nodes - 2:
-        right = len(group)
-    else:
-        right = int(left + len(group) / n_nodes)
-
-for i in range(n_nodes):
-    random.shuffle(clusters1[i])
-
 clusters2 = []
 for i in range(n_nodes * n_clients):
     clusters2.append([])
 
-# step 2: for each node, cluster based on client number, and mixture
-for i in range(n_nodes):
-    for x in range(copy_num):
+for x in range(copy_num):
+    # step 1: cluster based on node number, and mixture;
+    kmeans = KMeans(n_init='auto', n_clusters=n_nodes).fit(X)
+    clusters = []
+    for i in range(n_nodes):
+        clusters.append([])
+    for i in range(kmeans.labels_.size):
+        clusters[kmeans.labels_[i]].append(X[i])
+    for i in range(n_nodes):
+        random.shuffle(clusters[i])
+        print(len(clusters[i]))
+    # mixture
+    group = []
+    for i in range(n_nodes):
+        count = int(len(clusters[i]) * mix_rate_node)
+        for j in range(count):
+            group.append(clusters[i][j])
+    random.shuffle(group)
+
+    # reassign
+    clusters1 = []
+    for i in range(n_nodes):
+        clusters1.append([])
+
+    left = 0
+    right = int(len(group) / n_nodes)
+    for i in range(n_nodes):
+        # mixed part
+        for j in range(left, right):
+            clusters1[i].append(group[j])
+        # original part
+        count = int(len(clusters[i]) * mix_rate_node)
+        for j in range(count + 1, len(clusters[i])):
+            clusters1[i].append(clusters[i][j])
+        left = right
+        if i == n_nodes - 2:
+            right = len(group)
+        else:
+            right = int(left + len(group) / n_nodes)
+
+    for i in range(n_nodes):
+        random.shuffle(clusters1[i])
+
+
+    # step 2: for each node, cluster based on client number, and mixture
+    for i in range(n_nodes):
         kmeans = KMeans(n_init='auto', n_clusters=n_clients).fit(clusters1[i])
         clusters = []
         for j in range(n_clients):
@@ -93,20 +93,21 @@ for i in range(n_nodes):
         right = int(len(group) / n_clients)
         for j in range(n_clients):
             # mixed part
+            tmp = []
             for k in range(left, right):
-                clusters2[i * n_clients + j].append(group[k])
+                tmp.append(group[k])
             # original part
             count = int(len(clusters[j]) * mix_rate_client)
             for k in range(count + 1, len(clusters[j])):
-                clusters2[i * n_clients + j].append(clusters[j][k])
+                tmp.append(clusters[j][k])
             left = right
             if i == n_clients - 2:
                 right = len(group)
             else:
                 right = int(left + len(group) / n_clients)
-
-for j in range(n_clients * n_nodes):
-    random.shuffle(clusters2[j])
+            random.shuffle(tmp)
+            for k in range(len(tmp)):
+                clusters2[i * n_clients + j].append(tmp[k])
 
 # print to file
 try:
