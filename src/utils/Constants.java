@@ -32,6 +32,18 @@ public class Constants {
     //    public static String prefix = "/home/xinyingzheng/Desktop/outlier_detection";
     public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Device_" + nn * dn + "_" + dataset + "/";
     public static String timePrefix = Constants.prefix + "/Timestamp_data/Device_" + nn * dn + "_" + dataset + "/";
+    public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint+"/_Device_" + nn * dn + "_" + dataset + "/";
+
+    public static String resultFile = resultPrefix +
+            "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
+    public static String resultNaiveFile = resultPrefix+
+            "_Result_Naive_" + "_outliers.txt";
+    public static String naiveInfo = resultPrefix+
+            "_Result_Naive_info" + "_outliers.txt";
+    public static String getDataInfo = resultPrefix+"get_data_info";
+    public static String supportDeviceInfo = resultPrefix+"support_device_info";
+    public static String ratioInfo = resultPrefix+"ratio_info";
+
 
     public static String forestCoverFileName = prefix + "fc.txt";
     public static String taoFileName = prefix + "tao.txt";

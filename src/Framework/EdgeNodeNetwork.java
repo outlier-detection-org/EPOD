@@ -31,6 +31,9 @@ public class EdgeNodeNetwork {
     public static BufferedWriter outlierFw;
     public static BufferedWriter outlierNaiveFw;
     public static BufferedWriter naiveInfo;
+    public static BufferedWriter getDataInfo;
+    public static BufferedWriter supportDeviceInfo;
+    public static BufferedWriter ratioInfo;
 
     //==================for measurement==================
     public static AtomicInteger dataTransfered = new AtomicInteger(0);
@@ -43,8 +46,7 @@ public class EdgeNodeNetwork {
         outliers = Collections.synchronizedSet(new HashSet<>());
         try {
             outlierFw = new BufferedWriter(new FileWriter(
-                    "src\\Result\\" +
-                            "_Result_"+Constants.methodToGenerateFingerprint+"_"+ Constants.dataset + "_outliers.txt"));
+                    Constants.resultFile));
 //            outlierFw = new BufferedWriter(new FileWriter(
 //                    "src/Result/" +
 //                            "_Result_"+Constants.methodToGenerateFingerprint+"_"+ Constants.dataset + "_outliers.txt"));
@@ -54,8 +56,7 @@ public class EdgeNodeNetwork {
 
         try {
             outlierNaiveFw = new BufferedWriter(new FileWriter(
-                    "src\\Result\\"+
-                            "_Result_Naive_" + Constants.dataset + "_outliers.txt"));
+                    Constants.resultNaiveFile));
 //            outlierNaiveFw = new BufferedWriter(new FileWriter(
 //                    "src/Result/"+
 //                            "_Result_Naive_" + Constants.dataset + "_outliers.txt"));
@@ -65,11 +66,34 @@ public class EdgeNodeNetwork {
 
         try {
             naiveInfo = new BufferedWriter(new FileWriter(
-                    "src\\Result\\"+
-                            "_Result_Naive_info" + Constants.dataset + "_outliers.txt"));
+                    Constants.naiveInfo));
 //            naiveInfo = new BufferedWriter(new FileWriter(
 //                    "src/Result/"+
 //                            "_Result_Naive_info" + Constants.dataset + "_outliers.txt"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            getDataInfo = new BufferedWriter(new FileWriter(
+                    Constants.getDataInfo));
+//            naiveInfo = new BufferedWriter(new FileWriter(
+//                    "src/Result/get_data_info"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            supportDeviceInfo = new BufferedWriter(new FileWriter(
+                    Constants.supportDeviceInfo));
+//            naiveInfo = new BufferedWriter(new FileWriter(
+//                    "src/Result/support_device_info"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            ratioInfo = new BufferedWriter(new FileWriter(
+                    Constants.ratioInfo));
+//            naiveInfo = new BufferedWriter(new FileWriter(
+//                    "src/Result/support_device_info"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -127,7 +151,17 @@ public class EdgeNodeNetwork {
         while (itr < Constants.nS + Constants.nW - 1) {
             //per slide
             System.out.println("===============================");
+            supportDeviceInfo.write("===============================\n");
+            ratioInfo.write("===============================\n");
+            getDataInfo.write("===============================\n");
             System.out.println("This is the " + itr + " slides.");
+            supportDeviceInfo.write("This is the " + itr + " slides.\n");
+            supportDeviceInfo.flush();
+            ratioInfo.write("This is the " + itr + " slides.\n");
+            ratioInfo.flush();
+            getDataInfo.write("This is the " + itr + " slides.\n");
+            getDataInfo.flush();
+
 //            dataTransfered.set(0);
             for (EdgeNode node : nodeHashMap.values()) {
                 node.handler.flag = false;
