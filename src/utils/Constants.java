@@ -12,7 +12,7 @@ public class Constants {
     public static int nn = 3;
     public static int dn = 3;
     public static int nW = 3;
-    public static String methodToGenerateFingerprint = "MCOD"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
+    public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
     public static String dataset = "TAO"; //"FC"(¡Á) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
@@ -43,6 +43,7 @@ public class Constants {
     public static String ratioInfoCSV = resultPrefix+"ratio_info.csv";
     public static String getDataInfoCSV = resultPrefix+"get_data_info.csv";
     public static String supportDeviceInfoCSV = resultPrefix+"support_device_info.csv";
+    public static String timeCSV = resultPrefix+"time.csv";
 
 
     public static String forestCoverFileName = prefix + "fc.txt";

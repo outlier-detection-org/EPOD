@@ -37,6 +37,7 @@ public class EdgeNodeNetwork {
     public static BufferedWriter getDataInfoCSV;
     public static BufferedWriter supportDeviceInfoCSV;
     public static BufferedWriter ratioInfoCSV;
+    public static BufferedWriter timeCSV;
 
     //==================for measurement==================
     public static AtomicInteger dataTransfered = new AtomicInteger(0);
@@ -57,6 +58,7 @@ public class EdgeNodeNetwork {
             getDataInfoCSV = new BufferedWriter(new FileWriter(Constants.getDataInfoCSV));
             supportDeviceInfoCSV = new BufferedWriter(new FileWriter(Constants.supportDeviceInfoCSV));
             ratioInfoCSV = new BufferedWriter(new FileWriter(Constants.ratioInfoCSV));
+            timeCSV = new BufferedWriter(new FileWriter(Constants.timeCSV));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -170,6 +172,8 @@ public class EdgeNodeNetwork {
                 ratioInfoCSV.flush();
 
                 System.out.println("Time cost for this window is : " + time);
+                timeCSV.write(time + ",");
+                timeCSV.flush();
 //                System.out.println("Average Data transfered is: " + dataTransfered * 1.0 / (Constants.dn * Constants.nn));
                 System.out.println("Data transfered so far is: " + dataTransfered);
                 System.out.println("interacted clients so far is: " + supportDevices);
