@@ -77,7 +77,7 @@ public class DeviceImpl implements DeviceService.Iface {
         Date currentRealTime = new Date();
         // 1000ms  10
         currentRealTime.setTime(dataGenerator.firstTimeStamp.getTime() + (long) 1000 * itr);
-        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, 1000 * 10);
+        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, 1);
     }
 
     public Set<? extends Vector> detectOutlier(int itr) throws Throwable {

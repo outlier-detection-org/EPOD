@@ -77,7 +77,7 @@ public class PrepareDatasets {
 
         String line;
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS");
         Random random = new Random();
 
         for (int i=0;i<deviceNum;i++){

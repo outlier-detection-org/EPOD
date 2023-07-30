@@ -23,7 +23,7 @@ public class testNetwork {
         System.setOut(ps);
         EdgeNodeNetwork.createNetwork(Constants.nn,Constants.dn, edgeDeviceFactory);
         System.out.println("started!");
-        EdgeNodeNetwork.stahrtNetwork();
+        EdgeNodeNetwork.startNetwork();
     }
 }
 
