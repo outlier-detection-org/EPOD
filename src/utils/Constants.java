@@ -9,11 +9,11 @@ public class Constants {
     public static int currentSlideID = -1;
 
     public static int threadhold = -1000000;
-    public static int nn = 3;
-    public static int dn = 3;
-    public static int nW = 3;
+    public static int nn = 4;
+    public static int dn = 8;
+    public static int nW = 10;
     public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "TAO"; //"FC"(��) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
+    public static String dataset = "STK"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
 
@@ -30,9 +30,14 @@ public class Constants {
 
     //Paths
     //    public static String prefix = "/home/xinyingzheng/Desktop/outlier_detection";
-    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Device_" + nn * dn + "_" + dataset + "/";
-    public static String timePrefix = Constants.prefix + "/Timestamp_data/Device_" + nn * dn + "_" + dataset + "/";
-    public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint+"/_Device_" + nn * dn + "_" + dataset + "/";
+    public static double mix_rate_node = 0.5;
+//    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Device_" + nn * dn + "_" + dataset + "/";
+    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_K_" + mix_rate_node + "/";
+
+    public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_K_" + mix_rate_node + "/";
+//    public static String timePrefix = Constants.prefix + "/Timestamp_data/Device_" + nn * dn + "_" + dataset + "/";
+    public static String variable = "mix0.5";
+    public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint +"_"+ nn + "*" + dn + "_" + dataset + "_"+ variable + "/";
 
     public static String resultFile = resultPrefix +
             "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";

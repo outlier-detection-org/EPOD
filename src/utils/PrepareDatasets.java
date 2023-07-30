@@ -27,10 +27,10 @@ public class PrepareDatasets {
             }
         }
     }
-    
+
     public static void main(String[] args) throws Throwable {
         //Step1 : Generate deviceID;
-        generateDeviceId();
+//        generateDeviceId();
         //Step2 : Generate timestamp
         generateTimestamp();
     }
@@ -44,7 +44,7 @@ public class PrepareDatasets {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(datasetPath));
         BufferedWriter[] bfws = new BufferedWriter[deviceNum];
         for (int i = 0; i < deviceNum; i++) {
-            bfws[i] = new BufferedWriter(new FileWriter(Constants.deviceIdPrefix + "\\" + i + ".txt"));
+            bfws[i] = new BufferedWriter(new FileWriter(Constants.deviceIdPrefix + "/" + i + ".txt"));
         }
         String line;
         int deviceId = 0;
@@ -64,16 +64,15 @@ public class PrepareDatasets {
         if (f.exists()) {
             return;
         } else f.mkdirs();
-
-        String metaPath = timePrefix + "\\meta.txt";
+        String metaPath = timePrefix + "/meta.txt";
         BufferedWriter metaBfw = new BufferedWriter(new FileWriter(metaPath));
         BufferedReader[] bfrs = new BufferedReader[deviceNum];
         for (int i = 0; i < deviceNum; i++) {
-            bfrs[i] = new BufferedReader(new FileReader(deviceIdPrefix + "\\" + i + ".txt"));
+            bfrs[i] = new BufferedReader(new FileReader(deviceIdPrefix + "/" + i + ".txt"));
         }
         BufferedWriter[] bfws = new BufferedWriter[deviceNum];
         for (int i = 0; i < deviceNum; i++) {
-            bfws[i] = new BufferedWriter(new FileWriter(timePrefix + "\\" + i + ".txt"));
+            bfws[i] = new BufferedWriter(new FileWriter(timePrefix + "/" + i + ".txt"));
         }
 
         String line;
@@ -82,7 +81,7 @@ public class PrepareDatasets {
         Random random = new Random();
 
         for (int i=0;i<deviceNum;i++){
-            int count = 0; //count per slide
+            int count; //count per slide
             if (s == 500) {
                 count = 490 + random.nextInt(10) + 1;
             } else if (s == 5000) {
@@ -90,15 +89,15 @@ public class PrepareDatasets {
             } else if (s == 1000) {
                 count = 990 + random.nextInt(10) + 1;
             } else {
-                count = s -10 + random.nextInt(10) + 1;
+                count = s - 10 + random.nextInt(10) + 1;
             }
             metaBfw.write("device " + i + " " + count + "\n");
-            int unit = s * 10 / count;
+            int unit = 1000 / count;
             int index = 0;
             while ((line = bfrs[i].readLine()) != null){
                 if (index == count - 1) {
-                    calendar.add(Calendar.SECOND, s * 10 - unit * (count - 1));
-                } else calendar.add(Calendar.SECOND, unit);
+                    calendar.add(Calendar.MILLISECOND, 1000 - unit * (count - 1));
+                } else calendar.add(Calendar.MILLISECOND, unit);
                 bfws[i].write(formatter.format(calendar.getTime()) + "," + line + "\n");
                 index++;
                 if (index == count) {
@@ -112,7 +111,7 @@ public class PrepareDatasets {
                         count = s -10 + random.nextInt(10) + 1;
                     }
                     metaBfw.write("device " + i + " " + count + "\n");
-                    unit = s * 10 / count;
+                    unit = 1000 / count;
                     index = 0;
                 }
 

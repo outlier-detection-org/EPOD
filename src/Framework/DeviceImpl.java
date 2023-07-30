@@ -76,13 +76,12 @@ public class DeviceImpl implements DeviceService.Iface {
     public void getRawData(int itr) {
         Date currentRealTime = new Date();
         // 1000ms  10
-        currentRealTime.setTime(dataGenerator.firstTimeStamp.getTime() + (long) Constants.S * 10 * 1000 * itr);
-        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S * 10);
+        currentRealTime.setTime(dataGenerator.firstTimeStamp.getTime() + (long) 1000 * itr);
+        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, 1000 * 10);
     }
 
     public Set<? extends Vector> detectOutlier(int itr) throws Throwable {
         processedExternalPoints = 0.0;
-        System.out.println("Thread " + Thread.currentThread().getId() + " detectOutlier");
         this.ready = false;
         //get initial data
         Constants.currentSlideID = itr;

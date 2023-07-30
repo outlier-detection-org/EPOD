@@ -5,5 +5,5 @@ out/
 src/Result/
 *.iml
 src/test/test.java
-src/utils/Constants.java
+
 

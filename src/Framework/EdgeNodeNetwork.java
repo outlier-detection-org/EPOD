@@ -196,13 +196,16 @@ public class EdgeNodeNetwork {
             for (Thread t : arrayList) {
                 t.join();
             }
-            time += System.currentTimeMillis() - start;
-            totalTime += time;
+            long temp_time = System.currentTimeMillis() - start;
+            time += temp_time;
+            totalTime += temp_time;
+//            System.out.println("this window:"+ time);
+//            System.out.println("total:"+ totalTime);
             if (itr >= Constants.nS - 1) {
                 System.out.println("Time cost for this window is : " + time);
 //                System.out.println("Average Data transfered is: " + dataTransfered * 1.0 / (Constants.dn * Constants.nn));
                 System.out.println("Data transfered so far is: " + dataTransfered);
-                System.out.println("interacted clients so far is: " + supportDevices);
+                System.out.println("Interacted clients so far is: " + supportDevices);
                 System.out.println("Total time cost is : " + totalTime);
                 time = 0;
             }
