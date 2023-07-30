@@ -22,7 +22,7 @@ public class DataGenerator {
     public DataGenerator(int deviceId) {
         int nodeId = deviceId / Constants.dn;
         int device = deviceId % Constants.dn;
-        int deviceNumber = nodeId * 10 + device;
+        int deviceNumber = nodeId * Constants.max_dn + device;
         this.getData(Constants.timePrefix + deviceNumber + ".txt");
         assert this.dataQueue.peek() != null;
         this.firstTimeStamp = this.dataQueue.peek().arrivalRealTime;

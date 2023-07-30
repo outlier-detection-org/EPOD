@@ -12,6 +12,7 @@ public class Constants {
     public static int nn = 4;
     public static int dn = 8;
     public static int nW = 10;
+    public static int max_dn = 10;
     public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
     public static String dataset = "STK"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
