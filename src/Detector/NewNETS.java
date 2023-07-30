@@ -439,6 +439,8 @@ public class NewNETS extends Detector {
         try {
             EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outlierVector.size()+"\n");
             EdgeNodeNetwork.ratioInfo.flush();
+            EdgeNodeNetwork.ratioInfoCSV.write(processExternalPoints * 1.0 / outlierVector.size()+",");
+            EdgeNodeNetwork.ratioInfoCSV.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

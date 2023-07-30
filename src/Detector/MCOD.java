@@ -700,6 +700,8 @@ public class MCOD extends Detector {
         try {
             EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outliers.size()+"\n");
             EdgeNodeNetwork.ratioInfo.flush();
+            EdgeNodeNetwork.ratioInfoCSV.write(processExternalPoints * 1.0 / outliers.size()+",");
+            EdgeNodeNetwork.ratioInfoCSV.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

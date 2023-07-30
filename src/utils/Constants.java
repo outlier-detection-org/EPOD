@@ -41,13 +41,16 @@ public class Constants {
 
     public static String resultFile = resultPrefix +
             "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
-    public static String resultNaiveFile = resultPrefix+
-            "_Result_Naive_" + "_outliers.txt";
-    public static String naiveInfo = resultPrefix+
-            "_Result_Naive_info" + "_outliers.txt";
-    public static String getDataInfo = resultPrefix+"get_data_info";
-    public static String supportDeviceInfo = resultPrefix+"support_device_info";
-    public static String ratioInfo = resultPrefix+"ratio_info";
+
+    public static String resultNaiveFile = resultPrefix+ "_Result_Naive_" + "_outliers.txt";
+    public static String naiveInfo = resultPrefix+ "_Result_Naive_info" + "_outliers.txt";
+    public static String getDataInfo = resultPrefix+"get_data_info.txt";
+    public static String supportDeviceInfo = resultPrefix+"support_device_info.txt";
+    public static String ratioInfo = resultPrefix+"ratio_info.txt";
+    public static String ratioInfoCSV = resultPrefix+"ratio_info.csv";
+    public static String getDataInfoCSV = resultPrefix+"get_data_info.csv";
+    public static String supportDeviceInfoCSV = resultPrefix+"support_device_info.csv";
+    public static String timeCSV = resultPrefix+"time.csv";
 
 
     public static String forestCoverFileName = prefix + "fc.txt";

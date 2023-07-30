@@ -34,6 +34,10 @@ public class EdgeNodeNetwork {
     public static BufferedWriter getDataInfo;
     public static BufferedWriter supportDeviceInfo;
     public static BufferedWriter ratioInfo;
+    public static BufferedWriter getDataInfoCSV;
+    public static BufferedWriter supportDeviceInfoCSV;
+    public static BufferedWriter ratioInfoCSV;
+    public static BufferedWriter timeCSV;
 
     //==================for measurement==================
     public static AtomicInteger dataTransfered = new AtomicInteger(0);
@@ -45,55 +49,16 @@ public class EdgeNodeNetwork {
     static {
         outliers = Collections.synchronizedSet(new HashSet<>());
         try {
-            outlierFw = new BufferedWriter(new FileWriter(
-                    Constants.resultFile));
-//            outlierFw = new BufferedWriter(new FileWriter(
-//                    "src/Result/" +
-//                            "_Result_"+Constants.methodToGenerateFingerprint+"_"+ Constants.dataset + "_outliers.txt"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            outlierNaiveFw = new BufferedWriter(new FileWriter(
-                    Constants.resultNaiveFile));
-//            outlierNaiveFw = new BufferedWriter(new FileWriter(
-//                    "src/Result/"+
-//                            "_Result_Naive_" + Constants.dataset + "_outliers.txt"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            naiveInfo = new BufferedWriter(new FileWriter(
-                    Constants.naiveInfo));
-//            naiveInfo = new BufferedWriter(new FileWriter(
-//                    "src/Result/"+
-//                            "_Result_Naive_info" + Constants.dataset + "_outliers.txt"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            getDataInfo = new BufferedWriter(new FileWriter(
-                    Constants.getDataInfo));
-//            naiveInfo = new BufferedWriter(new FileWriter(
-//                    "src/Result/get_data_info"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            supportDeviceInfo = new BufferedWriter(new FileWriter(
-                    Constants.supportDeviceInfo));
-//            naiveInfo = new BufferedWriter(new FileWriter(
-//                    "src/Result/support_device_info"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            ratioInfo = new BufferedWriter(new FileWriter(
-                    Constants.ratioInfo));
-//            naiveInfo = new BufferedWriter(new FileWriter(
-//                    "src/Result/support_device_info"));
+            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
+            outlierNaiveFw = new BufferedWriter(new FileWriter(Constants.resultNaiveFile));
+            naiveInfo = new BufferedWriter(new FileWriter(Constants.naiveInfo));
+            getDataInfo = new BufferedWriter(new FileWriter(Constants.getDataInfo));
+            supportDeviceInfo = new BufferedWriter(new FileWriter(Constants.supportDeviceInfo));
+            ratioInfo = new BufferedWriter(new FileWriter(Constants.ratioInfo));
+            getDataInfoCSV = new BufferedWriter(new FileWriter(Constants.getDataInfoCSV));
+            supportDeviceInfoCSV = new BufferedWriter(new FileWriter(Constants.supportDeviceInfoCSV));
+            ratioInfoCSV = new BufferedWriter(new FileWriter(Constants.ratioInfoCSV));
+            timeCSV = new BufferedWriter(new FileWriter(Constants.timeCSV));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -149,18 +114,6 @@ public class EdgeNodeNetwork {
 
         int itr = 0;
         while (itr < Constants.nS + Constants.nW - 1) {
-            //per slide
-            System.out.println("===============================");
-            supportDeviceInfo.write("===============================\n");
-            ratioInfo.write("===============================\n");
-            getDataInfo.write("===============================\n");
-            System.out.println("This is the " + itr + " slides.");
-            supportDeviceInfo.write("This is the " + itr + " slides.\n");
-            supportDeviceInfo.flush();
-            ratioInfo.write("This is the " + itr + " slides.\n");
-            ratioInfo.flush();
-            getDataInfo.write("This is the " + itr + " slides.\n");
-            getDataInfo.flush();
 
 //            dataTransfered.set(0);
             for (EdgeNode node : nodeHashMap.values()) {
@@ -202,7 +155,28 @@ public class EdgeNodeNetwork {
 //            System.out.println("this window:"+ time);
 //            System.out.println("total:"+ totalTime);
             if (itr >= Constants.nS - 1) {
+                //per slide
+                System.out.println("===============================");
+                supportDeviceInfo.write("===============================\n");
+                ratioInfo.write("===============================\n");
+                getDataInfo.write("===============================\n");
+                System.out.println("This is the " + itr + " slides.");
+                supportDeviceInfo.write("This is the " + itr + " slides.\n");
+                supportDeviceInfo.flush();
+                ratioInfo.write("This is the " + itr + " slides.\n");
+                ratioInfo.flush();
+                getDataInfo.write("This is the " + itr + " slides.\n");
+                getDataInfo.flush();
+                getDataInfoCSV.write("\n");
+                supportDeviceInfoCSV.write("\n");
+                ratioInfoCSV.write("\n");
+                getDataInfoCSV.flush();
+                supportDeviceInfoCSV.flush();
+                ratioInfoCSV.flush();
+
                 System.out.println("Time cost for this window is : " + time);
+                timeCSV.write(time + ",");
+                timeCSV.flush();
 //                System.out.println("Average Data transfered is: " + dataTransfered * 1.0 / (Constants.dn * Constants.nn));
                 System.out.println("Data transfered so far is: " + dataTransfered);
                 System.out.println("Interacted clients so far is: " + supportDevices);

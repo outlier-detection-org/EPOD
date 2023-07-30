@@ -120,6 +120,8 @@ public class DeviceImpl implements DeviceService.Iface {
         try {
             EdgeNodeNetwork.supportDeviceInfo.write("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().size()+"\n");
             EdgeNodeNetwork.supportDeviceInfo.flush();
+            EdgeNodeNetwork.supportDeviceInfoCSV.write(result.keySet().size()+",");
+            EdgeNodeNetwork.supportDeviceInfoCSV.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -163,7 +165,9 @@ public class DeviceImpl implements DeviceService.Iface {
         if (Constants.currentSlideID >= Constants.nS - 1) {
             try {
                 EdgeNodeNetwork.getDataInfo.write("Device " + this.belongedDevice.hashCode() + " get data size is " + dataSize+"\n");
+                EdgeNodeNetwork.getDataInfoCSV.write(dataSize+",");
                 EdgeNodeNetwork.getDataInfo.flush();
+                EdgeNodeNetwork.getDataInfoCSV.flush();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
