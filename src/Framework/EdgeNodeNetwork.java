@@ -71,6 +71,30 @@ public class EdgeNodeNetwork {
         return edgeNode;
     }
 
+    public static void reOpenEdgeNetwork(){
+        HashMap<Integer, Device> deviceHashMap = new HashMap<>();
+        HashMap<Integer, EdgeNode> nodeHashMap = new HashMap<>();
+        dataTransfered = new AtomicInteger(0);
+        supportDevices = new AtomicInteger(0);
+        time = 0;
+        totalTime = 0;
+        outliers = Collections.synchronizedSet(new HashSet<>());
+        try {
+            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
+            outlierNaiveFw = new BufferedWriter(new FileWriter(Constants.resultNaiveFile));
+            naiveInfo = new BufferedWriter(new FileWriter(Constants.naiveInfo));
+            getDataInfo = new BufferedWriter(new FileWriter(Constants.getDataInfo));
+            supportDeviceInfo = new BufferedWriter(new FileWriter(Constants.supportDeviceInfo));
+            ratioInfo = new BufferedWriter(new FileWriter(Constants.ratioInfo));
+            getDataInfoCSV = new BufferedWriter(new FileWriter(Constants.getDataInfoCSV));
+            supportDeviceInfoCSV = new BufferedWriter(new FileWriter(Constants.supportDeviceInfoCSV));
+            ratioInfoCSV = new BufferedWriter(new FileWriter(Constants.ratioInfoCSV));
+            timeCSV = new BufferedWriter(new FileWriter(Constants.timeCSV));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void createNetwork(int nn, int dn, DeviceFactory edgeDeviceFactory) throws Throwable {
         for (int i = 0; i < nn; i++) {
             EdgeNode node = createEdgeNode();
@@ -223,9 +247,17 @@ public class EdgeNodeNetwork {
         testNetwork.testing.write("===============================\n");
         testNetwork.testing.flush();
         System.out.println("Total interacted clients is: " + supportDevices);
-//        outlierFw.close();
-//        outlierNaiveFw.close();
-//        naiveInfo.close();
+        outlierFw.close();
+        outlierNaiveFw.close();
+        naiveInfo.close();
+        getDataInfo.close();
+        supportDeviceInfo.close();
+        ratioInfo.close();
+        getDataInfoCSV.close();
+        supportDeviceInfoCSV.close();
+        ratioInfoCSV.close();
+        timeCSV.close();
+
     }
 
     public static void printOutliers() throws IOException {
@@ -306,6 +338,7 @@ public class EdgeNodeNetwork {
         }
         device.handler.setClients(clientForNearestNode, clientsForDevices);
     }
+
 
     public static void parametersPreprocessing(Boolean isMultipleQuery){
         if (!isMultipleQuery) {

@@ -8,7 +8,7 @@ import java.io.*;
 
 public class testNetwork {
     public static BufferedWriter testing;
-    public void runTestNetwork() throws Throwable {
+    public static void runTestNetwork() throws Throwable {
         PrintStream ps;
         DeviceFactory edgeDeviceFactory;
         File f = new File(Constants.resultPrefix);
@@ -22,6 +22,8 @@ public class testNetwork {
         EdgeNodeNetwork.createNetwork(Constants.nn, Constants.dn, edgeDeviceFactory);
         System.out.println("started!");
         EdgeNodeNetwork.startNetwork();
+        EdgeNodeNetwork.reOpenEdgeNetwork();
+        Thread.sleep(100);
     }
 
     public static void main(String[] args) throws Throwable {
@@ -40,7 +42,11 @@ public class testNetwork {
 //        EdgeNodeNetwork.startNetwork();
 
         testing = new BufferedWriter(new FileWriter("src/Result/testing_R"));
-        Constants.R = 1.3;
+        for (double i = 1.1; i < 2.2; i = i + 0.1) {
+            Constants.R = i;
+            Constants.K = 30;
+            runTestNetwork();
+        }
     }
 }
 

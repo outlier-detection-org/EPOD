@@ -19,7 +19,7 @@ public class Device {
     public ArrayList<TTransport> transports;
 
     public Device(int deviceId){
-        port = new Random().nextInt(50000) + 10000;
+        port = new Random().nextInt(48000) + 1024;
         handler = new DeviceImpl(deviceId, this);
         processor = new DeviceService.Processor<>(handler);
         transports = new ArrayList<>();

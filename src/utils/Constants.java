@@ -13,7 +13,7 @@ public class Constants {
     public static int dn = 8;
     public static int nW = 10;
     public static int max_dn = 10;
-    public static String methodToGenerateFingerprint = "MCOD_P2P"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
+    public static String methodToGenerateFingerprint = "MCOD"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
     public static String dataset = "STK"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
@@ -29,7 +29,7 @@ public class Constants {
     public static String prefix = "Datasets/";
 
     //Paths
-    public static double mix_rate_node = 0.05;
+    public static double mix_rate_node = 0.15;
 //    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_" + mix_rate_node + "/";
     public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
 

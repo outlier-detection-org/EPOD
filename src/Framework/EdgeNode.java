@@ -22,7 +22,7 @@ public class EdgeNode {
     public EdgeNode() {
         handler = new EdgeNodeImpl(this);
         processor = new EdgeNodeService.Processor<>(handler);
-        port = new Random().nextInt(50000) + 10000;
+        port = new Random().nextInt(48000) + 1024;
         transports = new ArrayList<>();
     }
 
