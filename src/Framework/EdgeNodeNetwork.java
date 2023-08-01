@@ -8,6 +8,7 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
+import test.testNetwork;
 import utils.CompareResult;
 import utils.Constants;
 
@@ -184,6 +185,7 @@ public class EdgeNodeNetwork {
                 time = 0;
             }
             printOutliers();
+            testNetwork.testing.write("Number of outliers: " + outliers.size()+"\n");
             outliers.clear();
 
             //========================== NAIVE ================================
@@ -212,12 +214,18 @@ public class EdgeNodeNetwork {
         }
         stopNetwork();
 //        System.out.println("Average time cost is: " + time * 1.0 / (Constants.nS + Constants.nW - 1)); // todo: 感觉优点问题？
+        testNetwork.testing.write("R = "+Constants.R+"\n");
         System.out.println("Average time cost per slide is: " + totalTime * 1.0 / (Constants.nS + Constants.nW - 1));
+        testNetwork.testing.write("Average time cost per slide is: " + totalTime * 1.0 / (Constants.nS + Constants.nW - 1)+"\n");
         System.out.println("Total time cost is: " + totalTime);
+        testNetwork.testing.write("Total time cost is: " + totalTime+"\n");
+        testNetwork.testing.write("Data transfered so far is: " + dataTransfered+"\n");
+        testNetwork.testing.write("===============================\n");
+        testNetwork.testing.flush();
         System.out.println("Total interacted clients is: " + supportDevices);
-        outlierFw.close();
-        outlierNaiveFw.close();
-        naiveInfo.close();
+//        outlierFw.close();
+//        outlierNaiveFw.close();
+//        naiveInfo.close();
     }
 
     public static void printOutliers() throws IOException {
@@ -231,13 +239,13 @@ public class EdgeNodeNetwork {
         if (Constants.methodToGenerateFingerprint.equals("NETS")) {
             List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.backup)).toList();
             for (Vector v : list) {
-                outlierFw.write(v.backup + "\n");
+                outlierFw.write(v.backup.values + "\n");
             }
         }
         else {
-            List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.arrivalTime)).toList();
+            List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.values.get(0))).toList();
             for (Vector v : list) {
-                outlierFw.write(v + "\n");
+                outlierFw.write(v.values + "\n");
             }
         }
         outlierFw.write("====================================\n");

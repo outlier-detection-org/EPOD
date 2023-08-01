@@ -108,9 +108,9 @@ public class MCOD extends Detector {
             cluster.remove(d);
             List<Double> key = d.center.values;
             if (cluster.size() == 0) {
-                if (key.get(0)==12.45 && key.get(1)==9.77962) {
-                    System.out.println("disappear");
-                }
+//                if (key.get(0)==12.45 && key.get(1)==9.77962) {
+//                    System.out.println("disappear");
+//                }
                 unfilled_clusters.remove(d.center);
                 map_to_MCO.remove(key);
                 update_fingerprint(key, false);

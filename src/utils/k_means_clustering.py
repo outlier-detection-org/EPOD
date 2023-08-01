@@ -10,8 +10,8 @@ import random
 # Configuration that need to be changed each time
 n_nodes = 6
 n_clients = 10
-mix_rate_node = 0
-mix_rate_client = 0
+mix_rate_node = 0.025
+mix_rate_client = 0.025
 nW = 10
 W = 10000
 data = pd.read_table('/home/shimin/EPOD/Datasets/stock.txt', sep=',', header=None)

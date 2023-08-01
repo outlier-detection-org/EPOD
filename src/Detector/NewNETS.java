@@ -201,7 +201,7 @@ public class NewNETS extends Detector {
     public void indexingSlide(ArrayList<Tuple> slideTuples) {
         slideIn = new HashMap<>();
         fullDimCellSlideInCnt = new HashMap<>();
-        internal_dataList.put(Constants.currentSlideID,new HashMap<>());
+        internal_dataList.put(Constants.currentSlideID, new HashMap<>());
         for (Tuple t : slideTuples) {
             ArrayList<Short> fullDimCellIdx = new ArrayList<>();
             ArrayList<Short> subDimCellIdx = new ArrayList<>();
@@ -211,7 +211,7 @@ public class NewNETS extends Detector {
             }
             if (subDimFlag) {
                 for (int j = 0; j < Constants.subDim; j++) {
-                    short dimIdx = (short) ((t.values.get(j)- minValues[j]) / subDimLength[j]);
+                    short dimIdx = (short) ((t.values.get(j) - minValues[j]) / subDimLength[j]);
                     subDimCellIdx.add(dimIdx);
                 }
             } else {
@@ -257,8 +257,8 @@ public class NewNETS extends Detector {
             }
             fullDimCellSlideInCnt.put(idxEncoder.get(fullDimCellIdx), fullDimCellSlideInCnt.get(idxEncoder.get(fullDimCellIdx)) + 1);
 
-            if (t.values.get(0) == 8.6693){
-                int a=1;
+            if (t.values.get(0) == 8.6693) {
+                int a = 1;
             }
         }
 
@@ -324,8 +324,8 @@ public class NewNETS extends Detector {
         for (Integer key : fullDimCellSlideOutCnt.keySet()) {
             fullDimCellWindowCnt.put(key, fullDimCellWindowCnt.get(key) - fullDimCellSlideOutCnt.get(key));
             List<Double> fingerprint = convertShortToDouble(idxDecoder.get(key));
-            if (fingerprint.get(0) == 371.0 && Constants.currentSlideID == 20){
-                int a=1;
+            if (fingerprint.get(0) == 371.0 && Constants.currentSlideID == 20) {
+                int a = 1;
             }
             if (!this.fullCellDelta.containsKey(fingerprint)) {
                 this.fullCellDelta.put(fingerprint, 0);
@@ -351,7 +351,7 @@ public class NewNETS extends Detector {
             outlier.removeOutdatedNNUnsafeOut(Constants.currentSlideID, Constants.nS);
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
             if (status.get(tmp) == 2) {
-                if (outlier.get(0) == 8.0117 && Constants.currentSlideID==22) {
+                if (outlier.get(0) == 8.0117 && Constants.currentSlideID == 22) {
                     System.out.println("has it11111!");
                 }
                 it.remove();
@@ -396,39 +396,41 @@ public class NewNETS extends Detector {
                 //calculate distance concretely
                 int need = Constants.K - outlier.getNN() - sumOfNN;
                 if (outlier.last_calculate_time == -1 || outlier.last_calculate_time <= Constants.currentSlideID - Constants.nS) {
-                    outlier.last_calculate_time = Math.max(Constants.currentSlideID - Constants.nS + 1, Constants.nS-1);
+                    outlier.last_calculate_time = Math.max(Constants.currentSlideID - Constants.nS + 1, Constants.nS - 1);
                 }
                 while (outlier.last_calculate_time <= Constants.currentSlideID) {
                     HashMap<List<Double>, List<Vector>> candiNeighbors = candNeighborByTime.get(outlier.last_calculate_time);
-                    for (List<Double> cellId : candiNeighbors.keySet()) {
-                        List<Vector> cluster = candiNeighbors.get(cellId);
-                        processExternalPoints += cluster.size();
-                        for (Vector v : cluster) {
-                            if (neighboringTupleSet(v.values, outlier.values, Constants.R)) {
-                                if (v.slideID < outlier.slideID) {
-                                    outlier.nnUnSafeOut++;
-                                    if (!outlier.unSafeOutNeighbors.containsKey(v.slideID)) {
-                                        outlier.unSafeOutNeighbors.put(v.slideID, 0);
+                    if (candiNeighbors != null) {
+                        for (List<Double> cellId : candiNeighbors.keySet()) {
+                            List<Vector> cluster = candiNeighbors.get(cellId);
+                            processExternalPoints += cluster.size();
+                            for (Vector v : cluster) {
+                                if (neighboringTupleSet(v.values, outlier.values, Constants.R)) {
+                                    if (v.slideID < outlier.slideID) {
+                                        outlier.nnUnSafeOut++;
+                                        if (!outlier.unSafeOutNeighbors.containsKey(v.slideID)) {
+                                            outlier.unSafeOutNeighbors.put(v.slideID, 0);
+                                        }
+                                        outlier.unSafeOutNeighbors.put(v.slideID, outlier.unSafeOutNeighbors.get(v.slideID) + 1);
+                                    } else {
+                                        outlier.nnSafeOut++;
                                     }
-                                    outlier.unSafeOutNeighbors.put(v.slideID, outlier.unSafeOutNeighbors.get(v.slideID) + 1);
-                                } else {
-                                    outlier.nnSafeOut++;
+                                    need--;
                                 }
-                                need--;
                             }
                         }
                     }
                     outlier.last_calculate_time++;
-                    if (outlier.values.get(0) == 6.9106) {
-                        System.out.println("NETS nn: " + (outlier.nnIn + sumOfNN));
-                        System.out.println("NETS SafeOut: " + outlier.nnSafeOut);
-                        System.out.println("NETS UnSafeOut: " + outlier.nnUnSafeOut);
-                    }
+//                    if (outlier.values.get(0) == 6.9106) {
+//                        System.out.println("NETS nn: " + (outlier.nnIn + sumOfNN));
+//                        System.out.println("NETS SafeOut: " + outlier.nnSafeOut);
+//                        System.out.println("NETS UnSafeOut: " + outlier.nnUnSafeOut);
+//                    }
                     if (need <= 0) {
-                        if(outlier.values.get(0) == 6.9106)
-                        {
-                            System.out.println("NETS1 NEIGHBOR IS " + (outlier.getNN() + sumOfNN));
-                        }
+//                        if(outlier.values.get(0) == 6.9106)
+//                        {
+//                            System.out.println("NETS1 NEIGHBOR IS " + (outlier.getNN() + sumOfNN));
+//                        }
                         it.remove();
                         continue OutlierLoop;
                     }
@@ -437,9 +439,9 @@ public class NewNETS extends Detector {
         }
         this.outlierVector = outliers_out;
         try {
-            EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outlierVector.size()+"\n");
+            EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outlierVector.size() + "\n");
             EdgeNodeNetwork.ratioInfo.flush();
-            EdgeNodeNetwork.ratioInfoCSV.write(processExternalPoints * 1.0 / outlierVector.size()+",");
+            EdgeNodeNetwork.ratioInfoCSV.write(processExternalPoints * 1.0 / outlierVector.size() + ",");
             EdgeNodeNetwork.ratioInfoCSV.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -450,7 +452,7 @@ public class NewNETS extends Detector {
 //        System.out.printf("Thead %d processOutliers1. \n", Thread.currentThread().getId());
         // after receive external data, we need to process outliers once again
         Iterator<Tuple> it = outliers.iterator();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             Tuple t = it.next();
             int num = t.getNN();
             //Map<Integer, Map<List<Double>, List<Vector>>>
@@ -500,19 +502,19 @@ public class NewNETS extends Detector {
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         Map<List<Double>, List<Vector>> data = new HashMap<>();
         //HashMap<List<Double>, HashMap<Integer, Integer>>
-        for (List<Double> id : bucketIds){
-            if (!historyRecord.containsKey(id)){
+        for (List<Double> id : bucketIds) {
+            if (!historyRecord.containsKey(id)) {
                 historyRecord.put(id, Collections.synchronizedMap(new HashMap<>()));
             }
-            Map<Integer,Integer> bucketHistory = historyRecord.get(id);
-            if (!bucketHistory.containsKey(deviceHashCode)){
+            Map<Integer, Integer> bucketHistory = historyRecord.get(id);
+            if (!bucketHistory.containsKey(deviceHashCode)) {
                 bucketHistory.put(deviceHashCode, -1);
             }
             int lastSent = Math.max(bucketHistory.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
             bucketHistory.put(deviceHashCode, Constants.currentSlideID);
             for (int time = lastSent + 1; time <= Constants.currentSlideID; time++) {
-                if (id.get(0) == 434.0){
-                    int a =1;
+                if (id.get(0) == 434.0) {
+                    int a = 1;
                 }
                 if (!internal_dataList.get(time).containsKey(convertDoubleToShort(id))) continue;
                 ArrayList<Tuple> tuples = internal_dataList.get(time).get(convertDoubleToShort(id));
@@ -520,8 +522,8 @@ public class NewNETS extends Detector {
                     data.put(id, new ArrayList<>());
                 }
                 data.get(id).addAll(tuples);
-                if (id.get(0) == 434.0){
-                    int a =1;
+                if (id.get(0) == 434.0) {
+                    int a = 1;
                 }
             }
         }
@@ -534,7 +536,7 @@ public class NewNETS extends Detector {
         ArrayList<Short> subId = new ArrayList<Short>();
         for (int i = 0; i < Constants.subDim; i++) {
 //            Short id = (short) (Math.sqrt(Constants.subDim * 1.0 / Constants.dim) * (fullId.get(i) + minValues[i]) - minValues[i]);
-            short id =(short)(fullId.get(i) * dimLength[i] /subDimLength[i]);
+            short id = (short) (fullId.get(i) * dimLength[i] / subDimLength[i]);
             subId.add(id);
         }
         return subId;
@@ -615,8 +617,8 @@ public class NewNETS extends Detector {
         for (Integer infCellIdx : influencedCells) {
             //find neighbor cells
             ArrayList<Short> d = idxDecoder.get(infCellIdx);
-            if (d.get(0) == 263 && Constants.currentSlideID == 19){
-                int a =1;
+            if (d.get(0) == 263 && Constants.currentSlideID == 19) {
+                int a = 1;
             }
             candidateCellsTupleCnt = 0;
             ArrayList<Integer> candCellIndices = getSortedCandidateCellIndices(infCellIdx);
@@ -780,25 +782,25 @@ public class NewNETS extends Detector {
         return true;
     }
 
-    public boolean listComparison(List<Short> shortList, List<Double> doubleList){
-        for (int i = 0; i<shortList.size();i++){
+    public boolean listComparison(List<Short> shortList, List<Double> doubleList) {
+        for (int i = 0; i < shortList.size(); i++) {
             double tmp = doubleList.get(i);
-            if (shortList.get(i) != (short) tmp ){
+            if (shortList.get(i) != (short) tmp) {
                 return false;
             }
         }
         return true;
     }
 
-    public List<Double> convertShortToDouble(List<Short> shortArrayList){
+    public List<Double> convertShortToDouble(List<Short> shortArrayList) {
         ArrayList<Double> fingerprint = new ArrayList<>();
-        shortArrayList.forEach(idx -> fingerprint.add((double)idx));
+        shortArrayList.forEach(idx -> fingerprint.add((double) idx));
         return fingerprint;
     }
 
-    public List<Short> convertDoubleToShort(List<Double> doubleArrayList){
+    public List<Short> convertDoubleToShort(List<Double> doubleArrayList) {
         ArrayList<Short> fingerprint = new ArrayList<>();
-        doubleArrayList.forEach(idx -> fingerprint.add((short)(double) idx));
+        doubleArrayList.forEach(idx -> fingerprint.add((short) (double) idx));
         return fingerprint;
     }
 }

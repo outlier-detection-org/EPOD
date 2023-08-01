@@ -13,11 +13,10 @@ public class Constants {
     public static int dn = 8;
     public static int nW = 10;
     public static int max_dn = 10;
-    public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
+    public static String methodToGenerateFingerprint = "MCOD_P2P"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
     public static String dataset = "STK"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
-
     public static double R = -1;// distance threshold, default=6.5(HPC), 115(EM), 1.9(TAO), 0.45(STK), 0.028(GAU), 525(FC), 2.75(GAS), 5(RC)
     public static int dim = -1; // dimension, default = 7(HPC), 16(EM), 55(FC), 3(TAO), 10(GAS),1(STK)
     public static int subDim = -1;
@@ -26,22 +25,20 @@ public class Constants {
     public static int nS = -1;
 
     //fixed
-    public static int K = 50; // neighborhood threshold, default = 50
+    public static int K = 30; // neighborhood threshold, default = 50
     public static String prefix = "Datasets/";
 
     //Paths
-    //    public static String prefix = "/home/xinyingzheng/Desktop/outlier_detection";
-    public static double mix_rate_node = 0.5;
-//    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Device_" + nn * dn + "_" + dataset + "/";
-    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_K_" + mix_rate_node + "/";
+    public static double mix_rate_node = 0.05;
+//    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_" + mix_rate_node + "/";
+    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
 
-    public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_K_" + mix_rate_node + "/";
-//    public static String timePrefix = Constants.prefix + "/Timestamp_data/Device_" + nn * dn + "_" + dataset + "/";
-    public static String variable = "mix0.5";
+//    public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_" + mix_rate_node + "/";
+    public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
+    public static String variable = "mix_" + mix_rate_node;
     public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint +"_"+ nn + "*" + dn + "_" + dataset + "_"+ variable + "/";
 
-    public static String resultFile = resultPrefix +
-            "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
+    public static String resultFile = resultPrefix + "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
 
     public static String resultNaiveFile = resultPrefix+ "_Result_Naive_" + "_outliers.txt";
     public static String naiveInfo = resultPrefix+ "_Result_Naive_info" + "_outliers.txt";
@@ -100,7 +97,8 @@ public class Constants {
                 subDim = 4;
             }
         } else if (dataset.contains("STK")) {
-            R = 0.45;
+//            R = 0.45;
+//            R = 2;
             dim = 1;
             if (methodToGenerateFingerprint.contains("NETS")){
                 subDim = 1;

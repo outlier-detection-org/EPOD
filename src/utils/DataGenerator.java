@@ -1,5 +1,7 @@
 package utils;
 
+import Framework.EdgeNodeNetwork;
+import RPC.EdgeNodeService;
 import RPC.Vector;
 
 import java.io.*;
@@ -24,6 +26,12 @@ public class DataGenerator {
         int device = deviceId % Constants.dn;
         int deviceNumber = nodeId * Constants.max_dn + device;
         this.getData(Constants.timePrefix + deviceNumber + ".txt");
+        try {
+            EdgeNodeNetwork.getDataInfo.write("Read data from "+ deviceNumber + ".txt\n");
+            EdgeNodeNetwork.getDataInfo.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         assert this.dataQueue.peek() != null;
         this.firstTimeStamp = this.dataQueue.peek().arrivalRealTime;
     }
