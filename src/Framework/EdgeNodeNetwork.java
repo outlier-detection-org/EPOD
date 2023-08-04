@@ -9,7 +9,6 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import test.testNetwork;
-import utils.CompareResult;
 import utils.Constants;
 
 import java.io.BufferedWriter;
@@ -70,14 +69,16 @@ public class EdgeNodeNetwork {
         nodeHashMap.put(edgeNode.hashCode(), edgeNode);
         return edgeNode;
     }
+    public static void resetTime(){
+        time = 0;
+        totalTime = 0;
+    }
 
-    public static void reOpenEdgeNetwork(){
+    public static void resetEdgeNetwork(){
         deviceHashMap = new HashMap<>();
         nodeHashMap = new HashMap<>();
 //        dataTransfered = new AtomicInteger(0);
 //        supportDevices = new AtomicInteger(0);
-        time = 0;
-        totalTime = 0;
         outliers = Collections.synchronizedSet(new HashSet<>());
 //        try {
 //            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
@@ -117,6 +118,7 @@ public class EdgeNodeNetwork {
 //        System.out.println("dn/nn: " + Constants.dn + "/" + Constants.nn);
 //        System.out.println("R/K/W/S: " + Constants.R + "/" + Constants.K + "/" + Constants.W + "/" + Constants.S);
 //        System.out.println("# of windows: " + (Constants.nW));
+        resetEdgeNetwork();
         for (EdgeNode node : nodeHashMap.values()) {
             node.begin();
         }
@@ -240,8 +242,8 @@ public class EdgeNodeNetwork {
         stopNetwork();
 //        System.out.println("Average time cost is: " + time * 1.0 / (Constants.nS + Constants.nW - 1)); // todo: 感觉优点问题？
 //        testNetwork.testing.write("Method: "+Constants.methodToGenerateFingerprint);
-        testNetwork.testing.write("R = "+Constants.R+"\n");
-        testNetwork.testing.write("K = "+Constants.K+"\n");
+//        testNetwork.testing.write("R = "+Constants.R+"\n");
+//        testNetwork.testing.write("K = "+Constants.K+"\n");
 //        testNetwork.testing.write("Ratio = "+ Constants.mix_rate_node);
 //        if (testNetwork.cnt!=0)
         testNetwork.sum += totalTime * 1.0 / (Constants.nS + Constants.nW - 1);

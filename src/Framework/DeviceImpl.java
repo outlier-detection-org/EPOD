@@ -9,10 +9,7 @@ import RPC.Vector;
 import utils.Constants;
 import utils.DataGenerator;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public class DeviceImpl implements DeviceService.Iface {
@@ -27,7 +24,6 @@ public class DeviceImpl implements DeviceService.Iface {
 
     //=============================EPOD===============================
 //    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
-//    public HashMap<Integer, Integer> historyRecord;
     public Map<Integer, DeviceService.Client> clientsForDevices; //And for P2P
     public EdgeNodeService.Client clientsForNearestNode;
 
@@ -61,13 +57,6 @@ public class DeviceImpl implements DeviceService.Iface {
         //记得重置代码中的R和K
     }
 
-//    public void setHistoryRecord() {
-//        this.historyRecord = new HashMap<>();
-//        for (int deviceHashCode : EdgeNodeNetwork.deviceHashMap.keySet()) {
-//            this.historyRecord.put(deviceHashCode, -1);
-//        }
-//    }
-
     public void setClients(EdgeNodeService.Client clientsForNearestNode, Map<Integer, DeviceService.Client> clientsForDevices) {
         this.clientsForDevices = clientsForDevices;
         this.clientsForNearestNode = clientsForNearestNode;
@@ -87,13 +76,13 @@ public class DeviceImpl implements DeviceService.Iface {
         Constants.currentSlideID = itr;
         getRawData(itr);
 
-        //step1: ����ָ�� + �����ȼ���outliers
+        //step1
         if (itr > Constants.nS - 1) {
             this.detector.clearFingerprints();
         }
         this.detector.detectOutlier(this.rawData);
 
-        //step2: �ϴ�ָ��
+        //step2
         if (itr >= Constants.nS - 1) {
             this.clientsForNearestNode.receiveAndProcessFP(this.detector.fullCellDelta, this.belongedDevice.hashCode());
         } else return new HashSet<>();
@@ -108,8 +97,6 @@ public class DeviceImpl implements DeviceService.Iface {
 
 
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
-//        int lastSent = Math.max(this.historyRecord.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
-//        this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
         return this.detector.sendData(bucketIds, deviceHashCode);
     }
 //    AtomicInteger dataSize = new AtomicInteger(0);
@@ -217,12 +204,9 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public Set<? extends Vector> detectOutlier_Centralize(int itr) throws Throwable {
-//        System.out.println("centralize detectOutlier 187");
         Constants.currentSlideID = itr;
         getRawData(itr);
-//        System.out.println("centralize detectOutlier 190");
         Set<? extends Vector> result = clientsForNearestNode.uploadAndDetectOutlier(this.rawData);
-//        System.out.println("centralize detectOutlier 192");
         return result;
     }
 

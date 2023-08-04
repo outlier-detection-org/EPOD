@@ -1,15 +1,10 @@
 package Detector;
 
-import DataStructure.MCO;
-import Framework.EdgeNodeNetwork;
 import RPC.Vector;
 import DataStructure.Cell;
 import DataStructure.Tuple;
-import Framework.DeviceImpl;
 import utils.Constants;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
