@@ -24,6 +24,7 @@ public class EdgeNode {
         processor = new EdgeNodeService.Processor<>(handler);
         port = Utils.generatePort();
         transports = new ArrayList<>();
+        begin();
     }
 
     public void begin() {

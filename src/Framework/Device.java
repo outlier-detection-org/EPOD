@@ -22,6 +22,7 @@ public class Device {
         handler = new DeviceImpl(deviceId, this);
         processor = new DeviceService.Processor<>(handler);
         transports = new ArrayList<>();
+        begin();
     }
 
     public void begin() {

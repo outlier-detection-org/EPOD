@@ -117,12 +117,14 @@ public class EdgeNodeNetwork {
 //        System.out.println("R/K/W/S: " + Constants.R + "/" + Constants.K + "/" + Constants.W + "/" + Constants.S);
 //        System.out.println("# of windows: " + (Constants.nW));
 //        resetEdgeNetwork();
-        for (EdgeNode node : nodeHashMap.values()) {
-            node.begin();
-        }
-        for (Device device : deviceHashMap.values()) {
-            device.begin();
-        }
+
+        //begin when create, avoiding repeated port
+//        for (EdgeNode node : nodeHashMap.values()) {
+//            node.begin();
+//        }
+//        for (Device device : deviceHashMap.values()) {
+//            device.begin();
+//        }
 
         //set clients for nodes and devices
         for (EdgeNode node : nodeHashMap.values()) {

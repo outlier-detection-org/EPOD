@@ -29,7 +29,7 @@ public class Constants {
     public static String prefix = "Datasets/";
 
     //Paths
-    public static double mix_rate_node = 0.05;
+    public static double mix_rate_node = 0.025;
 //    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_" + mix_rate_node + "/";
     public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
 
