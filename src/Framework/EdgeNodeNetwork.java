@@ -69,12 +69,10 @@ public class EdgeNodeNetwork {
         nodeHashMap.put(edgeNode.hashCode(), edgeNode);
         return edgeNode;
     }
-    public static void resetTime(){
-        time = 0;
-        totalTime = 0;
-    }
 
     public static void resetEdgeNetwork(){
+        time = 0;
+        totalTime = 0;
         deviceHashMap = new HashMap<>();
         nodeHashMap = new HashMap<>();
 //        dataTransfered = new AtomicInteger(0);
@@ -118,7 +116,7 @@ public class EdgeNodeNetwork {
 //        System.out.println("dn/nn: " + Constants.dn + "/" + Constants.nn);
 //        System.out.println("R/K/W/S: " + Constants.R + "/" + Constants.K + "/" + Constants.W + "/" + Constants.S);
 //        System.out.println("# of windows: " + (Constants.nW));
-        resetEdgeNetwork();
+//        resetEdgeNetwork();
         for (EdgeNode node : nodeHashMap.values()) {
             node.begin();
         }
@@ -239,7 +237,7 @@ public class EdgeNodeNetwork {
 //            outlierNaiveFw.flush();
             itr++;
         }
-        stopNetwork();
+
 //        System.out.println("Average time cost is: " + time * 1.0 / (Constants.nS + Constants.nW - 1)); // todo: 感觉优点问题？
 //        testNetwork.testing.write("Method: "+Constants.methodToGenerateFingerprint);
 //        testNetwork.testing.write("R = "+Constants.R+"\n");
@@ -265,7 +263,7 @@ public class EdgeNodeNetwork {
 //        supportDeviceInfoCSV.close();
 //        ratioInfoCSV.close();
 //        timeCSV.close();
-
+        stopNetwork();
     }
 
 //    public static void printOutliers() throws IOException {
@@ -299,6 +297,7 @@ public class EdgeNodeNetwork {
         for (Device device : deviceHashMap.values()) {
             device.stop();
         }
+        resetEdgeNetwork();
 //        System.out.println("Ended!");
     }
 

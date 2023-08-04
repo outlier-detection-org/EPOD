@@ -24,8 +24,8 @@ public class testNetwork {
 //        System.setOut(ps);
         EdgeNodeNetwork.createNetwork(Constants.nn, Constants.dn, edgeDeviceFactory);
 //        System.out.println("started!");
-        EdgeNodeNetwork.resetTime();
         EdgeNodeNetwork.startNetwork();
+//        EdgeNodeNetwork.resetEdgeNetwork();
 //        Thread.sleep(2000);
     }
 
@@ -41,6 +41,7 @@ public class testNetwork {
                         runTestNetwork();
                     }
                     testing.write("Average time cost per slide is: " + sum / 3.0 + "\n");
+                    System.out.println("Average time cost per slide is: " + sum / 3.0);
                     testing.write("===============================\n");
 
                     testing.flush();
@@ -50,8 +51,9 @@ public class testNetwork {
                 Constants.R += 0.1;
             }
         }catch (Throwable e){
-            testing.write("Error\n");
-            recursive_run();
+//            testing.write("Error\n");
+//            EdgeNodeNetwork.stopNetwork();
+//            recursive_run();
         }finally {
             testing.flush();
             testing.close();
