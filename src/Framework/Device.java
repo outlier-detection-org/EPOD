@@ -19,7 +19,7 @@ public class Device {
     public ArrayList<TTransport> transports;
 
     public Device(int deviceId){
-        port = new Random().nextInt(48000) + 1024;
+        port = new Random().nextInt(18000) + 1024;
         handler = new DeviceImpl(deviceId, this);
         processor = new DeviceService.Processor<>(handler);
         transports = new ArrayList<>();
@@ -42,7 +42,7 @@ public class Device {
             TServerTransport serverTransport = new TServerSocket(port);
             // Use this for a multithreaded server
             server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
-            System.out.printf("Starting the device at port %d...\n", port);
+//            System.out.printf("Starting the device at port %d...\n", port);
             server.serve();
         } catch (Exception e) {
             e.printStackTrace();

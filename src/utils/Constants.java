@@ -11,9 +11,9 @@ public class Constants {
     public static int threadhold = -1000000;
     public static int nn = 4;
     public static int dn = 8;
-    public static int nW = 10;
+    public static int nW = 20;
     public static int max_dn = 10;
-    public static String methodToGenerateFingerprint = "MCOD"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
+    public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
     public static String dataset = "STK"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
@@ -29,26 +29,26 @@ public class Constants {
     public static String prefix = "Datasets/";
 
     //Paths
-    public static double mix_rate_node = 0.15;
+    public static double mix_rate_node = 0.025;
 //    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_" + mix_rate_node + "/";
     public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
 
 //    public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_" + mix_rate_node + "/";
     public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
-    public static String variable = "mix_" + mix_rate_node;
-    public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint +"_"+ nn + "*" + dn + "_" + dataset + "_"+ variable + "/";
+//    public static String variable = "mix_" + mix_rate_node;
+//    public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint +"_"+ nn + "*" + dn + "_" + dataset + "_"+ variable + "/";
 
-    public static String resultFile = resultPrefix + "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
+//    public static String resultFile = resultPrefix + "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
 
-    public static String resultNaiveFile = resultPrefix+ "_Result_Naive_" + "_outliers.txt";
-    public static String naiveInfo = resultPrefix+ "_Result_Naive_info" + "_outliers.txt";
-    public static String getDataInfo = resultPrefix+"get_data_info.txt";
-    public static String supportDeviceInfo = resultPrefix+"support_device_info.txt";
-    public static String ratioInfo = resultPrefix+"ratio_info.txt";
-    public static String ratioInfoCSV = resultPrefix+"ratio_info.csv";
-    public static String getDataInfoCSV = resultPrefix+"get_data_info.csv";
-    public static String supportDeviceInfoCSV = resultPrefix+"support_device_info.csv";
-    public static String timeCSV = resultPrefix+"time.csv";
+//    public static String resultNaiveFile = resultPrefix+ "_Result_Naive_" + "_outliers.txt";
+//    public static String naiveInfo = resultPrefix+ "_Result_Naive_info" + "_outliers.txt";
+//    public static String getDataInfo = resultPrefix+"get_data_info.txt";
+//    public static String supportDeviceInfo = resultPrefix+"support_device_info.txt";
+//    public static String ratioInfo = resultPrefix+"ratio_info.txt";
+//    public static String ratioInfoCSV = resultPrefix+"ratio_info.csv";
+//    public static String getDataInfoCSV = resultPrefix+"get_data_info.csv";
+//    public static String supportDeviceInfoCSV = resultPrefix+"support_device_info.csv";
+//    public static String timeCSV = resultPrefix+"time.csv";
 
 
     public static String forestCoverFileName = prefix + "fc.txt";
@@ -71,10 +71,12 @@ public class Constants {
     static {
         if (dataset.contains("TAO") || dataset.contains("FC") || dataset.contains("RC")) {
             S = 500;
-            W = S * 20;
+//            W = S * 20; 20slides/win
+            W = S * 10;
         } else {
             S = 500;
-            W = 10000;
+//            W = 10000;
+            W = 5000;
         }
         nS = W / S;
 

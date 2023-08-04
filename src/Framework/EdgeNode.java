@@ -22,7 +22,7 @@ public class EdgeNode {
     public EdgeNode() {
         handler = new EdgeNodeImpl(this);
         processor = new EdgeNodeService.Processor<>(handler);
-        port = new Random().nextInt(48000) + 1024;
+        port = new Random().nextInt(18000) + 1024;
         transports = new ArrayList<>();
     }
 
@@ -43,7 +43,7 @@ public class EdgeNode {
 //            TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
             // Use this for a multithreaded server
             server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
-            System.out.printf("Starting the EdgeNode at port %d...%n", port);
+//            System.out.printf("Starting the EdgeNode at port %d...%n", port);
             server.serve();
         } catch (Exception e) {
             e.printStackTrace();

@@ -351,9 +351,9 @@ public class NewNETS extends Detector {
             outlier.removeOutdatedNNUnsafeOut(Constants.currentSlideID, Constants.nS);
             List<Double> tmp = convertShortToDouble(outlier.fullDimCellIdx);
             if (status.get(tmp) == 2) {
-                if (outlier.get(0) == 8.0117 && Constants.currentSlideID == 22) {
-                    System.out.println("has it11111!");
-                }
+//                if (outlier.get(0) == 8.0117 && Constants.currentSlideID == 22) {
+//                    System.out.println("has it11111!");
+//                }
                 it.remove();
                 continue OutlierLoop;
             }
@@ -438,14 +438,14 @@ public class NewNETS extends Detector {
             }
         }
         this.outlierVector = outliers_out;
-        try {
-            EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outlierVector.size() + "\n");
-            EdgeNodeNetwork.ratioInfo.flush();
-            EdgeNodeNetwork.ratioInfoCSV.write(processExternalPoints * 1.0 / outlierVector.size() + ",");
-            EdgeNodeNetwork.ratioInfoCSV.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outlierVector.size() + "\n");
+//            EdgeNodeNetwork.ratioInfo.flush();
+//            EdgeNodeNetwork.ratioInfoCSV.write(processExternalPoints * 1.0 / outlierVector.size() + ",");
+//            EdgeNodeNetwork.ratioInfoCSV.flush();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     public void processOutliers1() {
@@ -639,9 +639,9 @@ public class NewNETS extends Detector {
             for (HashMap<Integer, Cell> slide : slides) {
                 if (!slide.containsKey(infCellIdx)) continue;
                 for (Tuple t : slide.get(infCellIdx).tuples) {
-                    if (t.values.get(0) == 6.9106) {
-                        System.out.println("zxyzxy has it!");
-                    }
+//                    if (t.values.get(0) == 6.9106) {
+//                        System.out.println("zxyzxy has it!");
+//                    }
                     if (t.safeness) {
                         continue;
                     }
@@ -715,11 +715,11 @@ public class NewNETS extends Detector {
                         continue TupleLoop;
                     }
                 }
-                if (tCand.values.get(0) == 7.0578) {
-                    System.out.println("NETS nn: " + tCand.nnIn);
-                    System.out.println("NETS SafeOut: " + tCand.nnSafeOut);
-                    System.out.println("NETS UnSafeOut: " + tCand.nnUnSafeOut);
-                }
+//                if (tCand.values.get(0) == 7.0578) {
+//                    System.out.println("NETS nn: " + tCand.nnIn);
+//                    System.out.println("NETS SafeOut: " + tCand.nnSafeOut);
+//                    System.out.println("NETS UnSafeOut: " + tCand.nnUnSafeOut);
+//                }
                 outliers.add(tCand);
             }
         }

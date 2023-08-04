@@ -4,8 +4,8 @@ import java.io.*;
 
 public class postProcess {
     public static void main(String[] args) {
-        String prefixPath = "Datasets/Timestamp_data/Node_6_Device_10_STK_0.15/"; // 替换为实际文件路径
-        int linesToRead = 100000; // 需要读取的行数
+        String prefixPath = "Datasets/DeviceId_data/Node_6_Device_10_STK_0.025/"; // 替换为实际文件路径
+        int linesToRead = 30000; // 需要读取的行数
 
         for (int i = 0; i < 60; i++) {
             String filePath = prefixPath + i + ".txt";

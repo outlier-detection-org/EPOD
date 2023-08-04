@@ -256,9 +256,9 @@ public class MCOD extends Detector {
     private void check_filled(MCO center) {
         ArrayList<MCO> cluster = unfilled_clusters.get(center);
         if (cluster.size() > Constants.K) {
-            if (center.values.get(0)==12.45 && center.values.get(1)==9.77962) {
-                System.out.println("filled");
-            }
+//            if (center.values.get(0)==12.45 && center.values.get(1)==9.77962) {
+//                System.out.println("filled");
+//            }
             unfilled_clusters.remove(center);
             filled_clusters.put(center, cluster);
             cluster.forEach(p -> {
@@ -697,14 +697,14 @@ public class MCOD extends Detector {
                 }
             }
         }
-        try {
-            EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outliers.size()+"\n");
-            EdgeNodeNetwork.ratioInfo.flush();
-            EdgeNodeNetwork.ratioInfoCSV.write(processExternalPoints * 1.0 / outliers.size()+",");
-            EdgeNodeNetwork.ratioInfoCSV.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            EdgeNodeNetwork.ratioInfo.write("Client # process external points / # outliers = " + processExternalPoints * 1.0 / outliers.size()+"\n");
+//            EdgeNodeNetwork.ratioInfo.flush();
+//            EdgeNodeNetwork.ratioInfoCSV.write(processExternalPoints * 1.0 / outliers.size()+",");
+//            EdgeNodeNetwork.ratioInfoCSV.flush();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
 

@@ -400,7 +400,7 @@ public class EdgeNodeImpl implements EdgeNodeService.Iface {
             }
 //            System.out.println("Thead " + Thread.currentThread().getId() + " uploadAndDetectOutlier 394");
             if (Constants.currentSlideID >= Constants.nS - 1) {
-                System.out.println("Each node get data size is " + (dataSize.get()));
+//                System.out.println("Each node get data size is " + (dataSize.get()));
                 dataSize.set(0);
             }
             this.detector.detectOutlier(allData);

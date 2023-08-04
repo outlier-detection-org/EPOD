@@ -150,7 +150,8 @@ while True:
     for i in range(len(clusters2)):
         if len(clusters2[i]) < smallest:
             smallest = len(clusters2[i])
-    if smallest >= W * nW:
+#     if smallest >= W * nW:
+    if smallest >= 20000:
         break
 # print to file
 try:
