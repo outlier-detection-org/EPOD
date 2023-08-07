@@ -6,9 +6,9 @@ import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransport;
+import utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class EdgeNode {
 
@@ -22,8 +22,9 @@ public class EdgeNode {
     public EdgeNode() {
         handler = new EdgeNodeImpl(this);
         processor = new EdgeNodeService.Processor<>(handler);
-        port = new Random().nextInt(50000) + 10000;
+        port = Utils.generatePort();
         transports = new ArrayList<>();
+        begin();
     }
 
     public void begin() {
@@ -43,7 +44,7 @@ public class EdgeNode {
 //            TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
             // Use this for a multithreaded server
             server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
-            System.out.printf("Starting the EdgeNode at port %d...%n", port);
+//            System.out.printf("Starting the EdgeNode at port %d...%n", port);
             server.serve();
         } catch (Exception e) {
             e.printStackTrace();

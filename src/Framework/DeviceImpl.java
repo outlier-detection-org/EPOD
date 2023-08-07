@@ -9,10 +9,7 @@ import RPC.Vector;
 import utils.Constants;
 import utils.DataGenerator;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public class DeviceImpl implements DeviceService.Iface {
@@ -27,7 +24,6 @@ public class DeviceImpl implements DeviceService.Iface {
 
     //=============================EPOD===============================
 //    public Map<List<Double>, Integer> fullCellDelta; //fingerprint
-//    public HashMap<Integer, Integer> historyRecord;
     public Map<Integer, DeviceService.Client> clientsForDevices; //And for P2P
     public EdgeNodeService.Client clientsForNearestNode;
 
@@ -61,13 +57,6 @@ public class DeviceImpl implements DeviceService.Iface {
         //记得重置代码中的R和K
     }
 
-//    public void setHistoryRecord() {
-//        this.historyRecord = new HashMap<>();
-//        for (int deviceHashCode : EdgeNodeNetwork.deviceHashMap.keySet()) {
-//            this.historyRecord.put(deviceHashCode, -1);
-//        }
-//    }
-
     public void setClients(EdgeNodeService.Client clientsForNearestNode, Map<Integer, DeviceService.Client> clientsForDevices) {
         this.clientsForDevices = clientsForDevices;
         this.clientsForNearestNode = clientsForNearestNode;
@@ -76,25 +65,24 @@ public class DeviceImpl implements DeviceService.Iface {
     public void getRawData(int itr) {
         Date currentRealTime = new Date();
         // 1000ms  10
-        currentRealTime.setTime(dataGenerator.firstTimeStamp.getTime() + (long) Constants.S * 10 * 1000 * itr);
-        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, Constants.S * 10);
+        currentRealTime.setTime(dataGenerator.firstTimeStamp.getTime() + (long) 1000 * itr);
+        this.rawData = dataGenerator.getTimeBasedIncomingData(currentRealTime, 1);
     }
 
     public Set<? extends Vector> detectOutlier(int itr) throws Throwable {
         processedExternalPoints = 0.0;
-        System.out.println("Thread " + Thread.currentThread().getId() + " detectOutlier");
         this.ready = false;
         //get initial data
         Constants.currentSlideID = itr;
         getRawData(itr);
 
-        //step1: ����ָ�� + �����ȼ���outliers
+        //step1
         if (itr > Constants.nS - 1) {
             this.detector.clearFingerprints();
         }
         this.detector.detectOutlier(this.rawData);
 
-        //step2: �ϴ�ָ��
+        //step2
         if (itr >= Constants.nS - 1) {
             this.clientsForNearestNode.receiveAndProcessFP(this.detector.fullCellDelta, this.belongedDevice.hashCode());
         } else return new HashSet<>();
@@ -109,24 +97,22 @@ public class DeviceImpl implements DeviceService.Iface {
 
 
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
-//        int lastSent = Math.max(this.historyRecord.get(deviceHashCode), Constants.currentSlideID - Constants.nS);
-//        this.historyRecord.put(deviceHashCode, Constants.currentSlideID);
         return this.detector.sendData(bucketIds, deviceHashCode);
     }
-    AtomicInteger dataSize = new AtomicInteger(0);
+//    AtomicInteger dataSize = new AtomicInteger(0);
     public void getExternalData(Map<List<Double>, Integer> status, Map<Integer, Set<List<Double>>> result) {
 //        System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
         this.detector.status = status;
         ArrayList<Thread> threads = new ArrayList<>();
-        try {
-            EdgeNodeNetwork.supportDeviceInfo.write("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().size()+"\n");
-            EdgeNodeNetwork.supportDeviceInfo.flush();
-            EdgeNodeNetwork.supportDeviceInfoCSV.write(result.keySet().size()+",");
-            EdgeNodeNetwork.supportDeviceInfoCSV.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        EdgeNodeNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
+//        try {
+//            EdgeNodeNetwork.supportDeviceInfo.write("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().size()+"\n");
+//            EdgeNodeNetwork.supportDeviceInfo.flush();
+//            EdgeNodeNetwork.supportDeviceInfoCSV.write(result.keySet().size()+",");
+//            EdgeNodeNetwork.supportDeviceInfoCSV.flush();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        EdgeNodeNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode.equals(this.belongedDevice.hashCode())) continue;
             //HashMap<Integer,HashSet<ArrayList<?>>>
@@ -136,7 +122,7 @@ public class DeviceImpl implements DeviceService.Iface {
                     if (!this.detector.externalData.containsKey(Constants.currentSlideID)) {
                         this.detector.externalData.put(Constants.currentSlideID, Collections.synchronizedMap(new HashMap<>()));
                     }
-                    data.values().forEach(x -> dataSize.addAndGet(x.size()));
+//                    data.values().forEach(x -> dataSize.addAndGet(x.size()));
                     Map<List<Double>, List<Vector>> map = this.detector.externalData.get(Constants.currentSlideID);
                     data.keySet().forEach(
                             x -> {
@@ -164,17 +150,17 @@ public class DeviceImpl implements DeviceService.Iface {
             }
         }
         if (Constants.currentSlideID >= Constants.nS - 1) {
-            try {
-                EdgeNodeNetwork.getDataInfo.write("Device " + this.belongedDevice.hashCode() + " get data size is " + dataSize+"\n");
-                EdgeNodeNetwork.getDataInfoCSV.write(dataSize+",");
-                EdgeNodeNetwork.getDataInfo.flush();
-                EdgeNodeNetwork.getDataInfoCSV.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            EdgeNodeNetwork.dataTransfered.addAndGet(dataSize.get());
+//            try {
+//                EdgeNodeNetwork.getDataInfo.write("Device " + this.belongedDevice.hashCode() + " get data size is " + dataSize+"\n");
+//                EdgeNodeNetwork.getDataInfoCSV.write(dataSize+",");
+//                EdgeNodeNetwork.getDataInfo.flush();
+//                EdgeNodeNetwork.getDataInfoCSV.flush();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            EdgeNodeNetwork.dataTransfered.addAndGet(dataSize.get());
         }
-        dataSize.set(0);
+//        dataSize.set(0);
         this.ready = true;
     }
 
@@ -191,7 +177,7 @@ public class DeviceImpl implements DeviceService.Iface {
             Thread t = new Thread(() -> {
                 try {
                     List<Vector> data = client.sendAllLocalData();
-                    dataSize.addAndGet(data.size());
+//                    dataSize.addAndGet(data.size());
                     allData.addAll(data);
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -207,10 +193,10 @@ public class DeviceImpl implements DeviceService.Iface {
                 e.printStackTrace();
             }
         }
-        if (Constants.currentSlideID >= Constants.nS - 1) {
-            System.out.println("Each device get data size is " + dataSize);
-            dataSize.set(0);
-        }
+//        if (Constants.currentSlideID >= Constants.nS - 1) {
+//            System.out.println("Each device get data size is " + dataSize);
+//            dataSize.set(0);
+//        }
         this.detector.detectOutlier(allData);
         if (itr >= Constants.nS - 1) {
             return this.detector.outlierVector;
@@ -218,12 +204,9 @@ public class DeviceImpl implements DeviceService.Iface {
     }
 
     public Set<? extends Vector> detectOutlier_Centralize(int itr) throws Throwable {
-//        System.out.println("centralize detectOutlier 187");
         Constants.currentSlideID = itr;
         getRawData(itr);
-//        System.out.println("centralize detectOutlier 190");
         Set<? extends Vector> result = clientsForNearestNode.uploadAndDetectOutlier(this.rawData);
-//        System.out.println("centralize detectOutlier 192");
         return result;
     }
 

@@ -1,6 +1,9 @@
 package utils;
 
+import Framework.EdgeNodeNetwork;
+import RPC.EdgeNodeService;
 import RPC.Vector;
+
 import java.io.*;
 import java.lang.reflect.Array;
 import java.text.ParseException;
@@ -19,7 +22,16 @@ public class DataGenerator {
     public static AtomicInteger arrivalTime = new AtomicInteger(-1);
 
     public DataGenerator(int deviceId) {
-        this.getData(Constants.timePrefix + deviceId + ".txt");
+        int nodeId = deviceId / Constants.dn;
+        int device = deviceId % Constants.dn;
+        int deviceNumber = nodeId * Constants.max_dn + device;
+        this.getData(Constants.timePrefix + deviceNumber + ".txt");
+//        try {
+//            EdgeNodeNetwork.getDataInfo.write("Read data from "+ deviceNumber + ".txt\n");
+//            EdgeNodeNetwork.getDataInfo.flush();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         assert this.dataQueue.peek() != null;
         this.firstTimeStamp = this.dataQueue.peek().arrivalRealTime;
     }
@@ -45,7 +57,7 @@ public class DataGenerator {
     public void getData(String filename) {
         Comparator<Vector> comparator = new DataComparatorWithTimestamp();
         dataQueue = new PriorityQueue<>(comparator);
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SS");
         try {
             BufferedReader bfr = new BufferedReader(new FileReader(filename));
             try {

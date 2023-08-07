@@ -8,14 +8,15 @@ import random
 # Then for each mixed cluster, cluster based on client number, and mixture
 
 # Configuration that need to be changed each time
-n_nodes = 4
-n_clients = 8
-mix_rate_node = 0.5
-mix_rate_client = 0.5
-copy_num = 10
-data = pd.read_table('..\\..\\Datasets\\stock.txt', sep=',', header=None)
-prefix = "..\\..\\Datasets\\DeviceId_data\\Node_" \
-         + str(n_nodes) + "_Device_" + str(n_clients) + "_STK_K_" + str(mix_rate_node) + "\\"
+n_nodes = 6
+n_clients = 10
+mix_rate_node = 0.025
+mix_rate_client = 0.025
+nW = 10
+W = 10000
+data = pd.read_table('/home/shimin/EPOD/Datasets/stock.txt', sep=',', header=None)
+prefix = "/home/shimin/EPOD/Datasets/DeviceId_data/Node_" \
+         + str(n_nodes) + "_Device_" + str(n_clients) + "_STK_" + str(mix_rate_node) + "/"
 
 # read datasets
 df = pd.DataFrame(data)
@@ -25,18 +26,49 @@ clusters2 = []
 for i in range(n_nodes * n_clients):
     clusters2.append([])
 
-for x in range(copy_num):
+while True:
     # step 1: cluster based on node number, and mixture;
-    kmeans = KMeans(n_init='auto', n_clusters=n_nodes).fit(X)
-    clusters = []
-    for i in range(n_nodes):
-        clusters.append([])
+    kmeans = KMeans(n_init='auto', n_clusters=2).fit(X)
+    tmp0 = []
+    for i in range(2):
+        tmp0.append([])
     for i in range(kmeans.labels_.size):
-        clusters[kmeans.labels_[i]].append(X[i])
-    for i in range(n_nodes):
-        random.shuffle(clusters[i])
-        print(len(clusters[i]))
+        tmp0[kmeans.labels_[i]].append(X[i])
+    for i in range(2):
+        random.shuffle(tmp0[i])
+    clusters_tmp = []
+    tmp = tmp0[1]
+    if len(tmp0[1]) < len(tmp0[0]):
+        tmp = tmp0[0]
+        clusters_tmp.append(tmp0[1])
+    else:
+        clusters_tmp.append(tmp0[0])
+    kmeans = KMeans(n_init='auto', n_clusters=6).fit(tmp)
+    for i in range(6):
+        clusters_tmp.append([])
+    for i in range(kmeans.labels_.size):
+        clusters_tmp[kmeans.labels_[i] + 1].append(tmp[i])
+    for i in range(len(clusters_tmp)):
+        random.shuffle(clusters_tmp[i])
+    flag = 0  # number of clusters that has less than 10 points
+    for i in range(len(clusters_tmp)):
+        if len(clusters_tmp[i]) < 10:
+            flag = flag + 1
+            if flag == 2:
+                print("cannot generate enough clusters.")
+                break
+    if flag == 2:
+        continue
+
+    clusters = []
+    for i in range(len(clusters_tmp)):
+        if len(clusters_tmp[i]) >= 10:
+            clusters.append(clusters_tmp[i])
     # mixture
+    clusters = sorted(clusters, key=lambda y: len(y), reverse=True)
+    for i in range(len(clusters)):
+        print(len(clusters[i]))
+    print("=====================================")
     group = []
     for i in range(n_nodes):
         count = int(len(clusters[i]) * mix_rate_node)
@@ -80,6 +112,9 @@ for x in range(copy_num):
         for j in range(n_clients):
             random.shuffle(clusters[j])
         # mixture
+        clusters = sorted(clusters, key=lambda y: len(y), reverse=True)
+        for x in range(len(clusters)):
+            print(len(clusters[x]))
         group = []
         for j in range(n_clients):
             count = int(len(clusters[j]) * mix_rate_client)
@@ -109,6 +144,15 @@ for x in range(copy_num):
             for k in range(len(tmp)):
                 clusters2[i * n_clients + j].append(tmp[k])
 
+    # check: the smallest cluster has at least 10 window points - 10000 * 10
+    print("=====================================")
+    smallest = 100000000
+    for i in range(len(clusters2)):
+        if len(clusters2[i]) < smallest:
+            smallest = len(clusters2[i])
+#     if smallest >= W * nW:
+    if smallest >= 20000:
+        break
 # print to file
 try:
     os.mkdir(prefix, 0o0755)

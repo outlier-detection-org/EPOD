@@ -5,9 +5,9 @@ import java.util.HashSet;
 
 public class Cell {
 	public ArrayList<Short> cellIdx;
-	public HashMap<ArrayList<Short>,Cell> fullCells; //����ӿռ��cell��Ӧ������ȫ�ռ��cell
+	public HashMap<ArrayList<Short>,Cell> fullCells;
 	public HashSet<Tuple> tuples;
-	public double[] cellCenter; //�ӿռ�����ĵ�
+	public double[] cellCenter;
 	
 	public Cell(ArrayList<Short> cellIdx){
 		this.cellIdx = cellIdx;

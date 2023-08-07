@@ -60,8 +60,8 @@ public class CompareResult {
                     }
                 }
                 if (Constants.methodToGenerateFingerprint.equals("NETS")) {
-                    EdgeNodeNetwork.naiveInfo.write(v + "\n");
-                    EdgeNodeNetwork.naiveInfo.write("NAIVE neighbor: " + numOfNeighbors + "\n");
+//                    EdgeNodeNetwork.naiveInfo.write(v + "\n");
+//                    EdgeNodeNetwork.naiveInfo.write("NAIVE neighbor: " + numOfNeighbors + "\n");
 //                    EdgeNodeNetwork.naiveInfo.write("NETS nn: " + (nn) + "\n");
 //                    EdgeNodeNetwork.naiveInfo.write("NETS SafeOut: " + outSafe + "\n");
 //                    EdgeNodeNetwork.naiveInfo.write("NETS UnSafeOut: " + outUnsafe + "\n");

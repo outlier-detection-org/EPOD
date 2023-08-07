@@ -4,7 +4,6 @@ import RPC.Vector;
 import utils.Constants;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 
 public class MCO extends Vector {
@@ -31,7 +30,6 @@ public class MCO extends Vector {
         this.arrivalTime = d.arrivalTime;
         this.values = d.values;
         center = null;
-//            Rmc = new ArrayList<>();
         isInFilledCluster = false;
         isCenter = false;
         ev = 0;

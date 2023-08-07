@@ -6,9 +6,8 @@ import org.apache.thrift.server.TThreadPoolServer;
 import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
 import org.apache.thrift.transport.TTransport;
-
+import utils.Utils;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Device {
     int port;
@@ -18,19 +17,20 @@ public class Device {
     public TServer server;
     public ArrayList<TTransport> transports;
 
-    public Device(int deviceId){
-        port = new Random().nextInt(50000) + 10000;
+    public Device(int deviceId) {
+        port = Utils.generatePort();
         handler = new DeviceImpl(deviceId, this);
         processor = new DeviceService.Processor<>(handler);
         transports = new ArrayList<>();
+        begin();
     }
 
-    public void begin(){
+    public void begin() {
         Runnable simple = () -> simple(processor);
         new Thread(simple).start();
     }
 
-    public void stop(){
+    public void stop() {
         for (TTransport transport : transports) {
             transport.close();
         }
@@ -42,7 +42,7 @@ public class Device {
             TServerTransport serverTransport = new TServerSocket(port);
             // Use this for a multithreaded server
             server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
-            System.out.printf("Starting the device at port %d...\n", port);
+//            System.out.printf("Starting the device at port %d...\n", port);
             server.serve();
         } catch (Exception e) {
             e.printStackTrace();
