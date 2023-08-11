@@ -9,7 +9,9 @@ import RPC.Vector;
 import utils.Constants;
 import utils.DataGenerator;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("unchecked")
 public class DeviceImpl implements DeviceService.Iface {
@@ -99,19 +101,19 @@ public class DeviceImpl implements DeviceService.Iface {
     public Map<List<Double>, List<Vector>> sendData(Set<List<Double>> bucketIds, int deviceHashCode) {
         return this.detector.sendData(bucketIds, deviceHashCode);
     }
-//    AtomicInteger dataSize = new AtomicInteger(0);
+    AtomicInteger dataSize = new AtomicInteger(0);
     public void getExternalData(Map<List<Double>, Integer> status, Map<Integer, Set<List<Double>>> result) {
 //        System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
         this.detector.status = status;
         ArrayList<Thread> threads = new ArrayList<>();
-//        try {
+        try {
 //            EdgeNodeNetwork.supportDeviceInfo.write("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().size()+"\n");
 //            EdgeNodeNetwork.supportDeviceInfo.flush();
-//            EdgeNodeNetwork.supportDeviceInfoCSV.write(result.keySet().size()+",");
-//            EdgeNodeNetwork.supportDeviceInfoCSV.flush();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+            EdgeNodeNetwork.supportDeviceInfoCSV.write(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size()+",");
+            EdgeNodeNetwork.supportDeviceInfoCSV.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 //        EdgeNodeNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode.equals(this.belongedDevice.hashCode())) continue;
@@ -122,7 +124,7 @@ public class DeviceImpl implements DeviceService.Iface {
                     if (!this.detector.externalData.containsKey(Constants.currentSlideID)) {
                         this.detector.externalData.put(Constants.currentSlideID, Collections.synchronizedMap(new HashMap<>()));
                     }
-//                    data.values().forEach(x -> dataSize.addAndGet(x.size()));
+                    data.values().forEach(x -> dataSize.addAndGet(x.size()));
                     Map<List<Double>, List<Vector>> map = this.detector.externalData.get(Constants.currentSlideID);
                     data.keySet().forEach(
                             x -> {
@@ -150,17 +152,17 @@ public class DeviceImpl implements DeviceService.Iface {
             }
         }
         if (Constants.currentSlideID >= Constants.nS - 1) {
-//            try {
+            try {
 //                EdgeNodeNetwork.getDataInfo.write("Device " + this.belongedDevice.hashCode() + " get data size is " + dataSize+"\n");
-//                EdgeNodeNetwork.getDataInfoCSV.write(dataSize+",");
+                EdgeNodeNetwork.getDataInfoCSV.write(dataSize+",");
 //                EdgeNodeNetwork.getDataInfo.flush();
-//                EdgeNodeNetwork.getDataInfoCSV.flush();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//            EdgeNodeNetwork.dataTransfered.addAndGet(dataSize.get());
+                EdgeNodeNetwork.getDataInfoCSV.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            EdgeNodeNetwork.dataTransfered.addAndGet(dataSize.get());
         }
-//        dataSize.set(0);
+        dataSize.set(0);
         this.ready = true;
     }
 
@@ -177,7 +179,7 @@ public class DeviceImpl implements DeviceService.Iface {
             Thread t = new Thread(() -> {
                 try {
                     List<Vector> data = client.sendAllLocalData();
-//                    dataSize.addAndGet(data.size());
+                    dataSize.addAndGet(data.size());
                     allData.addAll(data);
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -193,10 +195,10 @@ public class DeviceImpl implements DeviceService.Iface {
                 e.printStackTrace();
             }
         }
-//        if (Constants.currentSlideID >= Constants.nS - 1) {
+        if (Constants.currentSlideID >= Constants.nS - 1) {
 //            System.out.println("Each device get data size is " + dataSize);
-//            dataSize.set(0);
-//        }
+            dataSize.set(0);
+        }
         this.detector.detectOutlier(allData);
         if (itr >= Constants.nS - 1) {
             return this.detector.outlierVector;

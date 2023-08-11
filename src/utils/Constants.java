@@ -9,12 +9,12 @@ public class Constants {
     public static int currentSlideID = -1;
 
     public static int threadhold = -1000000;
-    public static int nn = 4;
-    public static int dn = 8;
+    public static int nn = 6;
+    public static int dn = 10;
     public static int nW = 20;
     public static int max_dn = 10;
     public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "STK"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
+    public static String dataset = "TAO"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
     public static double R = -1;// distance threshold, default=6.5(HPC), 115(EM), 1.9(TAO), 0.45(STK), 0.028(GAU), 525(FC), 2.75(GAS), 5(RC)
@@ -25,18 +25,19 @@ public class Constants {
     public static int nS = -1;
 
     //fixed
-    public static int K = 30; // neighborhood threshold, default = 50
+    public static int K = 15; // neighborhood threshold, default = 15
     public static String prefix = "Datasets/";
 
     //Paths
-    public static double mix_rate_node = 0.025;
-//    public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_" + mix_rate_node + "/";
+    public static double mix_rate_node = 0.15;
     public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
 
-//    public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_" + nn + "_Device_" + dn + "_" + dataset + "_" + mix_rate_node + "/";
     public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
-//    public static String variable = "mix_" + mix_rate_node;
-//    public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint +"_"+ nn + "*" + dn + "_" + dataset + "_"+ variable + "/";
+    public static String variable = "default";
+    public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint +"_"+ nn + "*" + dn + "_" + dataset + "_"+ variable + "/";
+    public static String getDataInfoCSV = resultPrefix+"get_data_info.csv";
+    public static String supportDeviceInfoCSV = resultPrefix+"support_device_info.csv";
+
 
 //    public static String resultFile = resultPrefix + "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
 
@@ -46,8 +47,7 @@ public class Constants {
 //    public static String supportDeviceInfo = resultPrefix+"support_device_info.txt";
 //    public static String ratioInfo = resultPrefix+"ratio_info.txt";
 //    public static String ratioInfoCSV = resultPrefix+"ratio_info.csv";
-//    public static String getDataInfoCSV = resultPrefix+"get_data_info.csv";
-//    public static String supportDeviceInfoCSV = resultPrefix+"support_device_info.csv";
+
 //    public static String timeCSV = resultPrefix+"time.csv";
 
 
@@ -100,7 +100,7 @@ public class Constants {
             }
         } else if (dataset.contains("STK")) {
 //            R = 0.45;
-//            R = 2;
+            R = 0.4;
             dim = 1;
             if (methodToGenerateFingerprint.contains("NETS")){
                 subDim = 1;
