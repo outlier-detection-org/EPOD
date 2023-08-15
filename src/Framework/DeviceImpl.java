@@ -106,14 +106,14 @@ public class DeviceImpl implements DeviceService.Iface {
 //        System.out.printf("Thead %d getExternalData. \n", Thread.currentThread().getId());
         this.detector.status = status;
         ArrayList<Thread> threads = new ArrayList<>();
-        try {
+//        try {
 //            EdgeNodeNetwork.supportDeviceInfo.write("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().size()+"\n");
 //            EdgeNodeNetwork.supportDeviceInfo.flush();
-            EdgeNodeNetwork.supportDeviceInfoCSV.write(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size()+",");
-            EdgeNodeNetwork.supportDeviceInfoCSV.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//            EdgeNodeNetwork.supportDeviceInfoCSV.write(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size()+",");
+//            EdgeNodeNetwork.supportDeviceInfoCSV.flush();
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 //        EdgeNodeNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode.equals(this.belongedDevice.hashCode())) continue;
@@ -152,14 +152,12 @@ public class DeviceImpl implements DeviceService.Iface {
             }
         }
         if (Constants.currentSlideID >= Constants.nS - 1) {
-            try {
-//                EdgeNodeNetwork.getDataInfo.write("Device " + this.belongedDevice.hashCode() + " get data size is " + dataSize+"\n");
-                EdgeNodeNetwork.getDataInfoCSV.write(dataSize+",");
-//                EdgeNodeNetwork.getDataInfo.flush();
-                EdgeNodeNetwork.getDataInfoCSV.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+//            try {
+//                EdgeNodeNetwork.getDataInfoCSV.write(dataSize+",");
+//                EdgeNodeNetwork.getDataInfoCSV.flush();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
             EdgeNodeNetwork.dataTransfered.addAndGet(dataSize.get());
         }
         dataSize.set(0);

@@ -9,8 +9,8 @@ public class Constants {
     public static int currentSlideID = -1;
 
     public static int threadhold = -1000000;
-    public static int nn = 6;
-    public static int dn = 10;
+    public static int nn = 4;
+    public static int dn = 8;
     public static int nW = 20;
     public static int max_dn = 10;
     public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
@@ -29,26 +29,20 @@ public class Constants {
     public static String prefix = "Datasets/";
 
     //Paths
-    public static double mix_rate_node = 0.15;
+    public static double mix_rate_node = 0.05;
     public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
 
     public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
     public static String variable = "default";
     public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint +"_"+ nn + "*" + dn + "_" + dataset + "_"+ variable + "/";
-    public static String getDataInfoCSV = resultPrefix+"get_data_info.csv";
-    public static String supportDeviceInfoCSV = resultPrefix+"support_device_info.csv";
+//    public static String getDataInfoCSV = resultPrefix+"get_data_info.csv";
+//    public static String supportDeviceInfoCSV = resultPrefix+"support_device_info.csv";
 
 
 //    public static String resultFile = resultPrefix + "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
-
 //    public static String resultNaiveFile = resultPrefix+ "_Result_Naive_" + "_outliers.txt";
 //    public static String naiveInfo = resultPrefix+ "_Result_Naive_info" + "_outliers.txt";
-//    public static String getDataInfo = resultPrefix+"get_data_info.txt";
-//    public static String supportDeviceInfo = resultPrefix+"support_device_info.txt";
-//    public static String ratioInfo = resultPrefix+"ratio_info.txt";
-//    public static String ratioInfoCSV = resultPrefix+"ratio_info.csv";
 
-//    public static String timeCSV = resultPrefix+"time.csv";
 
 
     public static String forestCoverFileName = prefix + "fc.txt";

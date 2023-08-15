@@ -4,7 +4,7 @@ import java.io.*;
 
 public class postProcess {
     public static void main(String[] args) {
-        String prefixPath = "Datasets/DeviceId_data/Node_6_Device_10_TAO_0.15/"; // 替换为实际文件路径
+        String prefixPath = "Datasets/DeviceId_data/Node_6_Device_10_TAO_0.1/"; // 替换为实际文件路径
         int linesToRead = 30000; // 需要读取的行数
 
         for (int i = 0; i < 60; i++) {
