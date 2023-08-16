@@ -31,17 +31,13 @@ public class EdgeNodeNetwork {
 //    public static BufferedWriter outlierFw;
 //    public static BufferedWriter outlierNaiveFw;
 //    public static BufferedWriter naiveInfo;
-//    public static BufferedWriter getDataInfo;
-//    public static BufferedWriter supportDeviceInfo;
-//    public static BufferedWriter ratioInfo;
+
 //    public static BufferedWriter getDataInfoCSV;
 //    public static BufferedWriter supportDeviceInfoCSV;
-//    public static BufferedWriter ratioInfoCSV;
-//    public static BufferedWriter timeCSV;
 
     //==================for measurement==================
-//    public static AtomicInteger dataTransfered = new AtomicInteger(0);
-//    public static AtomicInteger supportDevices = new AtomicInteger(0);
+    public static AtomicInteger dataTransfered = new AtomicInteger(0);
+    public static AtomicInteger supportDevices = new AtomicInteger(0);
     static long time = 0;
     static long totalTime = 0;
 
@@ -49,16 +45,13 @@ public class EdgeNodeNetwork {
     static {
         outliers = Collections.synchronizedSet(new HashSet<>());
 //        try {
+//            getDataInfoCSV = new BufferedWriter(new FileWriter(Constants.getDataInfoCSV));
+//            supportDeviceInfoCSV = new BufferedWriter(new FileWriter(Constants.supportDeviceInfoCSV));
+
+
 //            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
 //            outlierNaiveFw = new BufferedWriter(new FileWriter(Constants.resultNaiveFile));
 //            naiveInfo = new BufferedWriter(new FileWriter(Constants.naiveInfo));
-//            getDataInfo = new BufferedWriter(new FileWriter(Constants.getDataInfo));
-//            supportDeviceInfo = new BufferedWriter(new FileWriter(Constants.supportDeviceInfo));
-//            ratioInfo = new BufferedWriter(new FileWriter(Constants.ratioInfo));
-//            getDataInfoCSV = new BufferedWriter(new FileWriter(Constants.getDataInfoCSV));
-//            supportDeviceInfoCSV = new BufferedWriter(new FileWriter(Constants.supportDeviceInfoCSV));
-//            ratioInfoCSV = new BufferedWriter(new FileWriter(Constants.ratioInfoCSV));
-//            timeCSV = new BufferedWriter(new FileWriter(Constants.timeCSV));
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
@@ -75,23 +68,9 @@ public class EdgeNodeNetwork {
         totalTime = 0;
         deviceHashMap = new HashMap<>();
         nodeHashMap = new HashMap<>();
-//        dataTransfered = new AtomicInteger(0);
-//        supportDevices = new AtomicInteger(0);
+        dataTransfered = new AtomicInteger(0);
+        supportDevices = new AtomicInteger(0);
         outliers = Collections.synchronizedSet(new HashSet<>());
-//        try {
-//            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
-//            outlierNaiveFw = new BufferedWriter(new FileWriter(Constants.resultNaiveFile));
-//            naiveInfo = new BufferedWriter(new FileWriter(Constants.naiveInfo));
-//            getDataInfo = new BufferedWriter(new FileWriter(Constants.getDataInfo));
-//            supportDeviceInfo = new BufferedWriter(new FileWriter(Constants.supportDeviceInfo));
-//            ratioInfo = new BufferedWriter(new FileWriter(Constants.ratioInfo));
-//            getDataInfoCSV = new BufferedWriter(new FileWriter(Constants.getDataInfoCSV));
-//            supportDeviceInfoCSV = new BufferedWriter(new FileWriter(Constants.supportDeviceInfoCSV));
-//            ratioInfoCSV = new BufferedWriter(new FileWriter(Constants.ratioInfoCSV));
-//            timeCSV = new BufferedWriter(new FileWriter(Constants.timeCSV));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     public static void createNetwork(int nn, int dn, DeviceFactory edgeDeviceFactory) throws Throwable {
@@ -116,7 +95,6 @@ public class EdgeNodeNetwork {
 //        System.out.println("dn/nn: " + Constants.dn + "/" + Constants.nn);
 //        System.out.println("R/K/W/S: " + Constants.R + "/" + Constants.K + "/" + Constants.W + "/" + Constants.S);
 //        System.out.println("# of windows: " + (Constants.nW));
-//        resetEdgeNetwork();
 
         //begin when create, avoiding repeated port
 //        for (EdgeNode node : nodeHashMap.values()) {
@@ -138,11 +116,20 @@ public class EdgeNodeNetwork {
         //synchronize global parameters
         parametersPreprocessing(Constants.isMultipleQuery);
 
+//        try {
+//            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
+//            outlierNaiveFw = new BufferedWriter(new FileWriter(Constants.resultNaiveFile));
+//            naiveInfo = new BufferedWriter(new FileWriter(Constants.naiveInfo));
 
+//            getDataInfoCSV = new BufferedWriter(new FileWriter(Constants.getDataInfoCSV));
+//            supportDeviceInfoCSV = new BufferedWriter(new FileWriter(Constants.supportDeviceInfoCSV));
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         int itr = 0;
         while (itr < Constants.nS + Constants.nW - 1) {
 
-//            dataTransfered.set(0);
+            dataTransfered.set(0);
             for (EdgeNode node : nodeHashMap.values()) {
                 node.handler.flag = false;
                 node.handler.ready = false;
@@ -150,9 +137,6 @@ public class EdgeNodeNetwork {
             for (Device device : deviceHashMap.values()) {
                 device.handler.ready = false;
             }
-//            if (itr >= Constants.nS - 1) {
-//                System.out.println("Window " + (itr - Constants.nS + 1));
-//            }
             ArrayList<Thread> arrayList = new ArrayList<>();
             long start = System.currentTimeMillis();
             for (Device device : deviceHashMap.values()) {
@@ -179,31 +163,18 @@ public class EdgeNodeNetwork {
             long temp_time = System.currentTimeMillis() - start;
             time += temp_time;
             totalTime += temp_time;
-//            System.out.println("this window:"+ time);
-//            System.out.println("total:"+ totalTime);
             if (itr >= Constants.nS - 1) {
                 //per slide
 //                System.out.println("===============================");
-//                supportDeviceInfo.write("===============================\n");
-//                ratioInfo.write("===============================\n");
-//                getDataInfo.write("===============================\n");
 //                System.out.println("This is the " + itr + " slides.");
-//                supportDeviceInfo.write("This is the " + itr + " slides.\n");
-//                supportDeviceInfo.flush();
-//                ratioInfo.write("This is the " + itr + " slides.\n");
-//                ratioInfo.flush();
-//                getDataInfo.write("This is the " + itr + " slides.\n");
-//                getDataInfo.flush();
+
 //                getDataInfoCSV.write("\n");
 //                supportDeviceInfoCSV.write("\n");
-//                ratioInfoCSV.write("\n");
 //                getDataInfoCSV.flush();
 //                supportDeviceInfoCSV.flush();
-//                ratioInfoCSV.flush();
+//                getDataInfoCSV.write("Data transfer per devices is: " + (int)(dataTransfered.doubleValue() / (Constants.dn * Constants.nn))+"\n");
 
 //                System.out.println("Time cost for this window is : " + time);
-//                timeCSV.write(time + ",");
-//                timeCSV.flush();
 //                System.out.println("Average Data transfered is: " + dataTransfered * 1.0 / (Constants.dn * Constants.nn));
 //                System.out.println("Data transfered so far is: " + dataTransfered);
 //                System.out.println("Interacted clients so far is: " + supportDevices);
@@ -211,8 +182,9 @@ public class EdgeNodeNetwork {
                 time = 0;
             }
 //            printOutliers();
-            if (itr == Constants.nS + Constants.nS - 1)
-                testNetwork.testing.write("Number of outliers: " + outliers.size()+"\n");
+
+//            if (itr == Constants.nS + Constants.nS - 1)
+//                testing.write("Number of outliers: " + outliers.size()+"\n");
             outliers.clear();
 
             //========================== NAIVE ================================
@@ -241,30 +213,26 @@ public class EdgeNodeNetwork {
         }
 
 //        System.out.println("Average time cost is: " + time * 1.0 / (Constants.nS + Constants.nW - 1)); // todo: 感觉优点问题？
-//        testNetwork.testing.write("Method: "+Constants.methodToGenerateFingerprint);
+//        testing.write("Method: "+Constants.methodToGenerateFingerprint);
 //        testNetwork.testing.write("R = "+Constants.R+"\n");
 //        testNetwork.testing.write("K = "+Constants.K+"\n");
 //        testNetwork.testing.write("Ratio = "+ Constants.mix_rate_node);
 //        if (testNetwork.cnt!=0)
         testNetwork.sum += totalTime * 1.0 / (Constants.nS + Constants.nW - 1);
 //        System.out.println("Average time cost per slide is: " + totalTime * 1.0 / (Constants.nS + Constants.nW - 1));
-        testNetwork.testing.write("Average time cost per slide is: " + totalTime * 1.0 / (Constants.nS + Constants.nW - 1)+"\n");
+//        testNetwork.testing.write("Average time cost per slide is: " + totalTime * 1.0 / (Constants.nS + Constants.nW - 1)+"\n");
 //        System.out.println("Total time cost is: " + totalTime);
-        testNetwork.testing.write("Total time cost is: " + totalTime+"\n");
+//        testNetwork.testing.write("Total time cost is: " + totalTime+"\n");
 //        testNetwork.testing.write("Data transfered so far is: " + dataTransfered+"\n");
-        testNetwork.testing.write("===============================\n");
-        testNetwork.testing.flush();
+//        testNetwork.testing.write("===============================\n");
+//        testNetwork.testing.flush();
 //        System.out.println("Total interacted clients is: " + supportDevices);
 //        outlierFw.close();
 //        outlierNaiveFw.close();
 //        naiveInfo.close();
-//        getDataInfo.close();
-//        supportDeviceInfo.close();
-//        ratioInfo.close();
+//        getDataInfoCSV.flush();
 //        getDataInfoCSV.close();
 //        supportDeviceInfoCSV.close();
-//        ratioInfoCSV.close();
-//        timeCSV.close();
         stopNetwork();
     }
 
@@ -300,7 +268,6 @@ public class EdgeNodeNetwork {
             device.stop();
         }
         resetEdgeNetwork();
-//        System.out.println("Ended!");
     }
 
     public static void setClientsForEdgeNodes(EdgeNode node) throws TTransportException {
