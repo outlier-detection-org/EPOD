@@ -6,4 +6,3 @@ src/Result/
 *.iml
 src/test/test.java
 src/test/postProcess.java
-src/utils/Constants.java
