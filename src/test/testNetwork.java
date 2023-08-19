@@ -10,7 +10,8 @@ public class testNetwork {
     public static BufferedWriter testing;
     public static BufferedWriter testingCSV;
     public static double sum = 0;
-    public static String[] methods = new String[]{"MCOD", "MCOD_CENTRALIZE","MCOD_P2P", "NETS_CENTRALIZE", "NETS",  "NETS_P2P" };
+//    public static String[] methods = new String[]{"MCOD", "MCOD_CENTRALIZE","MCOD_P2P", "NETS_CENTRALIZE", "NETS",  "NETS_P2P" };
+    public static String[] methods = new String[]{"NETS", "NETS_CENTRALIZE",   "NETS_P2P" };
     public static double[] accuracys = new double[]{0.025, 0.05, 0.1, 0.15};
 
     public static void runTestNetwork() throws Throwable {
@@ -129,11 +130,11 @@ public class testNetwork {
                 Constants.methodToGenerateFingerprint = s;
 //                testing.write("Method: " + Constants.methodToGenerateFingerprint + "\n");
                 testingCSV.write(Constants.methodToGenerateFingerprint + " " + Constants.mix_rate_node + "\n");
-                testingCSV.write("R \\ K,15\n");
-                for (double R = 4; R <= 8; R += 0.2) {
+                testingCSV.write("R \\ K, 120, 150,180\n");
+                for (double R = 7.5; R <= 10.1; R += 0.5) {
                     Constants.R = R;
                     testingCSV.write(Constants.R + ",");
-                    for (int K = 15; K <= 15; K = K + 5) {
+                    for (int K = 120; K <= 180; K = K + 30) {
                         Constants.K = K;
 //                        testing.write("R = " + Constants.R + "\n");
 //                        testing.write("K = " + Constants.K + "\n");
