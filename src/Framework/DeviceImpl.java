@@ -6,6 +6,7 @@ import Detector.NewNETS;
 import RPC.DeviceService;
 import RPC.EdgeNodeService;
 import RPC.Vector;
+import test.testNetwork;
 import utils.Constants;
 import utils.DataGenerator;
 
@@ -107,14 +108,14 @@ public class DeviceImpl implements DeviceService.Iface {
         this.detector.status = status;
         ArrayList<Thread> threads = new ArrayList<>();
 //        try {
-//            EdgeNodeNetwork.supportDeviceInfo.write("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().size()+"\n");
+//        System.out.println("Device "+this.belongedDevice.hashCode() + " support device size is " + result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size()+"\n");
 //            EdgeNodeNetwork.supportDeviceInfo.flush();
 //            EdgeNodeNetwork.supportDeviceInfoCSV.write(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size()+",");
 //            EdgeNodeNetwork.supportDeviceInfoCSV.flush();
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-//        EdgeNodeNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
+        testNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode.equals(this.belongedDevice.hashCode())) continue;
             //HashMap<Integer,HashSet<ArrayList<?>>>
@@ -158,7 +159,7 @@ public class DeviceImpl implements DeviceService.Iface {
 //            } catch (IOException e) {
 //                throw new RuntimeException(e);
 //            }
-            EdgeNodeNetwork.dataTransfered.addAndGet(dataSize.get());
+            testNetwork.dataTransfered.addAndGet(dataSize.get());
         }
         dataSize.set(0);
         this.ready = true;

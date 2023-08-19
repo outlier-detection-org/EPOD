@@ -9,8 +9,8 @@ public class Constants {
     public static int currentSlideID = -1;
 
     public static int threadhold = -1000000;
-    public static int nn = 4;
-    public static int dn = 8;
+    public static int nn = 6;
+    public static int dn = 10;
     public static int nW = 20;
     public static int max_dn = 10;
     public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
@@ -32,7 +32,8 @@ public class Constants {
     public static double mix_rate_node = 0.05;
     public static String deviceIdPrefix = Constants.prefix + "/DeviceId_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
 
-    public static String timePrefix = Constants.prefix + "/Timestamp_data/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
+    public static int timelineSpeed = 500;
+    public static String timePrefix = Constants.prefix + "/Timestamp_data_" + timelineSpeed + "/Node_6_Device_10_" + dataset + "_" + mix_rate_node + "/";
     public static String variable = "default";
     public static String resultPrefix = "src/Result/"+methodToGenerateFingerprint +"_"+ nn + "*" + dn + "_" + dataset + "_"+ variable + "/";
 //    public static String getDataInfoCSV = resultPrefix+"get_data_info.csv";
@@ -41,9 +42,7 @@ public class Constants {
 
 //    public static String resultFile = resultPrefix + "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
 //    public static String resultNaiveFile = resultPrefix+ "_Result_Naive_" + "_outliers.txt";
-//    public static String naiveInfo = resultPrefix+ "_Result_Naive_info" + "_outliers.txt";
-
-
+//    public static String naiveInfo = resultPrefix+ "_Result_Naive_info" + "_outliers.txt
 
     public static String forestCoverFileName = prefix + "fc.txt";
     public static String taoFileName = prefix + "tao.txt";
@@ -64,13 +63,13 @@ public class Constants {
 
     static {
         if (dataset.contains("TAO") || dataset.contains("FC") || dataset.contains("RC")) {
-            S = 500;
+            S = timelineSpeed;
 //            W = S * 20; 20slides/win
             W = S * 10;
         } else {
-            S = 500;
+            S = timelineSpeed;
 //            W = 10000;
-            W = 5000;
+            W = S * 10;
         }
         nS = W / S;
 
