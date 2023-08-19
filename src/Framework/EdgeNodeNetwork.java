@@ -32,12 +32,11 @@ public class EdgeNodeNetwork {
 //    public static BufferedWriter outlierNaiveFw;
 //    public static BufferedWriter naiveInfo;
 
-//    public static BufferedWriter getDataInfoCSV;
-//    public static BufferedWriter supportDeviceInfoCSV;
+    public static BufferedWriter getDataInfoCSV;
+    public static BufferedWriter supportDeviceInfoCSV;
 
     //==================for measurement==================
-    public static AtomicInteger dataTransfered = new AtomicInteger(0);
-    public static AtomicInteger supportDevices = new AtomicInteger(0);
+
     static long time = 0;
     static long totalTime = 0;
 
@@ -68,8 +67,8 @@ public class EdgeNodeNetwork {
         totalTime = 0;
         deviceHashMap = new HashMap<>();
         nodeHashMap = new HashMap<>();
-        dataTransfered = new AtomicInteger(0);
-        supportDevices = new AtomicInteger(0);
+//        dataTransfered = new AtomicLong(0);
+//        supportDevices = new AtomicLong(0);
         outliers = Collections.synchronizedSet(new HashSet<>());
     }
 
@@ -129,7 +128,7 @@ public class EdgeNodeNetwork {
         int itr = 0;
         while (itr < Constants.nS + Constants.nW - 1) {
 
-            dataTransfered.set(0);
+//            dataTransfered.set(0);
             for (EdgeNode node : nodeHashMap.values()) {
                 node.handler.flag = false;
                 node.handler.ready = false;

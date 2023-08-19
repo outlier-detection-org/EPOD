@@ -6,6 +6,7 @@ import Detector.NewNETS;
 import RPC.DeviceService;
 import RPC.EdgeNodeService;
 import RPC.Vector;
+import test.testNetwork;
 import utils.Constants;
 import utils.DataGenerator;
 
@@ -114,7 +115,7 @@ public class DeviceImpl implements DeviceService.Iface {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-//        EdgeNodeNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
+        testNetwork.supportDevices.addAndGet(result.keySet().stream().filter(x -> x != this.belongedDevice.hashCode()).toList().size());
         for (Integer deviceCode : result.keySet()) {
             if (deviceCode.equals(this.belongedDevice.hashCode())) continue;
             //HashMap<Integer,HashSet<ArrayList<?>>>
@@ -158,7 +159,7 @@ public class DeviceImpl implements DeviceService.Iface {
 //            } catch (IOException e) {
 //                throw new RuntimeException(e);
 //            }
-            EdgeNodeNetwork.dataTransfered.addAndGet(dataSize.get());
+            testNetwork.dataTransfered.addAndGet(dataSize.get());
         }
         dataSize.set(0);
         this.ready = true;

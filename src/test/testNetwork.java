@@ -5,12 +5,18 @@ import Framework.EdgeNodeNetwork;
 import utils.Constants;
 
 import java.io.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class testNetwork {
-    public static BufferedWriter testing;
     public static BufferedWriter testingCSV;
+    public static BufferedWriter testingCSV_sd;
+    public static BufferedWriter testingCSV_dt;
     public static double sum = 0;
-    public static String[] methods = new String[]{"MCOD", "MCOD_CENTRALIZE","MCOD_P2P", "NETS_CENTRALIZE", "NETS",  "NETS_P2P" };
+    public static AtomicLong dataTransfered = new AtomicLong(0);
+    public static AtomicLong supportDevices = new AtomicLong(0);
+
+//    public static String[] methods = new String[]{"MCOD", "MCOD_CENTRALIZE", "MCOD_P2P", "NETS_CENTRALIZE", "NETS", "NETS_P2P"};
+    public static String[] methods = new String[]{"MCOD", "NETS"};
     public static double[] accuracys = new double[]{0.025, 0.05, 0.1, 0.15};
 
     public static void runTestNetwork() throws Throwable {
@@ -125,46 +131,73 @@ public class testNetwork {
 //        for (int a = 0; a < accuracys.length; a++) {
 //            Constants.mix_rate_node = accuracys[a];
 
-            for (String s : methods) {
-                Constants.methodToGenerateFingerprint = s;
-//                testing.write("Method: " + Constants.methodToGenerateFingerprint + "\n");
-                testingCSV.write(Constants.methodToGenerateFingerprint + " " + Constants.mix_rate_node + "\n");
-                testingCSV.write("R \\ K,15\n");
-                for (double R = 4; R <= 8; R += 0.2) {
-                    Constants.R = R;
-                    testingCSV.write(Constants.R + ",");
-                    for (int K = 15; K <= 15; K = K + 5) {
-                        Constants.K = K;
-//                        testing.write("R = " + Constants.R + "\n");
-//                        testing.write("K = " + Constants.K + "\n");
-                        sum = 0;
-                        for (int i = 0; i < 3; i++) {
-                            runTestNetwork();
-                        }
-//                        testing.write("Average time cost per slide is: " + (int) (sum / 3) + "\n");
-//                        testing.write("===============================\n");
-//                        testing.flush();
-                        testingCSV.write((int) (sum / 3) + ",");
-                        testingCSV.flush();
+        for (String s : methods) {
+            Constants.methodToGenerateFingerprint = s;
+            testingCSV.write(Constants.methodToGenerateFingerprint + " " + Constants.mix_rate_node + "\n");
+            testingCSV.write("R \\ K,15\n");
+            for (double R = 4; R <= 8; R += 0.2) {
+                Constants.R = R;
+                testingCSV.write(Constants.R + ",");
+                for (int K = 15; K <= 15; K = K + 5) {
+                    Constants.K = K;
+                    sum = 0;
+                    for (int i = 0; i < 3; i++) {
+                        runTestNetwork();
                     }
-//                    testing.write("++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-//                    testing.flush();
-                    testingCSV.write("\n");
+                    testingCSV.write((int) (sum / 3) + ",");
                     testingCSV.flush();
                 }
-//                testing.write("###########################################################################\n\n");
-//                testing.flush();
                 testingCSV.write("\n");
                 testingCSV.flush();
             }
             testingCSV.write("\n");
             testingCSV.flush();
-//            testing.write("_________________________________________________________________________________\n\n\n");
-//            testing.flush();
-//        }
-//        testing.flush();
-//        testing.close();
-//        testingCSV.flush();
+        }
+        testingCSV.write("\n");
+        testingCSV.flush();
+    }
+
+    public static void measure_sd_dt_R_K() throws Throwable {
+        dataTransfered = new AtomicLong(0);
+        supportDevices = new AtomicLong(0);
+        testingCSV_sd = new BufferedWriter(new FileWriter("src/Result/testing_sd_CSV"));
+        testingCSV_dt = new BufferedWriter(new FileWriter("src/Result/testing_dt_CSV"));
+
+//        for (int a = 0; a < accuracys.length; a++) {
+//            Constants.mix_rate_node = accuracys[a];
+
+        for (String s : methods) {
+            Constants.methodToGenerateFingerprint = s;
+            testingCSV_sd.write(Constants.methodToGenerateFingerprint + " " + Constants.mix_rate_node + "\n");
+            testingCSV_dt.write(Constants.methodToGenerateFingerprint + " " + Constants.mix_rate_node + "\n");
+            testingCSV_sd.write("R \\ K,15\n");
+            testingCSV_dt.write("R \\ K,15\n");
+            for (double R = 0.2; R <= 0.41; R += 0.2) {
+                Constants.R = R;
+                testingCSV_sd.write(Constants.R + ",");
+                testingCSV_dt.write(Constants.R + ",");
+                for (int K = 15; K <= 15; K = K + 5) {
+                    Constants.K = K;
+                    runTestNetwork();
+                    testingCSV_sd.write((dataTransfered.get()/ (Constants.nS+Constants.nW-1)) + ",");
+                    testingCSV_dt.write((supportDevices.get()/ (Constants.nS+Constants.nW-1)) / (Constants.nn*Constants.dn) + ",");
+                    testingCSV_sd.flush();
+                    testingCSV_dt.flush();
+                }
+                testingCSV_sd.write("\n");
+                testingCSV_sd.flush();
+                testingCSV_dt.write("\n");
+                testingCSV_dt.flush();
+            }
+            testingCSV_sd.write("\n");
+            testingCSV_sd.flush();
+            testingCSV_dt.write("\n");
+            testingCSV_dt.flush();
+        }
+        testingCSV_sd.write("\n");
+        testingCSV_sd.flush();
+        testingCSV_dt.write("\n");
+        testingCSV_dt.flush();
     }
 }
 
