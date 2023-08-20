@@ -3,6 +3,7 @@ package test;
 import Framework.DeviceFactory;
 import Framework.EdgeNodeNetwork;
 import utils.Constants;
+import utils.PrepareDatasets;
 
 import java.io.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -13,9 +14,11 @@ public class testNetwork {
     public static BufferedWriter testingCSV_dt;
     public static double sum = 0;
 
-    //    public static String[] methods = new String[]{"MCOD", "MCOD_CENTRALIZE","MCOD_P2P", "NETS_CENTRALIZE", "NETS",  "NETS_P2P" };
+//        public static String[] methods = new String[]{"MCOD", "MCOD_CENTRALIZE","MCOD_P2P", "NETS_CENTRALIZE", "NETS",  "NETS_P2P" };
+//        public static String[] methods = new String[]{"MCOD_CENTRALIZE","MCOD_P2P", "NETS_CENTRALIZE", "NETS_P2P" };
+//        public static String[] methods = new String[]{"MCOD", "MCOD_CENTRALIZE","MCOD_P2P"};
 //    public static String[] methods = new String[]{"NETS", "NETS_CENTRALIZE",   "NETS_P2P" };
-    public static String[] methods = new String[]{"NETS", "MCOD"};
+    public static String[] methods = new String[]{"NETS"};
 
     public static AtomicLong dataTransfered = new AtomicLong(0);
     public static AtomicLong supportDevices = new AtomicLong(0);
@@ -34,8 +37,9 @@ public class testNetwork {
 //        simple_run();
 //        change_nd();
 //        change_nn();
-        various_accuracy_R_K_methods();
+//        various_accuracy_R_K_methods();
 //        measure_sd_dt_R_K();
+        measure_timelineSpeed();
     }
 
     public static void simple_run() throws Throwable {
@@ -139,10 +143,10 @@ public class testNetwork {
             Constants.methodToGenerateFingerprint = s;
             testingCSV.write(Constants.methodToGenerateFingerprint + " " + Constants.mix_rate_node + "\n");
             testingCSV.write("R \\ K,120,150,180\n");
-            for (double R = 8; R < 9; R += 0.1) {
+            for (double R = 8.3; R < 8.8; R += 0.2) {
                 Constants.R = R;
                 testingCSV.write(Constants.R + ",");
-                for (int K = 120; K <= 180; K = K + 30) {
+                for (int K = 150; K <= 180; K = K + 30) {
                     Constants.K = K;
                     sum = 0;
                     for (int i = 0; i < 3; i++) {
@@ -157,8 +161,8 @@ public class testNetwork {
             testingCSV.write("\n");
             testingCSV.flush();
         }
-        testingCSV.write("\n");
-        testingCSV.flush();
+//        testingCSV.write("\n");
+//        testingCSV.flush();
     }
 
     public static void measure_sd_dt_R_K() throws Throwable {
@@ -186,8 +190,8 @@ public class testNetwork {
                     Constants.K = K;
                     runTestNetwork();
                     System.out.println(supportDevices);
-                    testingCSV_sd.write((double) (supportDevices.get() / (Constants.nS + Constants.nW - 1)) / (Constants.nn * Constants.dn) + ",");
-                    testingCSV_dt.write((dataTransfered.get() / (Constants.nS + Constants.nW - 1)) + ",");
+                    testingCSV_sd.write((double) (supportDevices.get() / Constants.nW) / (Constants.nn * Constants.dn) + ",");
+                    testingCSV_dt.write((dataTransfered.get() / Constants.nW + Constants.nS - 1) + ",");
                     testingCSV_sd.flush();
                     testingCSV_dt.flush();
                 }
@@ -208,13 +212,21 @@ public class testNetwork {
     }
 
     public static void measure_timelineSpeed() throws Throwable {
+        runTestNetwork();
         testingCSV = new BufferedWriter(new FileWriter("src/Result/testing_CSV"));
 
         for (String s : methods) {
             Constants.methodToGenerateFingerprint = s;
             testingCSV.write(Constants.methodToGenerateFingerprint + " " + Constants.mix_rate_node + "\n");
-            testingCSV.write("100,300,500,900\n");
-            for (int speed = 100; speed <= 900; speed += 200) {
+            testingCSV.write("500, 1000, 1500, 2000, 2500\n");
+            for (int speed = 500; speed <= 2500; speed += 500) {
+                Constants.timelineSpeed = speed;
+                Constants.S = speed;
+                Constants.timePrefix = Constants.prefix + "/Timestamp_data_" + Constants.timelineSpeed + "/Node_6_Device_10_" + Constants.dataset + "_" + Constants.mix_rate_node + "/";
+                if (Constants.timelineSpeed != 500){
+                    String[] tmp = new String[]{"a"};
+                    PrepareDatasets.main(tmp);
+                }
                 sum = 0;
                 for (int i = 0; i < 3; i++) {
                     runTestNetwork();
@@ -222,7 +234,7 @@ public class testNetwork {
                 testingCSV.write((int) (sum / 3) + ",");
                 testingCSV.flush();
             }
-            testingCSV.write("\n");
+            testingCSV.write("\n\n");
             testingCSV.flush();
         }
     }

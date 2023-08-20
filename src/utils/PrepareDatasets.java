@@ -9,7 +9,7 @@ import java.util.Random;
 public class PrepareDatasets {
     public static String datasetPath;
 
-    public static int deviceNum = Constants.dn * Constants.nn;
+    public static int deviceNum = Constants.max_dn * Constants.max_nn;
     public static int s = Constants.S;
     public static String deviceIdPrefix = Constants.deviceIdPrefix;
     public static String timePrefix = Constants.timePrefix;
@@ -32,6 +32,9 @@ public class PrepareDatasets {
         //Step1 : Generate deviceID;
 //        generateDeviceId();
         //Step2 : Generate timestamp
+        s = Constants.timelineSpeed;
+        deviceIdPrefix = Constants.deviceIdPrefix;
+        timePrefix = Constants.timePrefix;
         generateTimestamp();
     }
 

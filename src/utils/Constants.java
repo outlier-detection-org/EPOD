@@ -9,12 +9,13 @@ public class Constants {
     public static int currentSlideID = -1;
 
     public static int threadhold = -1000000;
-    public static int nn = 6;
-    public static int dn = 10;
+    public static int nn = 4;
+    public static int dn = 8;
     public static int nW = 20;
+    public static int max_nn = 6;
     public static int max_dn = 10;
     public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
-    public static String dataset = "TAO"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
+    public static String dataset = "STK"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
     public static double R = -1;// distance threshold, default=6.5(HPC), 115(EM), 1.9(TAO), 0.45(STK), 0.028(GAU), 525(FC), 2.75(GAS), 5(RC)
@@ -65,11 +66,11 @@ public class Constants {
         if (dataset.contains("TAO") || dataset.contains("FC") || dataset.contains("RC")) {
             S = timelineSpeed;
 //            W = S * 20; 20slides/win
-            W = S * 10;
+            W = timelineSpeed * 10;
         } else {
             S = timelineSpeed;
 //            W = 10000;
-            W = S * 10;
+            W = timelineSpeed * 10;
         }
         nS = W / S;
 
