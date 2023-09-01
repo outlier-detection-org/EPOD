@@ -14,7 +14,7 @@ public class Constants {
     public static int nW = 20;
     public static int max_nn = 6;
     public static int max_dn = 10;
-    public static String methodToGenerateFingerprint = "NETS"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
+    public static String methodToGenerateFingerprint = "NETS_P2P"; //"NETS" "MCOD" "NETS_CENTRALIZE" "MCOD_CENTRALIZE" "NETS_P2P" "MCOD_P2P"
     public static String dataset = "STK"; //"FC"(ignore) "TAO" "GAS" "STK" "GAU" "EM" "HPC"
 
     //calculated automatically
@@ -41,7 +41,7 @@ public class Constants {
 //    public static String supportDeviceInfoCSV = resultPrefix+"support_device_info.csv";
 
 
-//    public static String resultFile = resultPrefix + "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
+    public static String resultFile = resultPrefix + "_Result_"+Constants.methodToGenerateFingerprint+ "_outliers.txt";
 //    public static String resultNaiveFile = resultPrefix+ "_Result_Naive_" + "_outliers.txt";
 //    public static String naiveInfo = resultPrefix+ "_Result_Naive_info" + "_outliers.txt
 

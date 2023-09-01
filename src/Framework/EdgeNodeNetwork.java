@@ -28,7 +28,7 @@ public class EdgeNodeNetwork {
     public static HashMap<Integer, Device> deviceHashMap = new HashMap<>();
     public static HashMap<Integer, EdgeNode> nodeHashMap = new HashMap<>();
     public static Set<Vector> outliers; //only used to print out outlier
-//    public static BufferedWriter outlierFw;
+    public static BufferedWriter outlierFw;
 //    public static BufferedWriter outlierNaiveFw;
 //    public static BufferedWriter naiveInfo;
 
@@ -43,17 +43,17 @@ public class EdgeNodeNetwork {
 
     static {
         outliers = Collections.synchronizedSet(new HashSet<>());
-//        try {
+        try {
 //            getDataInfoCSV = new BufferedWriter(new FileWriter(Constants.getDataInfoCSV));
 //            supportDeviceInfoCSV = new BufferedWriter(new FileWriter(Constants.supportDeviceInfoCSV));
 
 
-//            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
+            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
 //            outlierNaiveFw = new BufferedWriter(new FileWriter(Constants.resultNaiveFile));
 //            naiveInfo = new BufferedWriter(new FileWriter(Constants.naiveInfo));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static EdgeNode createEdgeNode() {
@@ -115,16 +115,16 @@ public class EdgeNodeNetwork {
         //synchronize global parameters
         parametersPreprocessing(Constants.isMultipleQuery);
 
-//        try {
-//            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
+        try {
+            outlierFw = new BufferedWriter(new FileWriter(Constants.resultFile));
 //            outlierNaiveFw = new BufferedWriter(new FileWriter(Constants.resultNaiveFile));
 //            naiveInfo = new BufferedWriter(new FileWriter(Constants.naiveInfo));
 
 //            getDataInfoCSV = new BufferedWriter(new FileWriter(Constants.getDataInfoCSV));
 //            supportDeviceInfoCSV = new BufferedWriter(new FileWriter(Constants.supportDeviceInfoCSV));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         int itr = 0;
         while (itr < Constants.nS + Constants.nW - 1) {
 
@@ -180,7 +180,7 @@ public class EdgeNodeNetwork {
 //                System.out.println("Total time cost is : " + totalTime);
                 time = 0;
             }
-//            printOutliers();
+            printOutliers();
 
 //            if (itr == Constants.nS + Constants.nS - 1)
 //                testing.write("Number of outliers: " + outliers.size()+"\n");
@@ -226,7 +226,7 @@ public class EdgeNodeNetwork {
 //        testNetwork.testing.write("===============================\n");
 //        testNetwork.testing.flush();
 //        System.out.println("Total interacted clients is: " + supportDevices);
-//        outlierFw.close();
+        outlierFw.close();
 //        outlierNaiveFw.close();
 //        naiveInfo.close();
 //        getDataInfoCSV.flush();
@@ -235,29 +235,29 @@ public class EdgeNodeNetwork {
         stopNetwork();
     }
 
-//    public static void printOutliers() throws IOException {
-//        HashSet<Vector> tmpList = new HashSet<>();
-//        for (Vector v : outliers) {
-//            Vector tmp = new Vector(v);
-//            tmp.backup = v.backup;
-//            tmpList.add(tmp);
-//        }
-//
-//        if (Constants.methodToGenerateFingerprint.equals("NETS")) {
-//            List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.backup)).toList();
-//            for (Vector v : list) {
-//                outlierFw.write(v.backup.values + "\n");
-//            }
-//        }
-//        else {
-//            List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.values.get(0))).toList();
-//            for (Vector v : list) {
-//                outlierFw.write(v.values + "\n");
-//            }
-//        }
-//        outlierFw.write("====================================\n");
-//        outlierFw.flush();
-//    }
+    public static void printOutliers() throws IOException {
+        HashSet<Vector> tmpList = new HashSet<>();
+        for (Vector v : outliers) {
+            Vector tmp = new Vector(v);
+            tmp.backup = v.backup;
+            tmpList.add(tmp);
+        }
+
+        if (Constants.methodToGenerateFingerprint.equals("NETS")) {
+            List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.backup)).toList();
+            for (Vector v : list) {
+                outlierFw.write(v.backup.values + "\n");
+            }
+        }
+        else {
+            List<Vector> list = tmpList.stream().sorted(Comparator.comparing(o -> o.values.get(0))).toList();
+            for (Vector v : list) {
+                outlierFw.write(v.values + "\n");
+            }
+        }
+        outlierFw.write("====================================\n");
+        outlierFw.flush();
+    }
 
     public static void stopNetwork() {
         for (EdgeNode node : nodeHashMap.values()) {
